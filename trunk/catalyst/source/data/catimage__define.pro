@@ -2434,6 +2434,7 @@ FUNCTION CatImage::INIT, image, $
    IF N_Elements(xstart) NE 0 THEN self._xstart = xstart
    IF N_Elements(ystart) NE 0 THEN self._ystart = ystart
    self._visible = 1
+   self._zoomcoords = self._coords
 
    IF Obj_Valid(wid) NE 0 THEN self._wid = wid
 

@@ -78,6 +78,8 @@
 ;          rather than the "filename" in the image DRAW method. I did this to facilitate
 ;          the display of HDF variables as images. 8 January 2009. DWF.
 ;       Added a vector color field and ability to display motion vector overlays. 15 June 2010. DWF.
+;       Renamed Colorbar procedure to FSC_Colorbar to avoid conflict with IDL 8 Colorbar function.
+;          26 September 2010. DWF.
 ;-
 ;******************************************************************************************;
 ;  Copyright (c) 2008-2010, Regents of the University of Colorado. All rights reserved.    ;
@@ -600,7 +602,7 @@ PRO NSIDC_Image::Draw,  _Extra=extrakeywords
             xdistance = 3.0 * !D.X_CH_SIZE / Float(!D.X_Size)
             self -> GetProperty, SCLMIN=sclmin, SCLMAX=sclmax
             colors -> Draw
-            Colorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
+            FSC_Colorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
                POSITION=[p[0]+xdistance, p[3]+ 0.01, p[2]-xdistance, p[3]+ydistance/2.], /TOP, ANNOTATECOLOR=self.fn_color, $
                XCharsize = StrUpCase(!Version.OS_Family) EQ 'WINDOWS' ? 0.8 : 1.0, $
                FONT=(StrUpCase(!Version.OS_Family) EQ 'WINDOWS') ? 1 : 0, XTINKLEN=1.0, XMINOR=0
@@ -691,7 +693,7 @@ PRO NSIDC_Image::Draw,  _Extra=extrakeywords
             xdistance = 3.0 * !D.X_CH_SIZE / Float(!D.X_Size)
             self -> GetProperty, SCLMIN=sclmin, SCLMAX=sclmax
             colors -> Draw
-            Colorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
+            FSC_Colorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
                POSITION=[p[0]+xdistance, p[3]+ 0.01, p[2]-xdistance, p[3]+ydistance/2.], /TOP, ANNOTATECOLOR=self.fn_color, $
                XCharsize = StrUpCase(!Version.OS_Family) EQ 'WINDOWS' ? 0.8 : 1.0, $
                FONT=(StrUpCase(!Version.OS_Family) EQ 'WINDOWS') ? -1 : 0, XTICKLEN=1.0, XMINOR=0
