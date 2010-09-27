@@ -1,8 +1,12 @@
 ; This is a configuration file for the DataViewer Program.
+<<<<<<< .mine
+; Created Fri Sept 23 21:09:58 2010
+=======
 ; Created Wed Sep 22 11:55:33 2010
+>>>>>>> .r9
 
 DATAVIEWER_CONFIG_FILE, 'dataviewer_default.txt'
-DATAVIEWER_DATA_DIRECTORY, 'C:\IDL\data\dataviewer\'
+DATAVIEWER_DATA_DIRECTORY, 'DEFAULT'
 DATAVIEWER_BACKGROUND_COLOR, 'WHITE'
 DATAVIEWER_MISSING_COLOR, 'WHITE'
 DATAVIEWER_OUTOFBOUNDS_LOW_COLOR, 'CRIMSON'
