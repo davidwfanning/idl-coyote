@@ -100,6 +100,9 @@
 ;       Written by: David W. Fanning, 17 October 2008, based on COLORTOOL.
 ;       In looking for a Brewer color table file, I replaced all FILE_WHICH commands with
 ;           FIND_RESOURCE_FILE commands. 28 April 2009. DWF.
+;       I added a check for a display connection before adding system colors to the colors
+;           the program knows about. This *should* make it possible to use the object in
+;           cron jobs. 6 October 2010. DWF.
 ;-
 ;******************************************************************************************;
 ;  Copyright (c) 2008, jointly by Fanning Software Consulting, Inc.                        ;
@@ -1537,8 +1540,16 @@ FUNCTION CatColors::INIT, $
    gvalue = [ gvalue,  48,    103,   141,   188,   188,   149,   113,    81 ]
    bvalue = [ bvalue,   5,     26,    60,   118,   177,   141,   105,    71 ]
 
-   ; Add system color names for IDL version 5.6 and higher.
-   IF Float(!Version.Release) GE 5.6 THEN BEGIN
+   ; Add system color names for IDL version 5.6 and higher. We don't want to
+   ; do this we cannot establish a display connection (e.g., we are running
+   ; in a cron job). Check for system variable !FSC_Display_Connection. If not
+   ; defined, check the connection.
+   DefSysV, '!FSC_Display_Connection', EXISTS=sysvarExists
+   IF sysvarExists $
+          THEN haveConnection = !FSC_Display_Connection $
+          ELSE haveConnection = CanConnect()
+      
+   IF (Float(!Version.Release) GE 5.6) && Keyword_Set(haveConnection) THEN BEGIN
 
       tlb = Widget_Base()
       sc = Widget_Info(tlb, /System_Colors)
