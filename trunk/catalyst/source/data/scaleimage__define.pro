@@ -80,6 +80,8 @@
 ;          some confusing documentation and inconsistent usage of MISSING_COLOR. 15 July 2010. DWF.
 ;       More work on correct usage of MISSING_COLOR and MISSING_INDEX keywords and
 ;          properties. 28 July 2010. DWF.
+;       Still more bugs in the MISSING_COLOR, MISSING_INDEX, and MISSING_VALUE keyword 
+;          handling. Tested more extensively, and passing all current tests. 10 October 2010. DWF.
 ;-
 ;*******************************************************************************************
 ;* Copyright (c) 2008-2009, jointly by Fanning Software Consulting, Inc.                   *
@@ -274,6 +276,8 @@ PRO ScaleImage::CreateDisplayImage
             IF count NE 0 THEN BEGIN
                image = Float(Temporary(image))
                image[i] = !VALUES.F_NAN
+               self -> GetProperty, COLOR_OBJECT=colors
+               colors -> LoadColor, self.missing_color, self.missing_index
             ENDIF
             i = Where(Finite(image) EQ 0, count)
             
@@ -303,6 +307,8 @@ PRO ScaleImage::CreateDisplayImage
             IF count NE 0 THEN BEGIN
                image = Float(Temporary(image))
                image[i] = !VALUES.F_NAN
+               self -> GetProperty, COLOR_OBJECT=colors
+               colors -> LoadColor, self.missing_color, self.missing_index
             ENDIF
             i = Where(Finite(image) EQ 0, count)
 
@@ -332,6 +338,8 @@ PRO ScaleImage::CreateDisplayImage
             IF count NE 0 THEN BEGIN
                image = Float(Temporary(image))
                image[i] = !VALUES.F_NAN
+               self -> GetProperty, COLOR_OBJECT=colors
+               colors -> LoadColor, self.missing_color, self.missing_index
             ENDIF
             i = Where(Finite(image) EQ 0, count)
             image = Temporary(self->ScaleTheImage(image)) + self.bottom
@@ -829,8 +837,6 @@ PRO SCALEIMAGE::SetProperty, $
         ; Linear 2% Scaling needs to be initialized properly.
         IF scaletype EQ 4 THEN BEGIN 
         
-           
-        
             ; Calculate binsize.
             maxr = Max(Float(*self._dataPtr), MIN=minr, /NAN)
             range = maxr - minr
@@ -925,7 +931,7 @@ END
 ;
 ;     MEAN:          The mean factor in a logarithmic stretch. Default is 0.5.
 ;     
-;     MISSING_COLOR: The color name of the missing value. By default, "white".
+;     MISSING_COLOR: The color name of the missing value. By default, "black".
 ;
 ;     MISSING_INDEX: The index of the missing color in the final byte scaled image. 
 ;                    By default, 255.
@@ -983,8 +989,30 @@ FUNCTION SCALEIMAGE::INIT, image, $
 
    ; Interacting with image must go on here. Because if NO_COPY is set on call to ScaleImage, then image
    ; will be undefined when it returns from the CATIMAGE::INIT call.
-   IF N_Elements(sclmin) EQ 0 THEN IF N_Elements(image) NE 0 THEN sclmin = Min(image, /NAN) ELSE sclmin = 0
-   IF N_Elements(sclmax) EQ 0 THEN IF N_Elements(image) NE 0 THEN sclmax = Max(image, /NAN) ELSE sclmax = 255
+   IF N_Elements(sclmin) EQ 0 THEN IF N_Elements(image) NE 0 THEN BEGIN
+        IF N_Elements(missing_value) NE 0 THEN BEGIN
+            i = Where(image EQ missing_value, count)
+            IF count GT 0 THEN BEGIN
+                temp = Float(image)
+                temp[i] = !Values.F_NAN
+                sclmin = Min(temp, /NAN)
+                UnDefine, temp
+            ENDIF ELSE sclmin = Min(image, /NAN)
+        ENDIF ELSE sclmin = Min(image, /NAN)
+   ENDIF 
+   IF N_Elements(sclmin) EQ 0 THEN sclmin = 0
+   IF N_Elements(sclmax) EQ 0 THEN IF N_Elements(image) NE 0 THEN BEGIN
+        IF N_Elements(missing_value) NE 0 THEN BEGIN
+            i = Where(image EQ missing_value, count)
+            IF count GT 0 THEN BEGIN
+                temp = Float(image)
+                temp[i] = !Values.F_NAN
+                sclmax = Max(temp, /NAN)
+                UnDefine, temp
+            ENDIF ELSE sclmax = Max(image, /NAN)
+        ENDIF ELSE sclmax = Max(image, /NAN) 
+   ENDIF
+   IF N_Elements(sclmax) EQ 0 THEN sclmax = 255
    ok = self -> CATIMAGE::INIT (image, _EXTRA=extraKeywords)
    IF ~ok THEN RETURN, 0
 
@@ -993,7 +1021,7 @@ FUNCTION SCALEIMAGE::INIT, image, $
    IF N_Elements(exponent) EQ 0 THEN exponent = 4.0
    IF N_Elements(gamma) EQ 0 THEN gamma = 1.5
    IF N_Elements(mean) EQ 0 THEN mean = 0.5
-   IF N_Elements(missing_color) EQ 0 THEN missing_color = 255
+   IF N_Elements(missing_color) EQ 0 THEN missing_color = 'black'
    IF N_Elements(missing_index) EQ 0 THEN missing_index = 255
    IF N_Elements(ncolors) EQ 0 THEN BEGIN
        IF N_Elements(missing_value) EQ 0 THEN ncolors = 256 ELSE ncolors = 255
@@ -1008,7 +1036,7 @@ FUNCTION SCALEIMAGE::INIT, image, $
         ENDIF
    ENDELSE
    IF N_Elements(sigma) EQ 0 THEN sigma = 1.0
-
+   
    ; Load the object.
    self.beta = beta
    self.bottom = bottom
