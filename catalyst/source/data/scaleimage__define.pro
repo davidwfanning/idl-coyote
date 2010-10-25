@@ -82,6 +82,8 @@
 ;          properties. 28 July 2010. DWF.
 ;       Still more bugs in the MISSING_COLOR, MISSING_INDEX, and MISSING_VALUE keyword 
 ;          handling. Tested more extensively, and passing all current tests. 10 October 2010. DWF.
+;       Error searching for missing value. Was using FINITE(missing_value) and I should have
+;          been using PTR_VALID(missing_value). 25 October 2010. DWF.
 ;-
 ;*******************************************************************************************
 ;* Copyright (c) 2008-2009, jointly by Fanning Software Consulting, Inc.                   *
@@ -299,7 +301,7 @@ PRO ScaleImage::CreateDisplayImage
             image = (*self._dataPtr)[*, self._x1:self._x2, self._y1:self._y2]
 
             ; Handle missing value, if present.
-            IF Finite(*self.missing_value) THEN BEGIN
+            IF Ptr_Valid(self.missing_value) THEN BEGIN
                i = Where(image EQ *self.missing_value, count)
             ENDIF ELSE BEGIN
                i = Where(Finite(image) EQ 0, count)
@@ -330,7 +332,7 @@ PRO ScaleImage::CreateDisplayImage
            image = (*self._dataPtr)[self._x1:self._x2, *, self._y1:self._y2]
 
             ; Handle missing value, if present.
-            IF Finite(*self.missing_value) THEN BEGIN
+            IF Ptr_Valid(self.missing_value) THEN BEGIN
                i = Where(image EQ *self.missing_value, count)
             ENDIF ELSE BEGIN
                i = Where(Finite(image) EQ 0, count)
@@ -359,7 +361,7 @@ PRO ScaleImage::CreateDisplayImage
            image = (*self._dataPtr)[self._x1:self._x2, self._y1:self._y2, *]
 
             ; Handle missing value, if present.
-           IF Finite(*self.missing_value) THEN BEGIN
+           IF Ptr_Valid(self.missing_value) THEN BEGIN
                i = Where(image EQ *self.missing_value, count)
             ENDIF ELSE BEGIN
                i = Where(Finite(image) EQ 0, count)
@@ -1045,7 +1047,7 @@ FUNCTION SCALEIMAGE::INIT, image, $
    self.mean = mean
    self.missing_color = missing_color
    self.missing_index = missing_index
-   IF N_Elements(missing_value) NE 0 THEN self.missing_value = Ptr_New(missing_value)
+   IF N_Elements(missing_value) NE 0 THEN self.missing_value = Ptr_New(missing_value) 
    self.ncolors = ncolors
    self.negative = 0
    self.sclmin = sclmin
