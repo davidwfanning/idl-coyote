@@ -1517,7 +1517,7 @@ PRO CatAtom::SetProperty, Name=name, $
       IF (Obj_IsA_Valid (self, 'CatAtom')) THEN BEGIN
          self._event_objects -> Remove, /All
          self._event_objects -> Add, event_objects
-      ENDIF ELSE Message, 'Can only add event objects to CATATOM objects.
+      ENDIF ELSE Message, 'Can only add event objects to CATATOM objects.'
    ENDIF
 
    ; If an event object is to be removed, do it here
