@@ -209,6 +209,7 @@
 ;      with the GeoTiff information. 26 August 2009. DWF.
 ;   Added GEOTIFF keyword to return GEOTIFF structure from GeoTIFF files. 30 Aug 2009. DWF.
 ;   Added DISPLAY keyword to immediately display the image in an IMGWIN window. 30 Aug 2009. DWF.
+;   Fixed a problem in which the starting directory was changed on exit. 20 Nov 2010. DWF.
 ;   
 ;-
 ;
@@ -1440,6 +1441,8 @@ FUNCTION SelectImage, $
    TITLE=title, $                  ; The title of the main image selection window.
    PreviewSize=previewsize         ; The maximum size of the image preview window. 150 pixels by default.
 
+CD, Current=originalDir
+
 ; First thing we are going to do is check for the availability of FITS files. We are
 ; going to look for MRDFITS on the path. If we don't find it, we will generate an error
 ; condition and handle it silently.
@@ -1482,6 +1485,7 @@ info = { storagePtr: Ptr_New(), $            ; The "outside the program" storage
          only3d: 0L, $                       ; A flag that permits only the acceptance of true-color images.
          filter: Ptr_New(), $                ; The file filter.
          filenameObj: Obj_New(), $           ; The FileSelect compound widget object reference.
+         originalDir: "", $                  ; The starting or original directory.
          dataDirectory: "", $                ; The current data directory.
          display: 0B, $                      ; Display the image after reading?
          labelmaxvalID: 0L, $                ; The ID of the Max Value label.
@@ -1792,7 +1796,7 @@ IF (Min(image) LT 0) OR (Max(image) GT (!D.Table_Size-1)) THEN $
 ; Set up information to run the program.
 storagePtr = Ptr_New({cancel:1, image:Ptr_New(image), fileInfo:Ptr_New(fileInfo), offsets:offsets, $
    outdirectory:"", outfilename:"", r:info.r, g:info.g, b:info.b, $
-   geotiff:Ptr_New(), extra:Ptr_New(extra)})
+   geotiff:Ptr_New(), extra:Ptr_New(extra), originalDir:originalDir})
 
 ; Load the info structure.
 info.storagePtr = storagePtr
@@ -1816,6 +1820,7 @@ info.labelTypeID = labelTypeID
 info.labelXSizeID = labelXSizeID
 info.labelYSizeID = labelYSizeID
 info.labelDataTypeID = labelDataTypeID
+info.originalDir = originalDir
 
 Widget_Control, tlb, Set_UValue=info, /No_Copy
 
@@ -1832,6 +1837,8 @@ IF type EQ 'FITS' THEN fheader = fileInfo.header
 image = *((*storagePtr).image)
 outDirectory = (*storagePtr).outDirectory
 outFilename = (*storagePtr).outFilename
+originalDir = (*storagePtr).originalDir
+CD, originalDir
 offsets = (*storagePtr).offsets
 Ptr_Free, (*storagePtr).image
 Ptr_Free, (*storagePtr).fileInfo
@@ -1863,8 +1870,6 @@ IF Keyword_Set(display) THEN BEGIN
     ENDIF ELSE IMGWIN, image, /WIN_KEEP_ASPECT
 ENDIF
 
-; Restore start directory.
-CD, startDirectory
 IF cancel EQ 1 THEN RETURN, 0 ELSE RETURN, image
 
 END ; ----------------------------------------------------------------------------------------
