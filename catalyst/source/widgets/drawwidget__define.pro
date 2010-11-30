@@ -1766,7 +1766,7 @@ FUNCTION DrawWidget::INIT, parent, $
    self._eraseWindow = Keyword_Set(erase_window)
 
    ; Refresh buffer.
-   IF Obj_ISA_VALID(refreshbuffer) THEN self._refreshbuffer = refreshbuffer
+   IF Obj_ISA_VALID(refreshbuffer, 'PIXMAPWIDGET') THEN self._refreshbuffer = refreshbuffer
 
    ; Set up PostScript configuration object.
    self._psconfig = Obj_New('FSC_PSCONFIG')
