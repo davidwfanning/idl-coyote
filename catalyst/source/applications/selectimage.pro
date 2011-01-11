@@ -492,7 +492,7 @@ PRO SelectImage_FilenameEvents, event
 
    ; Sort the files.
    FOR j=0, N_Elements(*info.filter)-1 DO BEGIN
-      specificFiles = Findfile((*info.filter)[j], Count=fileCount)
+      specificFiles = File_Search((*info.filter)[j], Count=fileCount)
       IF fileCount GT 0 THEN IF N_Elements(*(info.theFiles)) EQ 0 THEN $
          *info.theFiles = specificFiles[SelectImage_BSort(specificFiles)] ELSE $
          *info.theFiles = [*info.theFiles, specificFiles[SelectImage_BSort(specificFiles)]]
@@ -1300,7 +1300,7 @@ PRO SelectImage_SetFilter, event
    ; Locate appropriate files.
    FOR j=0, N_Elements(*info.filter)-1 DO BEGIN
 
-      specificFiles = Findfile((*info.filter)[j], Count=fileCount)
+      specificFiles = File_Search((*info.filter)[j], Count=fileCount)
       IF fileCount GT 0 THEN IF N_Elements(theFiles) EQ 0 THEN $
          theFiles = specificFiles[SelectImage_BSort(StrLowCase(specificFiles))] ELSE $
          theFiles = [theFiles, specificFiles[SelectImage_BSort(StrLowCase(specificFiles))]]
@@ -1603,7 +1603,7 @@ info.previewSize = previewSize
 
 ; Locate appropriate files.
 FOR j=0, N_Elements(filter)-1 DO BEGIN
-   specificFiles = Findfile(filter[j], Count=fileCount)
+   specificFiles = File_Search(filter[j], Count=fileCount)
    IF fileCount GT 0 THEN IF N_Elements(theFiles) EQ 0 THEN $
       theFiles = specificFiles[SelectImage_BSort(StrLowCase(specificFiles))] ELSE $
       theFiles = [theFiles, specificFiles[SelectImage_BSort(StrLowCase(specificFiles))]]
