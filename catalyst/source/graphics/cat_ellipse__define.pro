@@ -1,12 +1,12 @@
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE__DEFINE
+;       CAT_ELLIPSE__DEFINE
 ;
 ; PURPOSE:
 ;
 ;       The purpose of this routine is to provide a circle or ellipse that can be displayed
-;       in a direct graphics draw widget. The coordinate system of the Ellipse
+;       in a direct graphics draw widget. The coordinate system of the Cat_Ellipse
 ;       object is either passed to it (a CatCoord object) or is a normalized
 ;       coordinate system by default.
 ;
@@ -25,7 +25,7 @@
 ;
 ; SYNTAX:
 ;
-;       ellipseObject = Obj_New("ELLIPSE", X1=0.5, Y1=0.5, X2=0.75, Y2=0.75)
+;       ellipseObject = Obj_New("CAT_ELLIPSE", X1=0.5, Y1=0.5, X2=0.75, Y2=0.75)
 ;       drawObject -> Add, ellipseObject
 ;
 ; SUPERCLASSES:
@@ -38,7 +38,7 @@
 ;
 ; CLASS_STRUCTURE:
 ;
-;   class = { ELLIPSE, $
+;   class = { CAT_ELLIPSE, $
 ;             clip_to_data: 0B, $         ; Flag that if set will allow clipping to data range in DRAW method.
 ;             insertedObject: Obj_New(), $; The new object created in the CreateNewObject method. (Ignored in CLEANUP.)
 ;             linestyle: 0L, $            ; The line style of the ellipse.
@@ -59,7 +59,7 @@
 ;
 ; MESSAGES:
 ;
-;   ELLIPSE_CHANGED:   This message is sent whenever SetProperty method is called and the NOMESSAGE
+;   CAT_ELLIPSE_CHANGED:   This message is sent whenever SetProperty method is called and the NOMESSAGE
 ;                      keyword is NOT set.
 ;
 ; EVENT_STRUCTURE:
@@ -107,7 +107,7 @@
 ;******************************************************************************************;
 ;+
 ; NAME:
-;       ELLIPSE::ADDTOEVENTSTRUCTURE
+;       CAT_ELLIPSE::ADDTOEVENTSTRUCTURE
 ;
 ; PURPOSE:
 ;
@@ -129,7 +129,7 @@
 ;
 ;-
 ;*****************************************************************************************************
-FUNCTION Ellipse::AddToEventStructure, event
+FUNCTION Cat_Ellipse::AddToEventStructure, event
 
    @cat_func_error_handler
 
@@ -165,7 +165,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::CALCULATEBOUNDARYBOX
+;       CAT_ELLIPSE::CALCULATEBOUNDARYBOX
 ;
 ; PURPOSE:
 ;
@@ -185,7 +185,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::CalculateBoundaryBox
+PRO Cat_Ellipse::CalculateBoundaryBox
 
    @cat_pro_error_handler
 
@@ -210,11 +210,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::CONTROLPANEL
+;       CAT_ELLIPSE::CONTROLPANEL
 ;
 ; PURPOSE:
 ;
-;       This method creates a control panel for the ELLIPSE object.
+;       This method creates a control panel for the CAT_ELLIPSE object.
 ;
 ; SYNTAX:
 ;
@@ -231,18 +231,18 @@ END
 ;       _EXTRA:       Any keywords appropriate for the CATCONTROLPANEL::INIT method.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::ControlPanel, baseObject, _EXTRA=extraKeywords
+PRO Cat_Ellipse::ControlPanel, baseObject, _EXTRA=extraKeywords
 
    @cat_pro_error_handler
 
       ; Create a new control panel
 
    cp = OBJ_NEW ('CatControlPanel', self, PARENT=baseObject, COLUMN=1, $
-      TITLE='Ellipse Control Panel', _EXTRA=extraKeywords, /No_Cancel, /No_Apply, /No_OK)
+      TITLE='Cat_Ellipse Control Panel', _EXTRA=extraKeywords, /No_Cancel, /No_Apply, /No_OK)
 
    IF (NOT OBJ_VALID (cp)) THEN RETURN
 
-   aproperties = Obj_New('PROPERTYSHEETWIDGET', cp, Value=self, Name='ELLIPSE PROPERTYSHEET', YSize=12)
+   aproperties = Obj_New('PROPERTYSHEETWIDGET', cp, Value=self, Name='CAT_ELLIPSE PROPERTYSHEET', YSize=12)
    aproperties -> SetProperty, Event_Object=self
 
    ; Display the control panel if it created its own TLB.
@@ -256,7 +256,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::CREATENEWOBJECT
+;       CAT_ELLIPSE::CREATENEWOBJECT
 ;
 ; PURPOSE:
 ;
@@ -270,17 +270,17 @@ END
 ;
 ; ARGUMENTS:
 ;
-;       drawID:    The draw widget which will contain the new arrow object. Required in normal operation.
+;       drawID:    The draw widget which will contain the new ellipse object. Required in normal operation.
 ;
-;       pixmapID:  The pixmap which will contain the new arrow object. Optional.
+;       pixmapID:  The pixmap which will contain the new ellipse object. Optional.
 ;
 ; KEYWORDS:
 ;
-;       NEWOBJECT: An output keyword containing the new arrow object that gets created.
+;       NEWOBJECT: An output keyword containing the new ellipse object that gets created.
 ;
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
+PRO Cat_Ellipse::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
 
    @cat_pro_error_handler
 
@@ -297,7 +297,7 @@ PRO Ellipse::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
       XRADIUS=xradius, $
       YRADIUS=yradius
 
-   newObject = Obj_New('ELLIPSE',  $
+   newObject = Obj_New('CAT_ELLIPSE',  $
       BACKGROUND=background, $
       BG_COLOR=bg_color, $
       COLOR=color, $
@@ -341,7 +341,7 @@ PRO Ellipse::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
       IF Obj_Valid(pixmapID) THEN pixmapID -> Add, newObject
       self.insertedObject = newObject
 
-      ; Draw the new arrow.
+      ; Draw the new ellipse.
       newObject -> Draw
 
    ENDELSE
@@ -354,7 +354,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::DRAW
+;       CAT_ELLIPSE::DRAW
 ;
 ; PURPOSE:
 ;
@@ -374,7 +374,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::Draw, _Extra=extrakeywords
+PRO Cat_Ellipse::Draw, _Extra=extrakeywords
 
    @cat_pro_error_handler
 
@@ -399,10 +399,10 @@ PRO Ellipse::Draw, _Extra=extrakeywords
 
    ; Draw the background if required.
    IF self.background THEN $
-      PolyFill, xprime, yprime, Fill=1, Color=FSC_Color(self.bg_color), NOCLIP=1-self.clip_to_data
+      PolyFill, xprime, yprime, Fill=1, Color=cgColor(self.bg_color), NOCLIP=1-self.clip_to_data
 
    ; Draw the ellipse.
-   PlotS, xprime, yprime, Color=FSC_Color(self.color), $
+   PlotS, xprime, yprime, Color=cgColor(self.color), $
           Thick=self.thickness, Linestyle=self.linestyle, NOCLIP=1-self.clip_to_data
 
    self -> Report, /Completed
@@ -413,7 +413,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::DRAWSELECTIONBOX
+;       CAT_ELLIPSE::DRAWSELECTIONBOX
 ;
 ; PURPOSE:
 ;
@@ -433,7 +433,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::DrawSelectionBox, Color=color
+PRO Cat_Ellipse::DrawSelectionBox, Color=color
 
    @cat_pro_error_handler
 
@@ -447,10 +447,10 @@ PRO Ellipse::DrawSelectionBox, Color=color
 
   ; Apply the coordinate system.
    self -> ApplyCoords
-   PLOTS, self.xcenter - self.xradius, self.ycenter, PSYM=6, Color=FSC_Color(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
-   PLOTS, self.xcenter + self.xradius, self.ycenter, PSYM=6, Color=FSC_Color(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
-   PLOTS, self.xcenter, self.ycenter - self.yradius, PSYM=6, Color=FSC_Color(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
-   PLOTS, self.xcenter, self.ycenter + self.yradius, PSYM=6, Color=FSC_Color(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
+   PLOTS, self.xcenter - self.xradius, self.ycenter, PSYM=6, Color=cgColor(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
+   PLOTS, self.xcenter + self.xradius, self.ycenter, PSYM=6, Color=cgColor(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
+   PLOTS, self.xcenter, self.ycenter - self.yradius, PSYM=6, Color=cgColor(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
+   PLOTS, self.xcenter, self.ycenter + self.yradius, PSYM=6, Color=cgColor(color), Symsize=1.25, NOCLIP=1-self.clip_to_data
    self -> Report, /Completed
 
 END
@@ -459,7 +459,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::EVENTHANDLER
+;       CAT_ELLIPSE::EVENTHANDLER
 ;
 ; PURPOSE:
 ;
@@ -478,7 +478,7 @@ END
 ;       None.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::EventHandler, event
+PRO Cat_Ellipse::EventHandler, event
 
    @cat_pro_error_handler
 
@@ -487,7 +487,7 @@ PRO Ellipse::EventHandler, event
    CASE eventName OF
 
 
-      'ELLIPSE PROPERTYSHEET': BEGIN
+      'CAT_ELLIPSE PROPERTYSHEET': BEGIN
 
          IF event.type EQ 0 THEN BEGIN
             CASE StrUpCase(event.identifier) OF
@@ -548,11 +548,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::GETPROPERTY
+;       CAT_ELLIPSE::GETPROPERTY
 ;
 ; PURPOSE:
 ;
-;       This method allows the user to obtain ELLIPSE properties. Be sure
+;       This method allows the user to obtain CAT_ELLIPSE properties. Be sure
 ;       you ALWAYS call the superclass GETPROPERTY method if you have extra
 ;       keywords!
 ;
@@ -593,7 +593,7 @@ END
 ;     _REF_EXTRA:     Any keywords appropriate for the superclass GetProperty method.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::GetProperty, $
+PRO Cat_Ellipse::GetProperty, $
    CLIP_TO_DATA=clip_to_data, $
    HEIGHT=height, $
    INSERTEDOBJECT=insertedObject, $
@@ -640,7 +640,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::INTERACTIONEVENTS
+;       CAT_ELLIPSE::INTERACTIONEVENTS
 ;
 ; PURPOSE:
 ;
@@ -665,7 +665,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::InteractionEvents, event, Interaction=interaction
+PRO Cat_Ellipse::InteractionEvents, event, Interaction=interaction
 
    @cat_pro_error_handler
 
@@ -915,7 +915,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::MOVE
+;       CAT_ELLIPSE::MOVE
 ;
 ; PURPOSE:
 ;
@@ -939,7 +939,7 @@ END
 ;                   contents of the window.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::Move, x, y, PIXMAP=pixmap, NODRAW=noDraw
+PRO Cat_Ellipse::Move, x, y, PIXMAP=pixmap, NODRAW=noDraw
 
    @cat_pro_error_handler
 
@@ -975,7 +975,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::SELECT
+;       CAT_ELLIPSE::SELECT
 ;
 ; PURPOSE:
 ;
@@ -997,7 +997,7 @@ END
 ;       SUCCESS:   Set to 1 if a selection is made. To 0 otherwise.
 ;-
 ;*****************************************************************************************************
-FUNCTION Ellipse::Select, x, y, SUCCESS=success
+FUNCTION Cat_Ellipse::Select, x, y, SUCCESS=success
 
    @cat_func_error_handler
 
@@ -1062,7 +1062,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::SELECTMODE
+;       CAT_ELLIPSE::SELECTMODE
 ;
 ; PURPOSE:
 ;
@@ -1086,7 +1086,7 @@ END
 ;                   the proper device coodinate system.
 ;-
 ;*****************************************************************************************************
-FUNCTION Ellipse::SelectMode, x, y, DRAWID=drawID
+FUNCTION Cat_Ellipse::SelectMode, x, y, DRAWID=drawID
 
    @cat_func_error_handler
 
@@ -1116,11 +1116,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::SETPROPERTY
+;       CAT_ELLIPSE::SETPROPERTY
 ;
 ; PURPOSE:
 ;
-;       This method allows the user to set the ELLIPSE object's properties. Be sure
+;       This method allows the user to set the CAT_ELLIPSE object's properties. Be sure
 ;       you ALWAYS call the superclass SETPROPERTY method if you have extra keywords!
 ;
 ;
@@ -1162,7 +1162,7 @@ END
 ;     YRADIUS:      The axis radius in the Y direction.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::SetProperty, $
+PRO Cat_Ellipse::SetProperty, $
    CLIP_TO_DATA=clip_to_data, $
    DRAW=draw, $
    LAYER=layer, $
@@ -1224,7 +1224,7 @@ PRO Ellipse::SetProperty, $
    ENDIF
 
    ; Send message?
-   IF sendMessage AND ~Keyword_Set(nomessage) THEN self -> SendMessage, 'ELLIPSE_CHANGED'
+   IF sendMessage AND ~Keyword_Set(nomessage) THEN self -> SendMessage, 'CAT_ELLIPSE_CHANGED'
 
    IF Keyword_Set(draw) THEN self -> Draw
 
@@ -1238,7 +1238,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::UPDATE_MODEMAP
+;       CAT_ELLIPSE::UPDATE_MODEMAP
 ;
 ; PURPOSE:
 ;
@@ -1257,7 +1257,7 @@ END
 ;      CLEAR:     If this keyword is set, the modemap is cleared of all information.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::Update_Modemap, CLEAR=clear
+PRO Cat_Ellipse::Update_Modemap, CLEAR=clear
 
    @cat_pro_error_handler
 
@@ -1317,11 +1317,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::CLEANUP
+;       CAT_ELLIPSE::CLEANUP
 ;
 ; PURPOSE:
 ;
-;       This is the ELLIPSE object class destructor method.
+;       This is the CAT_ELLIPSE object class destructor method.
 ;
 ; SYNTAX:
 ;
@@ -1336,7 +1336,7 @@ END
 ;      None.
 ;-
 ;*****************************************************************************************************
-PRO Ellipse::CLEANUP
+PRO Cat_Ellipse::CLEANUP
 
    @cat_pro_error_handler
 
@@ -1352,11 +1352,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ELLIPSE::INIT
+;       CAT_ELLIPSE::INIT
 ;
 ; PURPOSE:
 ;
-;       This is the ELLIPSE object class initialization method
+;       This is the CAT_ELLIPSE object class initialization method
 ;
 ; SYNTAX:
 ;
@@ -1393,7 +1393,7 @@ END
 ;     _EXTRA:       Any keywords appropriate for the SELECTABLEOBJECT INIT method.
 ;-
 ;*****************************************************************************************************
-FUNCTION Ellipse::INIT, $
+FUNCTION Cat_Ellipse::INIT, $
    CLIP_TO_DATA=clip_to_data, $
    LAYER=layer, $
    LINESTYLE=linestyle, $
@@ -1409,7 +1409,7 @@ FUNCTION Ellipse::INIT, $
    ; Set up error handler and call superclass INIT method
    @cat_func_error_handler
 
-   ok = self -> SELECTABLEOBJECT::INIT (DESCRIPTION='Ellipse Properties', _EXTRA=extraKeywords)
+   ok = self -> SELECTABLEOBJECT::INIT (DESCRIPTION='Cat_Ellipse Properties', _EXTRA=extraKeywords)
    IF ~ok THEN RETURN, 0
 
    ; If a coordinate object wasn't provided, try to copy one from the
@@ -1471,16 +1471,16 @@ END
 ;*****************************************************************************************************
 ;
 ; NAME:
-;       ELLIPSE CLASS DEFINITION
+;       CAT_ELLIPSE CLASS DEFINITION
 ;
 ; PURPOSE:
 ;
-;       This is the structure definition code for the ELLIPSE object.
+;       This is the structure definition code for the CAT_ELLIPSE object.
 ;
 ;*****************************************************************************************************
-PRO Ellipse__Define
+PRO Cat_Ellipse__Define
 
-   class = { ELLIPSE, $
+   class = { CAT_ELLIPSE, $
              clip_to_data: 0B, $         ; Flag that if set will allow clipping to data range in DRAW method.
              insertedObject: Obj_New(), $; The new object created in the CreateNewObject method. (Ignored in CLEANUP.)
              linestyle: 0L, $            ; The line style of the ellipse.

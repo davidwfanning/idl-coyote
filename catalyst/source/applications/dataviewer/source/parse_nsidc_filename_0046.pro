@@ -137,15 +137,15 @@ FUNCTION Parse_NSIDC_Filename_0046, filename, INFO=info, SUCCESS=success
    ; Define a color object with appropriate colors.
    TVLCT, rr, gg, bb, /Get
    LoadCT, 0, /SILENT
-   TVLCT, FSC_Color('tan', /TRIPLE), 0
-   TVLCT, FSC_Color('cornsilk', /TRIPLE), 1
-   TVLCT, FSC_Color('BLU2', /TRIPLE), 2
-   TVLCT, FSC_Color('BLU3', /TRIPLE), 3
-   TVLCT, FSC_Color('GRN2', /TRIPLE), 4
-   TVLCT, FSC_Color('ivory', /TRIPLE), 5
-   TVLCT, FSC_Color('gray', /TRIPLE), 253
-   TVLCT, FSC_Color('linen', /TRIPLE), 254
-   TVLCT, FSC_Color('YGB3', /TRIPLE), 255
+   TVLCT, cgColor('tan', /TRIPLE), 0
+   TVLCT, cgColor('cornsilk', /TRIPLE), 1
+   TVLCT, cgColor('BLU2', /TRIPLE), 2
+   TVLCT, cgColor('BLU3', /TRIPLE), 3
+   TVLCT, cgColor('GRN2', /TRIPLE), 4
+   TVLCT, cgColor('ivory', /TRIPLE), 5
+   TVLCT, cgColor('gray', /TRIPLE), 253
+   TVLCT, cgColor('linen', /TRIPLE), 254
+   TVLCT, cgColor('YGB3', /TRIPLE), 255
    TVLCT, r, g, b, /Get
    colors = Obj_New('CatColors', COLORPALETTE=[[r], [g], [b]])
    TVLCT, rr, gg, bb

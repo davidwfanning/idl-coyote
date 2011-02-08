@@ -806,13 +806,13 @@ END
 ;       keyword. Normally, the color triple is returned as a 1 by 3 column vector.
 ;       This is appropriate for loading into a color index with TVLCT:
 ;
-;          IDL> TVLCT, FSC_Color('Yellow', /Triple), !P.Color
+;          IDL> TVLCT, cgColor('Yellow', /Triple), !P.Color
 ;
 ;       But sometimes (e.g, in object graphics applications) you want the color
 ;       returned as a row vector. In this case, you should set the ROW keyword
 ;       as well as the TRIPLE keyword:
 ;
-;          viewobj= Obj_New('IDLgrView', Color=FSC_Color('charcoal', /Triple, /Row))
+;          viewobj= Obj_New('IDLgrView', Color=cgColor('charcoal', /Triple, /Row))
 ;
 ;       If the ALLCOLORS keyword is used, then instead of a single value, modified
 ;       as described above, then all the color values are returned in an array. In
@@ -921,12 +921,12 @@ FUNCTION ColorTool::GetColor, theColor, colorIndex, $
 
             IF Keyword_Set(triple) THEN BEGIN
                colors = LonArr(ncolors, 3)
-               FOR j=0,ncolors-1 DO colors[j,*] = FSC_Color(theColor[j], colorIndex[j], Filename=filename, $
+               FOR j=0,ncolors-1 DO colors[j,*] = cgColor(theColor[j], colorIndex[j], Filename=filename, $
                   Decomposed=decomposedState, /Triple)
                RETURN, colors
             ENDIF ELSE BEGIN
                colors = LonArr(ncolors)
-               FOR j=0,ncolors-1 DO colors[j] = FSC_Color(theColor[j], colorIndex[j], Filename=filename, $
+               FOR j=0,ncolors-1 DO colors[j] = cgColor(theColor[j], colorIndex[j], Filename=filename, $
                   Decomposed=decomposedState)
                RETURN, colors
            ENDELSE
@@ -2188,7 +2188,7 @@ PRO ColorTool::XColors, $
    IF XRegistered(self._xc_registerName) GT 0 THEN RETURN
    
    ; Try to locate the brewer file. Check resource/colors directory, then directory
-   ; containing CTLOAD source code, then current directory, then ask, then give up.
+   ; containing cgLoadCT source code, then current directory, then ask, then give up.
    ; Look for either FSC_BREWER.TBL or BREWER.TBL.
     brewerfile = Filepath(SubDir=['resource','colors'], 'fsc_brewer.tbl')
     IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = File_Which('fsc_brewer.tbl', INCLUDE_CURRENT_DIR=1)
@@ -2482,10 +2482,10 @@ FUNCTION ColorTool::INIT, colorIndex, $
    @cat_func_error_handler
    
    ; Try to locate the brewer file. Check resource/colors directory, then directory
-   ; containing CTLOAD source code, then current directory, then ask, then give up.
+   ; containing cgLoadCT source code, then current directory, then ask, then give up.
    ; Look for either FSC_BREWER.TBL or BREWER.TBL.
    ; Try to locate the brewer file. Check resource/colors directory, then directory
-   ; containing CTLOAD source code, then current directory, then ask, then give up.
+   ; containing cgLoadCT source code, then current directory, then ask, then give up.
    ; Look for either FSC_BREWER.TBL or BREWER.TBL.
     brewerfile = Filepath(SubDir=['resource','colors'], 'fsc_brewer.tbl')
     IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = File_Which('fsc_brewer.tbl', INCLUDE_CURRENT_DIR=1)

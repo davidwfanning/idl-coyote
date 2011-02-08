@@ -72,7 +72,7 @@
 ;       Extensively modified to read more passive microware data products from NSIDS. Changes
 ;          include better ways of handling map projection information. 17 June 2010. DWF.
 ;       Fixed problem caused by loading a configuration file before images were selected,
-;           and fixed a problem with Coyote Library routine CTLOAD and the way it looks
+;           and fixed a problem with Coyote Library routine cgLoadCT and the way it looks
 ;           for the Brewer color table file. 28 June 2010. DWF.
 ;-
 ;******************************************************************************************;
@@ -364,7 +364,7 @@ PRO DataViewer::EventHandler, event
                newObject -> GetProperty, NSIDC_TAG=nsidc_tag, FILENAME=filename, COLORCHANGEALLOWED=colorChangeAllowed
                IF colorChangeAllowed THEN newObject -> SetProperty, COLOR_OBJECT=colors
                WSet, animateWindow
-               Erase, Color=FSC_Color(background_color)
+               Erase, Color=cgColor(background_color)
                newObject -> Draw
                Obj_Destroy, newObject
                XInterAnimate, WINDOW=animateWindow, FRAME=j
@@ -460,7 +460,7 @@ PRO DataViewer::EventHandler, event
             colorname = PickColorName(GROUP_LEADER=self->GetID(), landmaskColor, TITLE='Change LANDMASK Color')
             CatSetDefault, 'DATAVIEWER_LANDMASK_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
-            color = FSC_Color(colorname, /Triple)
+            color = cgColor(colorname, /Triple)
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             r[252] = color[0]
             g[252] = color[1]
@@ -482,7 +482,7 @@ PRO DataViewer::EventHandler, event
             colorname = PickColorName(GROUP_LEADER=self->GetID(), missingColor, TITLE='Change MISSING Color')
             CatSetDefault, 'DATAVIEWER_MISSING_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
-            color = FSC_Color(colorname, /Triple)
+            color = cgColor(colorname, /Triple)
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             r[255] = color[0]
             g[255] = color[1]
@@ -504,7 +504,7 @@ PRO DataViewer::EventHandler, event
             colorname = PickColorName(GROUP_LEADER=self->GetID(), oob_high_color, TITLE='Change OUT-OF-BOUNDS HIGH Color')
             CatSetDefault, 'DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
-            color = FSC_Color(colorname, /Triple)
+            color = cgColor(colorname, /Triple)
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             r[253] = color[0]
             g[253] = color[1]
@@ -526,7 +526,7 @@ PRO DataViewer::EventHandler, event
             colorname = PickColorName(GROUP_LEADER=self->GetID(), oob_low_color, TITLE='Change OUT-OF-BOUNDS LOW Color')
             CatSetDefault, 'DATAVIEWER_OUTOFBOUNDS_LOW_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
-            color = FSC_Color(colorname, /Triple)
+            color = cgColor(colorname, /Triple)
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             r[254] = color[0]
             g[254] = color[1]
@@ -798,10 +798,10 @@ PRO DataViewer::EventHandler, event
             oob_high_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR')
             landmask_color = CatGetDefault('DATAVIEWER_LANDMASK_COLOR')
             annotate_color = CatGetDefault('DATAVIEWER_ANNOTATE_COLOR')
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
             FOR j=0,numFilesToLoad-1 DO BEGIN
                  newObject = Parse_NSIDC_Filename((*self.theFiles)[self.fileStackPtr], INFO=info, SUCCESS=success)
                  IF success EQ 0 THEN RETURN
@@ -973,10 +973,10 @@ PRO DataViewer::EventHandler, event
             oob_high_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR')
             landmask_color = CatGetDefault('DATAVIEWER_LANDMASK_COLOR')
             annotate_color = CatGetDefault('DATAVIEWER_ANNOTATE_COLOR')
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
             FOR j=startIndex, endindex DO BEGIN
                  newObject = Parse_NSIDC_Filename((*self.theFiles)[j], INFO=info, SUCCESS=success)
                  IF success EQ 0 THEN RETURN
@@ -1056,15 +1056,15 @@ PRO DataViewer::EventHandler, event
             annotate_color = CatGetDefault('DATAVIEWER_ANNOTATE_COLOR')
 
             ; Load colors here, because we are going to copy for the color palette below.
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
-            TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
+            TVLCT, cgColor(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
             cttype = CatGetDefault('DATAVIEWER_DEFAULT_CT_TYPE')
             IF StrUpCase(cttype) EQ 'BREWER' THEN brewer=1 ELSE brewer = 0
             colorIndex = CatGetDefault('DATAVIEWER_DEFAULT_CT', SUCCESS=success)
             IF success EQ 0 THEN colorIndex = 4
-            CTLOAD, colorIndex, BREWER=brewer, NCOLORS=250
+            cgLoadCT, colorIndex, BREWER=brewer, NCOLORS=250
             TVLCT, r, g, b, /GET
 
             ; Read the images again.
@@ -1636,15 +1636,15 @@ PRO DataViewer::LoadFiles, files
     annotate_color = CatGetDefault('DATAVIEWER_ANNOTATE_COLOR')
 
     ; Load colors here, because we are going to copy for the color palette below.
-    TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
-    TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
-    TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
-    TVLCT, FSC_COLOR(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
+    TVLCT, cgColor(CatGetDefault('DATAVIEWER_MISSING_COLOR'), /Triple), 255
+    TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR'), /Triple), 254
+    TVLCT, cgColor(CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR'), /Triple), 253
+    TVLCT, cgColor(CatGetDefault('DATAVIEWER_LANDMASK_COLOR'), /Triple), 252
     cttype = CatGetDefault('DATAVIEWER_DEFAULT_CT_TYPE')
     IF StrUpCase(cttype) EQ 'BREWER' THEN brewer=1 ELSE brewer = 0
     colorIndex = CatGetDefault('DATAVIEWER_DEFAULT_CT', SUCCESS=success)
     IF success EQ 0 THEN colorIndex = 27
-    CTLOAD, colorIndex, BREWER=brewer, NCOLORS=250
+    cgLoadCT, colorIndex, BREWER=brewer, NCOLORS=250
     TVLCT, r, g, b, /GET
 
     FOR j=0,numImagesToLoad-1 DO BEGIN
@@ -2275,22 +2275,22 @@ PRO DataViewer::Update_GUI_From_Config, filename
              colors -> GetProperty, RED=r, GREEN=g, BLUE=b, NCOLORS=ncolors, $
                BREWER=brewer, INDEX=index
              missingColor = CatGetDefault('DATAVIEWER_MISSING_COLOR')
-             color = FSC_Color(missingColor, /TRIPLE)
+             color = cgColor(missingColor, /TRIPLE)
              r[255] = color[0]
              g[255] = color[1]
              b[255] = color[2]
              oob_low_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR')
-             color = FSC_Color(oob_low_color, /TRIPLE)
+             color = cgColor(oob_low_color, /TRIPLE)
              r[254] = color[0]
              g[254] = color[1]
              b[254] = color[2]
              oob_high_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR')
-             color = FSC_Color(oob_high_color, /TRIPLE)
+             color = cgColor(oob_high_color, /TRIPLE)
              r[253] = color[0]
              g[253] = color[1]
              b[253] = color[2]
              landmask_color = CatGetDefault('DATAVIEWER_LANDMASK_COLOR')
-             color = FSC_Color(landmask_color, /TRIPLE)
+             color = cgColor(landmask_color, /TRIPLE)
              r[252] = color[0]
              g[252] = color[1]
              b[252] = color[2]

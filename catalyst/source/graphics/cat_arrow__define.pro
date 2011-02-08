@@ -1,12 +1,12 @@
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW__DEFINE
+;       CAT_ARROW__DEFINE
 ;
 ; PURPOSE:
 ;
 ;       The purpose of this routine is to provide an arrow that can be displayed
-;       in a direct graphics draw widget. The coordinate system of the Arrow
+;       in a direct graphics draw widget. The coordinate system of the Cat_Arrow
 ;       object is either passed to it (a CatCoord object) or is a normalized
 ;       coordinate system by default.
 ;
@@ -25,7 +25,7 @@
 ;
 ; SYNTAX:
 ;
-;       arrowObject = Obj_New("ARROW", X1=0.5, Y1=0.5, X2=0.75, Y2=0.75)
+;       arrowObject = Obj_New("CAT_ARROW", X1=0.5, Y1=0.5, X2=0.75, Y2=0.75)
 ;       drawObject -> Add, arrowObject
 ;
 ; SUPERCLASSES:
@@ -38,7 +38,7 @@
 ;
 ; CLASS_STRUCTURE:
 ;
-;   class = { ARROW, $
+;   class = { CAT_ARROW, $
 ;             arrowhead: 0L, $            ; A flag to indicate which arrow heads should be drawn.
 ;             headsize: 0L, $             ; The arrow head size in pixels. By default !D.X_Size / 50.
 ;             layerObject: Obj_New(), $   ; A CATLAYER object for holding the annotation.
@@ -59,7 +59,7 @@
 ;
 ; MESSAGES:
 ;
-;   ARROW_CHANGED:   This message is sent whenever SetProperty method is called and the NOMESSAGE
+;   CAT_ARROW_CHANGED:   This message is sent whenever SetProperty method is called and the NOMESSAGE
 ;                    keyword is NOT set.
 ;
 ; MODIFICATION_HISTORY:
@@ -97,7 +97,7 @@
 
 ;+
 ; NAME:
-;       ARROW::CALCULATEBOUNDARYBOX
+;       CAT_ARROW::CALCULATEBOUNDARYBOX
 ;
 ; PURPOSE:
 ;
@@ -117,7 +117,7 @@
 ;
 ;-
 ;*****************************************************************************************************
-PRO Arrow::CalculateBoundaryBox
+PRO Cat_Arrow::CalculateBoundaryBox
 
    @cat_pro_error_handler
 
@@ -221,11 +221,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::CONTROLPANEL
+;       CAT_ARROW::CONTROLPANEL
 ;
 ; PURPOSE:
 ;
-;       This method creates a control panel for the ARROW object.
+;       This method creates a control panel for the CAT_ARROW object.
 ;
 ; SYNTAX:
 ;
@@ -242,7 +242,7 @@ END
 ;       _EXTRA:       Any keywords appropriate for the CATCONTROLPANEL::INIT method.
 ;-
 ;*****************************************************************************************************
-PRO Arrow::ControlPanel, baseObject, _EXTRA=extraKeywords
+PRO Cat_Arrow::ControlPanel, baseObject, _EXTRA=extraKeywords
 
    @cat_pro_error_handler
 
@@ -253,7 +253,7 @@ PRO Arrow::ControlPanel, baseObject, _EXTRA=extraKeywords
 
    IF (NOT OBJ_VALID (cp)) THEN RETURN
 
-   aproperties = Obj_New('PROPERTYSHEETWIDGET', cp, Value=self, Name='ARROW PROPERTYSHEET', YSize=15)
+   aproperties = Obj_New('PROPERTYSHEETWIDGET', cp, Value=self, Name='CAT_ARROW PROPERTYSHEET', YSize=15)
    aproperties -> SetProperty, Event_Object=self
 
    ; Display the control panel if it created its own TLB.
@@ -267,7 +267,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::CREATENEWOBJECT
+;       CAT_ARROW::CREATENEWOBJECT
 ;
 ; PURPOSE:
 ;
@@ -291,7 +291,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Arrow::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
+PRO Cat_Arrow::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
 
    @cat_pro_error_handler
 
@@ -310,7 +310,7 @@ PRO Arrow::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
       Y2=y2, $
       _EXTRA=extraKeywords
 
-   newObject = Obj_New('ARROW', $
+   newObject = Obj_New('CAT_ARROW', $
       ARROWHEAD=arrowhead, $
       BACKGROUND=background, $
       BG_COLOR=bg_color, $
@@ -366,7 +366,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::DRAW
+;       CAT_ARROW::DRAW
 ;
 ; PURPOSE:
 ;
@@ -386,7 +386,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Arrow::Draw, _Extra=extrakeywords
+PRO Cat_Arrow::Draw, _Extra=extrakeywords
 
    @cat_pro_error_handler
 
@@ -424,10 +424,10 @@ PRO Arrow::Draw, _Extra=extrakeywords
 
    ; Draw the background if required.
    IF self.background THEN $
-      PolyFill, self.box[0,*], self.box[1,*], Fill=1, Color=FSC_Color(self.bg_color), /Normal
+      PolyFill, self.box[0,*], self.box[1,*], Fill=1, Color=cgColor(self.bg_color), /Normal
 
    ; Output the line.
-   PLOTS, [_x1, _x2], [_y1, _y2], Color=Fsc_Color(self.color), $
+   PLOTS, [_x1, _x2], [_y1, _y2], Color=cgColor(self.color), $
       Thick=self.thickness, Linestyle=self.linestyle
 
    ; Draw the arrowheads. Headsize is the length of the arrowhead (along the arrow axis).
@@ -466,7 +466,7 @@ PRO Arrow::Draw, _Extra=extrakeywords
           yy0 = y2 + headsize * (costheta*msint + sintheta*mcost)
           xx1 = x2 + headsize * (costheta*mcost - sintheta*sint)
           yy1 = y2 + headsize * (costheta*sint + sintheta*mcost)
-          PolyFill, [xx0, xx1, x2, xx0], [yy0, yy1, y2, yy0], /Device, Color=Fsc_Color(self.color)
+          PolyFill, [xx0, xx1, x2, xx0], [yy0, yy1, y2, yy0], /Device, Color=cgColor(self.color)
 
          END
 
@@ -475,13 +475,13 @@ PRO Arrow::Draw, _Extra=extrakeywords
           yy0 = y2 + headsize * (costheta*msint + sintheta*mcost)
           xx1 = x2 + headsize * (costheta*mcost - sintheta*sint)
           yy1 = y2 + headsize * (costheta*sint + sintheta*mcost)
-          PolyFill, [xx0, xx1, x2, xx0], [yy0, yy1, y2, yy0], /Device, Color=Fsc_Color(self.color)
+          PolyFill, [xx0, xx1, x2, xx0], [yy0, yy1, y2, yy0], /Device, Color=cgColor(self.color)
 
           xx0 = x1 - headsize * (costheta*mcost - sintheta*msint)
           yy0 = y1 - headsize * (costheta*msint + sintheta*mcost)
           xx1 = x1 - headsize * (costheta*mcost - sintheta*sint)
           yy1 = y1 - headsize * (costheta*sint + sintheta*mcost)
-          PolyFill, [xx0, xx1, x1, xx0], [yy0, yy1, y1, yy0], /Device, Color=Fsc_Color(self.color)
+          PolyFill, [xx0, xx1, x1, xx0], [yy0, yy1, y1, yy0], /Device, Color=cgColor(self.color)
          END
 
       3: BEGIN ; Single arrowhead at (x1,y1)
@@ -489,7 +489,7 @@ PRO Arrow::Draw, _Extra=extrakeywords
           yy0 = y1 - headsize * (costheta*msint + sintheta*mcost)
           xx1 = x1 - headsize * (costheta*mcost - sintheta*sint)
           yy1 = y1 - headsize * (costheta*sint + sintheta*mcost)
-          PolyFill, [xx0, xx1, x1, xx0], [yy0, yy1, y1, yy0], /Device, Color=Fsc_Color(self.color)
+          PolyFill, [xx0, xx1, x1, xx0], [yy0, yy1, y1, yy0], /Device, Color=cgColor(self.color)
          END
 
       ELSE: ; No arrowheads.
@@ -504,7 +504,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::DRAWSELECTIONBOX
+;       CAT_ARROW::DRAWSELECTIONBOX
 ;
 ; PURPOSE:
 ;
@@ -524,7 +524,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Arrow::DrawSelectionBox, Color=color
+PRO Cat_Arrow::DrawSelectionBox, Color=color
 
    @cat_pro_error_handler
 
@@ -559,8 +559,8 @@ PRO Arrow::DrawSelectionBox, Color=color
 
    IF N_Elements(color) EQ 0 THEN color = self.color
 
-   PLOTS, _x1, _y1, PSYM=6, Color=FSC_Color(color), Symsize=1.25
-   PLOTS, _x2, _y2, PSYM=6, Color=FSC_Color(color), Symsize=1.25
+   PLOTS, _x1, _y1, PSYM=6, Color=cgColor(color), Symsize=1.25
+   PLOTS, _x2, _y2, PSYM=6, Color=cgColor(color), Symsize=1.25
 
    self -> Report, /Completed
 
@@ -571,7 +571,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::EVENTHANDLER
+;       CAT_ARROW::EVENTHANDLER
 ;
 ; PURPOSE:
 ;
@@ -590,7 +590,7 @@ END
 ;       None.
 ;-
 ;*****************************************************************************************************
-PRO Arrow::EventHandler, event
+PRO Cat_Arrow::EventHandler, event
 
    @cat_pro_error_handler
 
@@ -599,7 +599,7 @@ PRO Arrow::EventHandler, event
    CASE eventName OF
 
 
-      'ARROW PROPERTYSHEET': BEGIN
+      'CAT_ARROW PROPERTYSHEET': BEGIN
 
          IF event.type EQ 0 THEN BEGIN
             CASE StrUpCase(event.identifier) OF
@@ -661,11 +661,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::GETPROPERTY
+;       CAT_ARROW::GETPROPERTY
 ;
 ; PURPOSE:
 ;
-;       This method allows the user to obtain ARROW properties. Be sure
+;       This method allows the user to obtain CAT_ARROW properties. Be sure
 ;       you ALWAYS call the superclass GETPROPERTY method if you have extra
 ;       keywords!
 ;
@@ -711,7 +711,7 @@ END
 ;     _REF_EXTRA:  Any keywords appropriate for the superclass GetProperty method.
 ;-
 ;*****************************************************************************************************
-PRO Arrow::GetProperty, $
+PRO Cat_Arrow::GetProperty, $
    ARROWHEAD=arrowhead, $
    HEADSIZE=headsize, $
    HEIGHT=height, $
@@ -766,7 +766,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::INTERACTIONEVENTS
+;       CAT_ARROW::INTERACTIONEVENTS
 ;
 ; PURPOSE:
 ;
@@ -791,7 +791,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Arrow::InteractionEvents, event, Interaction=interaction
+PRO Cat_Arrow::InteractionEvents, event, Interaction=interaction
 
    @cat_pro_error_handler
 
@@ -955,7 +955,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::MOVE
+;       CAT_ARROW::MOVE
 ;
 ; PURPOSE:
 ;
@@ -979,7 +979,7 @@ END
 ;                   contents of the window.
 ;-
 ;*****************************************************************************************************
-PRO Arrow::Move, x, y, PIXMAP=pixmap, NODRAW=noDraw
+PRO Cat_Arrow::Move, x, y, PIXMAP=pixmap, NODRAW=noDraw
 
    @cat_pro_error_handler
 
@@ -1016,11 +1016,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::SETPROPERTY
+;       CAT_ARROW::SETPROPERTY
 ;
 ; PURPOSE:
 ;
-;       This method allows the user to set the ARROW object's properties. Be sure
+;       This method allows the user to set the CAT_ARROW object's properties. Be sure
 ;       you ALWAYS call the superclass SETPROPERTY method if you have extra keywords!
 ;
 ;
@@ -1067,7 +1067,7 @@ END
 ;     Y2:           The Y location of the other end of the arrow. (Arrowhead here if ARROWHEAD=1.)
 ;-
 ;*****************************************************************************************************
-PRO Arrow::SetProperty, $
+PRO Cat_Arrow::SetProperty, $
    ARROWHEAD=arrowhead, $
    DRAW=draw, $
    HEADSIZE=headsize, $
@@ -1184,7 +1184,7 @@ PRO Arrow::SetProperty, $
    self.midy = (yr - yl) / 2.0 + yl
 
    ; Send message?
-   IF sendMessage AND ~Keyword_Set(nomessage) THEN self -> SendMessage, 'ARROW_CHANGED'
+   IF sendMessage AND ~Keyword_Set(nomessage) THEN self -> SendMessage, 'CAT_ARROW_CHANGED'
 
    IF Keyword_Set(draw) THEN self -> Draw
 
@@ -1196,11 +1196,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::CLEANUP
+;       CAT_ARROW::CLEANUP
 ;
 ; PURPOSE:
 ;
-;       This is the ARROW object class destructor method.
+;       This is the CAT_ARROW object class destructor method.
 ;
 ; SYNTAX:
 ;
@@ -1215,7 +1215,7 @@ END
 ;      None.
 ;-
 ;*****************************************************************************************************
-PRO Arrow::CLEANUP
+PRO Cat_Arrow::CLEANUP
 
    @cat_pro_error_handler
 
@@ -1231,11 +1231,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       ARROW::INIT
+;       CAT_ARROW::INIT
 ;
 ; PURPOSE:
 ;
-;       This is the ARROW object class initialization method
+;       This is the CAT_ARROW object class initialization method
 ;
 ; SYNTAX:
 ;
@@ -1261,7 +1261,7 @@ END
 ;
 ;     THICKNESS:    Set this to the thickness of the output. By default, 1.0.
 ;
-;     UVCOORDS:     If the coordinate object for the Arrow object is a MAPCOORD object, then it
+;     UVCOORDS:     If the coordinate object for the Cat_Arrow object is a MAPCOORD object, then it
 ;                   is assumed the data coordinate space (and, hence, X and Y) is specified in 
 ;                   longitude and latitude values. If they are in UV map coordinates instead, set this
 ;                   keyword to indicate that fact.
@@ -1277,7 +1277,7 @@ END
 ;     _EXTRA:       Any keywords appropriate for the SELECTABLEOBJECT INIT method.
 ;-
 ;*****************************************************************************************************
-FUNCTION Arrow::INIT, $
+FUNCTION Cat_Arrow::INIT, $
    ARROWHEAD=arrowhead, $
    HEADSIZE=headsize, $
    LAYER=layer, $
@@ -1367,16 +1367,16 @@ END
 ;*****************************************************************************************************
 ;
 ; NAME:
-;       ARROW CLASS DEFINITION
+;       CAT_ARROW CLASS DEFINITION
 ;
 ; PURPOSE:
 ;
-;       This is the structure definition code for the ARROW object.
+;       This is the structure definition code for the CAT_ARROW object.
 ;
 ;*****************************************************************************************************
-PRO Arrow__Define, class
+PRO Cat_Arrow__Define, class
 
-   class = { ARROW, $
+   class = { CAT_ARROW, $
              arrowhead: 0L, $            ; A flag to indicate which arrow heads should be drawn.
              headsize: 0L, $             ; The arrow head size in pixels. By default !D.X_Size / 50.
              layerObject: Obj_New(), $   ; A CATLAYER object for holding the annotation.

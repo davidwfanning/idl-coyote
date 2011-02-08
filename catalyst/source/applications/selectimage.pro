@@ -150,7 +150,7 @@
 ;  http://www.dfanning.com/programs/fsc_fileselect.pro
 ;  http://www.dfanning.com/programs/image_dimensions.pro
 ;  http://www.dfanning.com/programs/number_formatter.pro
-;  http://www.dfanning.com/programs/tvimage.pro
+;  http://www.dfanning.com/programs/cgimage.pro
 ;
 ;  Note: Keyword inheritance to collect undefined keywords that may be passed into the
 ;  program for use in READ_XXX routines, make it impossible to trap keyword useage errors.
@@ -595,8 +595,8 @@ PRO SelectImage_FilenameEvents, event
    Widget_Control, info.previewID, Draw_XSize=sizes[0], Draw_YSize=sizes[1]
    TVLCT, info.r, info.g, info.b
    IF (Min(image) LT 0) OR (Max(image) GT (!D.Table_Size-1)) THEN $
-      TVImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
-      TVImage, image, /Keep_Aspect, /NoInterpolation, /Erase
+      cgImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
+      cgImage, image, /Keep_Aspect, /NoInterpolation, /Erase
    IF imageDataType EQ 'NONE' THEN image = 0
 
    ; Store the image data for later retrieval.
@@ -639,8 +639,8 @@ PRO SelectImage_FlipImage, event
    Widget_Control, info.previewID, Draw_XSize=sizes[0], Draw_YSize=sizes[1]
    TVLCT, info.r, info.g, info.b
    IF (Min(*(*(info.storagePtr)).image) LT 0) OR (Max(*(*(info.storagePtr)).image) GT (!D.Table_Size-1)) THEN $
-      TVImage, BytScl(*(*(info.storagePtr)).image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
-      TVImage, *(*(info.storagePtr)).image, /Keep_Aspect, /NoInterpolation, /Erase
+      cgImage, BytScl(*(*(info.storagePtr)).image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
+      cgImage, *(*(info.storagePtr)).image, /Keep_Aspect, /NoInterpolation, /Erase
 
    Widget_Control, event.top, Set_UValue=info, /No_Copy
 
@@ -777,8 +777,8 @@ PRO SelectImage_ListEvents, event
          Widget_Control, info.previewID, Draw_XSize=sizes[0], Draw_YSize=sizes[1]
          TVLCT, info.r, info.g, info.b
          IF (Min(image) LT 0) OR (Max(image) GT (!D.Table_Size-1)) THEN $
-            TVImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
-            TVImage, image, /Keep_Aspect, /NoInterpolation, /Erase
+            cgImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
+            cgImage, image, /Keep_Aspect, /NoInterpolation, /Erase
          IF imageDataType EQ 'NONE' THEN image = 0
 
          ; Store the image data for later retrieval.
@@ -880,8 +880,8 @@ PRO SelectImage_ListEvents, event
       Widget_Control, info.previewID, Draw_XSize=sizes[0], Draw_YSize=sizes[1]
       TVLCT, info.r, info.g, info.b
       IF (Min(image) LT 0) OR (Max(image) GT (!D.Table_Size-1)) THEN $
-         TVImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
-         TVImage, image, /Keep_Aspect, /NoInterpolation, /Erase
+         cgImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
+         cgImage, image, /Keep_Aspect, /NoInterpolation, /Erase
       IF imageDataType EQ 'NONE' THEN image = 0
 
       ; Store the image data for later retrieval.
@@ -1383,8 +1383,8 @@ PRO SelectImage_SetFilter, event
    Widget_Control, info.previewID, Draw_XSize=sizes[0], Draw_YSize=sizes[1]
    TVLCT, info.r, info.g, info.b
    IF (Min(image) LT 0) OR (Max(image) GT (!D.Table_Size-1)) THEN $
-      TVImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
-      TVImage, image, /Keep_Aspect, /NoInterpolation, /Erase
+      cgImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation, /Erase ELSE $
+      cgImage, image, /Keep_Aspect, /NoInterpolation, /Erase
    IF imageDataType EQ 'NONE' THEN image = 0
 
    ; Save the image data for later retrieval.
@@ -1790,8 +1790,8 @@ WSet, previewWID
 sizes = SelectImage_WindowSize(image, XSIZE=previewSize, YSIZE=previewSize)
 Widget_Control, previewID, Draw_XSize=sizes[0], Draw_YSize=sizes[1]
 IF (Min(image) LT 0) OR (Max(image) GT (!D.Table_Size-1)) THEN $
-   TVImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation ELSE $
-   TVImage, image, /Keep_Aspect, /NoInterpolation
+   cgImage, BytScl(image, Top=!D.Table_Size-1), /Keep_Aspect, /NoInterpolation ELSE $
+   cgImage, image, /Keep_Aspect, /NoInterpolation
 
 ; Set up information to run the program.
 storagePtr = Ptr_New({cancel:1, image:Ptr_New(image), fileInfo:Ptr_New(fileInfo), offsets:offsets, $

@@ -585,7 +585,7 @@ PRO GridWindow::EventHandler, event
                  loc[[1,3]] = loc[[1,3]] - ymove
                  PLOTS, [loc[0], loc[0], loc[2], loc[2], loc[0]], $
                         [loc[1], loc[3], loc[3], loc[1], loc[1]], /DEVICE, $
-                        COLOR=FSC_Color('indian red'), THICK=2
+                        COLOR=cgColor('indian red'), THICK=2
              ENDIF
              RETURN
              

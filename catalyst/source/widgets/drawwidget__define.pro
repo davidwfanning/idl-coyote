@@ -549,7 +549,7 @@ PRO DrawWidget::Draw, $
       IF Obj_Valid(target_window) THEN target_window -> SetWindow ELSE WSet, windowID
 
          ; Need the window erased?
-      IF (erase_window OR self._eraseWindow) THEN Erase, Color = FSC_Color(background_color, !P.BACKGROUND)
+      IF (erase_window OR self._eraseWindow) THEN Erase, Color = cgColor(background_color, !P.BACKGROUND)
 
    ENDIF
 
@@ -801,12 +801,12 @@ PRO DrawWidget::Notify_Realize, theObject
    self -> GetProperty, RefreshBuffer=refreshBuffer
    IF Obj_Valid(refreshBuffer) THEN BEGIN
       refreshBuffer -> SetWindow
-      Erase, Color=FSC_Color(self._initialcolor)
+      Erase, Color=cgColor(self._initialcolor)
       self -> SetWindow
       refreshBuffer -> Copy
    ENDIF ELSE BEGIN
       self -> SetWindow
-      Erase, Color=FSC_Color(self._initialcolor)
+      Erase, Color=cgColor(self._initialcolor)
    ENDELSE
 
    IF currentWindow GE 0 THEN WSet, currentWindow

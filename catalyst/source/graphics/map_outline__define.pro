@@ -47,7 +47,7 @@
 ;
 ; COMMON KEYWORDS (used with either MAP_CONTINENTS of MAP_GSHHS_SHORELINE):
 ;
-;       COLOR:         The name of a color (used with FSC_COLOR) to draw the output in.
+;       COLOR:         The name of a color (used with cgColor) to draw the output in.
 ;       
 ;       FILL:          Set this keyword to create a filled polygon output, rather than an outline.
 ;       
@@ -109,7 +109,7 @@
 ;
 ;                     http://www.dfanning.com/programs/error_message.pro
 ;                     http://www.dfanning.com/programs/find_resource_file.pro
-;                     http://www.dfanning.com/programs/fsc_color.pro
+;                     http://www.dfanning.com/programs/cgColor.pro
 ;                     http://www.dfanning.com/programs/map_gshhs_shoreline.pro
 ;
 ; MODIFICATION HISTORY:
@@ -200,7 +200,7 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
         IF self.fill AND (self.color NE self.land_color) THEN BEGIN
             MAP_CONTINENTS, $
                 COASTS=self.coasts, $
-                COLOR=FSC_COLOR(self.land_color), $
+                COLOR=cgColor(self.land_color), $
                 CONTINENTS=self.continents, $
                 COUNTRIES=self.countries, $
                 FILL=1, $
@@ -214,7 +214,7 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
                 ZVALUE=self.zvalue
             MAP_CONTINENTS, $
                 COASTS=self.coasts, $
-                COLOR=FSC_COLOR(self.color), $
+                COLOR=cgColor(self.color), $
                 CONTINENTS=self.continents, $
                 COUNTRIES=self.countries, $
                 FILL=0, $
@@ -229,7 +229,7 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
         ENDIF ELSE BEGIN
             MAP_CONTINENTS, $
                 COASTS=self.coasts, $
-                COLOR=FSC_COLOR(self.color), $
+                COLOR=cgColor(self.color), $
                 CONTINENTS=self.continents, $
                 COUNTRIES=self.countries, $
                 FILL=self.fill, $

@@ -1230,7 +1230,7 @@ PRO AnnotateInteraction::EventHandler, event
                LAYER=layer, $
                THICKNESS=thickness
 
-            default_object = Obj_New('ARROW', $
+            default_object = Obj_New('CAT_ARROW', $
                ARROWHEAD=arrowhead, $
                BACKGROUND=background, $
                BG_COLOR=bg_color, $
@@ -1271,7 +1271,7 @@ PRO AnnotateInteraction::EventHandler, event
                LAYER=layer, $
                LINESTYLE=linestyle, $
                THICKNESS=thickness
-            default_object = Obj_New('ELLIPSE', $
+            default_object = Obj_New('CAT_ELLIPSE', $
                BACKGROUND=background, $
                BG_COLOR=bg_color, $
                COLOR=color, $
@@ -1319,7 +1319,7 @@ PRO AnnotateInteraction::EventHandler, event
                LAYER=layer, $
                LINESTYLE=linestyle, $
                THICKNESS=thickness
-            default_object = Obj_New('POLYGON', $
+            default_object = Obj_New('CAT_POLYGON', $
                BACKGROUND=background, $
                BG_COLOR=bg_color, $
                COLOR=color, $
@@ -2166,7 +2166,7 @@ PRO AnnotateInteraction::SetProperty, $
                ENDELSE
             ENDIF
 
-            IF Obj_Isa_Valid(self.defaultObject, 'ARROW') THEN BEGIN
+            IF Obj_Isa_Valid(self.defaultObject, 'CAT_ARROW') THEN BEGIN
                IF !D.Name EQ 'WIN' THEN BEGIN
                     Device, Cursor_Standard=32515L
                ENDIF ELSE BEGIN
@@ -2413,7 +2413,7 @@ FUNCTION AnnotateInteraction::INIT, drawObject, $
    def_angle_object -> SetProperty, Statusbar=statusbar
 
    IF N_Elements(def_arrow_object) EQ 0 THEN $
-      def_arrow_object = Obj_New('ARROW', Visible=0, Coord_Object=coord_object, Name='ARROW TOOL', $
+      def_arrow_object = Obj_New('CAT_ARROW', Visible=0, Coord_Object=coord_object, Name='ARROW TOOL', $
          Thick=thick, Color=color, Background=background, Linestyle=linestyle, BG_Color=bgcolor) ELSE $
          def_arrow_object -> SetProperty, Visible=0
 
@@ -2423,7 +2423,7 @@ FUNCTION AnnotateInteraction::INIT, drawObject, $
       def_box_object -> SetProperty, Visible=0
 
    IF N_Elements(def_ellipse_object) EQ 0 THEN $
-      def_ellipse_object = Obj_New('ELLIPSE', Visible=0, Coord_Object=coord_object, Name='ELLIPSE TOOL', $
+      def_ellipse_object = Obj_New('CAT_ELLIPSE', Visible=0, Coord_Object=coord_object, Name='ELLIPSE TOOL', $
          Thick=thick, Color=color, Background=background, Linestyle=linestyle, BG_Color=bgcolor) ELSE $
          def_ellipse_object -> SetProperty, Visible=0
 
@@ -2433,7 +2433,7 @@ FUNCTION AnnotateInteraction::INIT, drawObject, $
          def_measure_object -> SetProperty, Visible=0
 
    IF N_Elements(def_polygon_object) EQ 0 THEN $
-      def_polygon_object = Obj_New('POLYGON', Visible=0, Coord_Object=coord_object, Name='POLYGON TOOL', $
+      def_polygon_object = Obj_New('CAT_POLYGON', Visible=0, Coord_Object=coord_object, Name='POLYGON TOOL', $
          Thick=thick, Color=color, Background=background, Linestyle=linestyle, BG_Color=bgcolor) ELSE $
          def_polygon_object -> SetProperty, Visible=0
 

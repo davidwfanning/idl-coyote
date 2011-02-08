@@ -47,7 +47,7 @@
 ; KEYWORDS:
 ; 
 ;    GRID_COLOR:           The name of a color the map grid should be displayed with. The default
-;                          is "indian red". Color names are those supported by FSC_COLOR.
+;                          is "indian red". Color names are those supported by cgColor.
 ;                          
 ;    MAP_GRID:             If a MapCoord object is made successfully, then setting this keyword
 ;                          will add a Map_Grid object to the MapCoord object.
@@ -56,7 +56,7 @@
 ;                          will add a Map_Outline object to the MapCoord object.
 ;                         
 ;    OUTLINE_COLOR:        The name of a color the map outline should be displayed with. The default
-;                          is "indian red". Color names are those supported by FSC_COLOR.
+;                          is "indian red". Color names are those supported by cgColor.
 ;                         
 ;    SILENT:               IDL cannot map every GeoTiff image to a supported map projection or datum.
 ;                          Normally, if the GeoTIFF image is unsupported, an error message is issued.

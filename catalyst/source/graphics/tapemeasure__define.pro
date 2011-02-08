@@ -533,14 +533,14 @@ PRO TapeMeasure::Draw, _Extra=extrakeywords
 
    ;Draw the background if required.
    IF self.background THEN $
-      PolyFill, self.box[0,*], self.box[1,*], Fill=1, Color=FSC_Color(self.bg_color), /NORMAL
+      PolyFill, self.box[0,*], self.box[1,*], Fill=1, Color=cgColor(self.bg_color), /NORMAL
 
    ; Draw the line.
-   PLOTS, [self.x1, self.x2], [self.y1, self.y2], Color=Fsc_Color(self.color), $
+   PLOTS, [self.x1, self.x2], [self.y1, self.y2], Color=cgColor(self.color), $
       Thick=self.thickness, Linestyle=self.linestyle
 
    ; Draw vertical and horizontal "locators" at endpoints.
-   PLOTS, [self.x1, self.x2], [self.y1, self.y2], PSYM=1, SYMSIZE=2, Color=Fsc_Color(self.color)
+   PLOTS, [self.x1, self.x2], [self.y1, self.y2], PSYM=1, SYMSIZE=2, Color=cgColor(self.color)
    ; Determine line length.
 
    length = StrTrim(String(SQRT((self.x1 - self.x2)^2 + (self.y1 - self.y2)^2), Format=self.format), 2)
@@ -614,8 +614,8 @@ PRO TapeMeasure::DrawSelectionBox, Color=color
    IF N_Elements(color) EQ 0 THEN color = self.color
 
    ; Draw the handles on the tape measure.
-   PLOTS, self.x1, self.y1, PSYM=6, Color=FSC_Color(color), Symsize=1.25
-   PLOTS, self.x2, self.y2, PSYM=6, Color=FSC_Color(color), Symsize=1.25
+   PLOTS, self.x1, self.y1, PSYM=6, Color=cgColor(color), Symsize=1.25
+   PLOTS, self.x2, self.y2, PSYM=6, Color=cgColor(color), Symsize=1.25
 
    self -> Report, /Completed
 

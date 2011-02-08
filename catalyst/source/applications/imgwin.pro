@@ -50,7 +50,7 @@
 ;     BREWER:      Set if the color table index number (CT) is the index of a Brewer color table.
 ;                  To use Brewer color tables, the file fsc_brewer.tbl must be in your IDL path.
 ;                  
-;     COLOR:       Set this keyword to the name of the axis color. The name is passed to FSC_Color 
+;     COLOR:       Set this keyword to the name of the axis color. The name is passed to cgColor 
 ;                  for processing. Default is "charcoal". Used only if AXES is set.
 ;
 ;     CTINDEX:     The index of the color table to use to display the image. Applies only to 
@@ -868,7 +868,7 @@ FUNCTION ImgWin::INIT, image, $
         IF N_Elements(ctindex) EQ 0 THEN BEGIN
             ctindex = 0
             TVLCT, rr, gg, bb, /Get
-            CTLoad, ctindex, BREWER=brewer, NCOLORS=ncolors
+            cgLoadCT, ctindex, BREWER=brewer, NCOLORS=ncolors
             TVLCT, r, g, b, /GET
             colorPalette = [[r], [g], [b]]
             TVLCT, rr, gg, bb
@@ -878,7 +878,7 @@ FUNCTION ImgWin::INIT, image, $
                 colorPalette = [[r], [g], [b]]
             ENDIF ELSE BEGIN
                 TVLCT, rr, gg, bb, /Get
-                CTLoad, ctindex, BREWER=brewer, NCOLORS=ncolors
+                cgLoadCT, ctindex, BREWER=brewer, NCOLORS=ncolors
                 TVLCT, r, g, b, /GET
                 colorPalette = [[r], [g], [b]]
                 TVLCT, rr, gg, bb
