@@ -91,7 +91,7 @@
 ;       The following programs (at least) are required from the Coyote Library:
 ;
 ;                     http://www.dfanning.com/programs/error_message.pro
-;                     http://www.dfanning.com/programs/fsc_color.pro
+;                     http://www.dfanning.com/programs/cgcolor.pro
 ;                     http://www.dfanning.com/programs/symcat.pro
 ;
 ; MODIFICATION HISTORY:
@@ -206,7 +206,7 @@ PRO Map_Vector::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
         y0 = (*self.lat)[j]
         x1 = x0 + uscaled[j]
         y1 = y0 + vscaled[j]
-        Cat_Arrow, x0, y0, x1, y1, HSIZE=self.hsize, CLIP=clip, THICK=self.thick, $
+        Cat_IDLArrow, x0, y0, x1, y1, HSIZE=self.hsize, CLIP=clip, THICK=self.thick, $
            HTHICK=self.thick, LENGTH=length, COLOR=self.color, SOLID=self.solid, $
            _EXTRA=extrakeywords, /DATA, LINESTYLE=self.linestyle
     ENDFOR

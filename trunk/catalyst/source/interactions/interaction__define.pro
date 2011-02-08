@@ -207,7 +207,7 @@ PRO Interaction::Draw, _EXTRA=extra
    @cat_pro_error_handler
 
    self._drawID ->SetWindow
-   PLOTS, self._click_x, self._click_y, /Device, PSYM=2, SymSize=2, Color=FSC_Color(self._roi_color)
+   PLOTS, self._click_x, self._click_y, /Device, PSYM=2, SymSize=2, Color=cgColor(self._roi_color)
    self -> Report, /Completed
 
 

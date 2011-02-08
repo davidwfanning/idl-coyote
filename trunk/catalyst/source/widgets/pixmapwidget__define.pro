@@ -699,7 +699,7 @@ PRO PixmapWidget::Refresh, HOURGLASS=hourglass, $
    self -> SetWindow
 
    ; Erase the pixmap window
-   ERASE, Color=FSC_Color(self._backgroundColor)
+   ERASE, Color=cgColor(self._backgroundColor)
 
    IF N_Elements(targets) NE 0 THEN BEGIN
 

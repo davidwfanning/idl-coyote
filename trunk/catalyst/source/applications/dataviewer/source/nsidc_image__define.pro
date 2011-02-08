@@ -78,7 +78,7 @@
 ;          rather than the "filename" in the image DRAW method. I did this to facilitate
 ;          the display of HDF variables as images. 8 January 2009. DWF.
 ;       Added a vector color field and ability to display motion vector overlays. 15 June 2010. DWF.
-;       Renamed Colorbar procedure to FSC_Colorbar to avoid conflict with IDL 8 Colorbar function.
+;       Renamed Colorbar procedure to cgColorbar to avoid conflict with IDL 8 Colorbar function.
 ;          26 September 2010. DWF.
 ;-
 ;******************************************************************************************;
@@ -588,7 +588,7 @@ PRO NSIDC_Image::Draw,  _Extra=extrakeywords
            XYOUTS, (p[2] - p[0]) / 2 + p[0], /NORMAL, $
               p[1] - (1.5 * unit), $
               self.displayName, $
-              ALIGNMENT=0.5, COLOR=FSC_Color(self.fn_color), $
+              ALIGNMENT=0.5, COLOR=cgColor(self.fn_color), $
               CHARSIZE=0.75, FONT=(StrUpCase(!Version.OS_Family) EQ 'WINDOWS') ? 1 : 0
            DEVICE, SET_FONT='Helvetica', /TT_FONT
       ENDIF 
@@ -602,22 +602,22 @@ PRO NSIDC_Image::Draw,  _Extra=extrakeywords
             xdistance = 3.0 * !D.X_CH_SIZE / Float(!D.X_Size)
             self -> GetProperty, SCLMIN=sclmin, SCLMAX=sclmax
             colors -> Draw
-            FSC_Colorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
+            cgColorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
                POSITION=[p[0]+xdistance, p[3]+ 0.01, p[2]-xdistance, p[3]+ydistance/2.], /TOP, ANNOTATECOLOR=self.fn_color, $
                XCharsize = StrUpCase(!Version.OS_Family) EQ 'WINDOWS' ? 0.8 : 1.0, $
                FONT=(StrUpCase(!Version.OS_Family) EQ 'WINDOWS') ? 1 : 0, XTINKLEN=1.0, XMINOR=0
             POLYFILL, [p[0]+xdistance, p[0], p[0]+xdistance, p[0]+xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(oob_low_color)
+                      COLOR=cgColor(oob_low_color)
             PLOTS, [p[0]+xdistance, p[0], p[0]+xdistance, p[0]+xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(self.fn_color)
+                      COLOR=cgColor(self.fn_color)
             POLYFILL, [p[2]-xdistance, p[2], p[2]-xdistance, p[2]-xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(oob_high_color)
+                      COLOR=cgColor(oob_high_color)
             PLOTS, [p[2]-xdistance, p[2], p[2]-xdistance, p[2]-xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(self.fn_color)
+                      COLOR=cgColor(self.fn_color)
         ENDIF
       ENDIF
    ENDIF ELSE $
@@ -680,7 +680,7 @@ PRO NSIDC_Image::Draw,  _Extra=extrakeywords
             XYOUTS, (p[2] - p[0]) / 2 + p[0], /NORMAL, $
                p[1] - (1.5 * unit), $
                self.displayName, $
-               ALIGNMENT=0.5, COLOR=FSC_Color(self.fn_color), $
+               ALIGNMENT=0.5, COLOR=cgColor(self.fn_color), $
                FONT=0
       ENDIF 
       
@@ -693,23 +693,23 @@ PRO NSIDC_Image::Draw,  _Extra=extrakeywords
             xdistance = 3.0 * !D.X_CH_SIZE / Float(!D.X_Size)
             self -> GetProperty, SCLMIN=sclmin, SCLMAX=sclmax
             colors -> Draw
-            FSC_Colorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
+            cgColorbar, NCOLORS=ncolors, RANGE=[sclmin, sclmax], DIVISIONS=2, FORMAT=self.cb_format, $
                POSITION=[p[0]+xdistance, p[3]+ 0.01, p[2]-xdistance, p[3]+ydistance/2.], /TOP, ANNOTATECOLOR=self.fn_color, $
                XCharsize = StrUpCase(!Version.OS_Family) EQ 'WINDOWS' ? 0.8 : 1.0, $
                FONT=(StrUpCase(!Version.OS_Family) EQ 'WINDOWS') ? -1 : 0, XTICKLEN=1.0, XMINOR=0
  
             POLYFILL, [p[0]+xdistance, p[0], p[0]+xdistance, p[0]+xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(oob_low_color)
+                      COLOR=cgColor(oob_low_color)
             PLOTS, [p[0]+xdistance, p[0], p[0]+xdistance, p[0]+xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(self.fn_color)
+                      COLOR=cgColor(self.fn_color)
             POLYFILL, [p[2]-xdistance, p[2], p[2]-xdistance, p[2]-xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(oob_high_color)
+                      COLOR=cgColor(oob_high_color)
             PLOTS, [p[2]-xdistance, p[2], p[2]-xdistance, p[2]-xdistance], $
                       [p[3] + 0.01,((p[3]+ydistance/2.)-(p[3]+ 0.01))/2. + (p[3]+ 0.01) , p[3]+ydistance/2.0, p[3]+ 0.01], /NORMAL, $
-                      COLOR=FSC_Color(self.fn_color)
+                      COLOR=cgColor(self.fn_color)
         ENDIF
       ENDIF
       
@@ -907,7 +907,7 @@ PRO NSIDC_Image::EventHandler, event
             self -> GetProperty, COLOR_OBJECT=colors, LANDMASK_COLOR=landmask_color
             colorname = colors -> PickColorName(landmask_color, TITLE='Change LANDMASK Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
-            color = FSC_Color(colorname, /TRIPLE)
+            color = cgColor(colorname, /TRIPLE)
             r[252] = color[0]
             g[252] = color[1]
             b[252] = color[2]
@@ -925,7 +925,7 @@ PRO NSIDC_Image::EventHandler, event
             self -> GetProperty, COLOR_OBJECT=colors, MISSING_COLOR=missing_color
             colorname = colors -> PickColorName(missing_color, TITLE='Change MISSING Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
-            color = FSC_Color(colorname, /TRIPLE)
+            color = cgColor(colorname, /TRIPLE)
             r[255] = color[0]
             g[255] = color[1]
             b[255] = color[2]
@@ -943,7 +943,7 @@ PRO NSIDC_Image::EventHandler, event
             self -> GetProperty, COLOR_OBJECT=colors, OOB_LOW_COLOR=oob_low_color
             colorname = colors -> PickColorName(oob_low_color, TITLE='Change OUT-OF-BOUNDS LOW Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
-            color = FSC_Color(colorname, /TRIPLE)
+            color = cgColor(colorname, /TRIPLE)
             r[254] = color[0]
             g[254] = color[1]
             b[254] = color[2]
@@ -961,7 +961,7 @@ PRO NSIDC_Image::EventHandler, event
             self -> GetProperty, COLOR_OBJECT=colors, OOB_HIGH_COLOR=oob_high_color
             colorname = colors -> PickColorName(oob_high_color, TITLE='Change OUT-OF-BOUNDS HIGH Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
-            color = FSC_Color(colorname, /TRIPLE)
+            color = cgColor(colorname, /TRIPLE)
             r[253] = color[0]
             g[253] = color[1]
             b[253] = color[2]
@@ -1778,7 +1778,7 @@ PRO NSIDC_Image::XStretch_Notification, info
    gridWindow -> SetWindow
    Polyfill, [loc[0], loc[0], loc[2], loc[2], loc[0]], $
              [loc[1], loc[3], loc[3], loc[1], loc[1]], /NORMAL, $
-             COLOR=FSC_Color(bgcolor)
+             COLOR=cgColor(bgcolor)
    self -> Draw
  
 END

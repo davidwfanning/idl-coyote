@@ -3,11 +3,11 @@
 ;
 ;+
 ; NAME:        
-;    CAT_ARROW
+;    CAT_IDLARROW
 ; PURPOSE:  Draw a vector(s) with an arrow head
 ; CATEGORY: Graphics
 ; CALLING SEQUENCE:
-;  ARROW, x0, y0, x1, y1
+;  CAT_IDLARROW, x0, y0, x1, y1
 ; INPUTS:
 ;  (x0, y0) = coordinates of beginning of vector(s).  May be arrays
 ;   or scalars. Coordinates are in DEVICE coordinates
@@ -39,24 +39,24 @@
 ;  Straightforward.
 ;  Examples:
 ;       Draw an arrow from (100,150) to (300,350) in DEVICE units.
-;  ARROW, 100, 150,  300, 350
+;  CAT_IDLARROW, 100, 150,  300, 350
 ;
 ;   Draw a sine wave with arrows from the line Y=0 to
 ;   sin(x/4).
 ;  X = FINDGEN(50)
 ;  Y = SIN(x/4)    ;Make sin wave
 ;  PLOT, X, Y
-;  ARROW, X, REPLICATE(0,50), X, Y, /DATA
+;  CAT_IDLARROW, X, REPLICATE(0,50), X, Y, /DATA
 ; MODIFICATION HISTORY:
 ;  DMS, Feb, 1992.
 ;  DMS, Sept, 1992.  Added /SOLID.
-;  Renamed program CAT_ARROW and added LINESTYLE and _EXTRA keywords. Changed default
+;  Renamed program CAT_IDLARROW and added LINESTYLE and _EXTRA keywords. Changed default
 ;     arrowhead size to 1/32nd of width of the device. DWF
 ;-
 
 ;  Draw an arrow with a head from (x0,y0) to (x1, y1).  Params may be
 ;   vectors.
-PRO CAT_ARROW, x0, y0, x1, y1, HSIZE = hsize, COLOR = color, HTHICK = hthick, $
+PRO CAT_IDLARROW, x0, y0, x1, y1, HSIZE = hsize, COLOR = color, HTHICK = hthick, $
    THICK = thick, DATA = data, NORMALIZED = norm, $
    SOLID = solid, LINESTYLE=linestyle, _EXTRA=extra
 
@@ -119,13 +119,13 @@ for i = 0L, n_elements(x0)-1 do begin   ;Each vector
    if keyword_set(solid) then begin   ;Use polyfill?
      b = a * mcost*.9d ;End of arrow shaft (Fudge to force join)
      plots, [xp0, xp1+b*dx], [yp0, yp1+b*dy], /DEVICE, $
-     COLOR = FSC_Color(color), THICK = thick, LINESTYLE=linestyle, _Extra=extra
+     COLOR = cgColor(color), THICK = thick, LINESTYLE=linestyle, _Extra=extra
      polyfill, [xxp0, xxp1, xp1, xxp0], [yyp0, yyp1, yp1, yyp0], $
-     /DEVICE, COLOR = FSC_Color(color)
+     /DEVICE, COLOR = cgColor(color)
    endif else begin
-     plots, [xp0, xp1], [yp0, yp1], /DEVICE, COLOR = FSC_Color(color), THICK = thick, $
+     plots, [xp0, xp1], [yp0, yp1], /DEVICE, COLOR = cgColor(color), THICK = thick, $
          LINESTYLE=linestyle, _Extra=extra
-     plots, [xxp0,xp1,xxp1],[yyp0,yp1,yyp1], /DEVICE, COLOR = FSC_Color(color), $
+     plots, [xxp0,xp1,xxp1],[yyp0,yp1,yyp1], /DEVICE, COLOR = cgColor(color), $
       THICK = hthick, LINESTYLE=linestyle, _Extra=extra
    endelse
    ENDFOR

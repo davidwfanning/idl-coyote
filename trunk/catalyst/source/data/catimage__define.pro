@@ -73,7 +73,7 @@
 ;         restricted the number of colors in the image. 5 July 2005. DWF.
 ;       Fixed a bug in Pixel_To_Value method that caused value to be slightly off.
 ;          This was most noticable with really small images. 10 Oct 2008. DWF.
-;       In Draw_Mode_0 (i.e., the mode similar to TVIMAGE), this object will now draw
+;       In Draw_Mode_0 (i.e., the mode similar to cgImage), this object will now draw
 ;          map outlines and map grids if the coordinate object is a MAPCOORD object, and
 ;          it has been loaded with with MAP_OUTLINE or MAP_GRID objects. 4 January 2009.
 ;       Removed some testing code in SetProperty that asked to update IMGAXES objects. 31 July 2009. DWF.
@@ -526,7 +526,7 @@ PRO CatImage::Draw, _Extra=extrakeywords
 
    ; Which display mode?
    CASE self._display_mode OF
-      0: self -> Draw_Mode_0, _Extra=extrakeywords ; Based on image's position in window (similar to TVIMAGE)
+      0: self -> Draw_Mode_0, _Extra=extrakeywords ; Based on image's position in window (similar to cgImage)
       1: self -> Draw_Mode_1, _Extra=extrakeywords ; Just a standard TV.
       2: self -> Draw_Mode_2, _Extra=extrakeywords ; Standard TV, but with a position index (TV, image, 1).
    ENDCASE

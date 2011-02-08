@@ -136,7 +136,7 @@
 ;       The following programs (at least) are required from the Coyote Library:
 ;
 ;                     http://www.dfanning.com/programs/error_message.pro
-;                     http://www.dfanning.com/programs/fsc_color.pro
+;                     http://www.dfanning.com/programs/cgColor.pro
 ;
 ; MODIFICATION HISTORY:
 ;
@@ -330,7 +330,7 @@ PRO Map_Grid::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
             BOX_AXES=self.box_axes, $
             CLIP_TEXT=self.clip_text, $
             CHARSIZE=self.charsize, $
-            COLOR=FSC_COLOR(self.color), $
+            COLOR=cgColor(self.color), $
             FILL_HORIZON=self.fill_horizon, $
             GLINESTYLE=self.linestyle, $
             GLINETHICK=self.thick, $
@@ -351,7 +351,7 @@ PRO Map_Grid::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
             BOX_AXES=self.box_axes, $
             CLIP_TEXT=1, $
             CHARSIZE=self.charsize, $
-            COLOR=FSC_COLOR(self.color), $
+            COLOR=cgColor(self.color), $
             FILL_HORIZON=self.fill_horizon, $
             GLINESTYLE=self.linestyle, $
             GLINETHICK=self.thick, $

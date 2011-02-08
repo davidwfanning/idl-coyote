@@ -1,12 +1,12 @@
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON__DEFINE
+;       CAT_POLYGON__DEFINE
 ;
 ; PURPOSE:
 ;
 ;       The purpose of this routine is to provide a polygon that can be displayed
-;       in a direct graphics draw widget. The coordinate system of the Polygon
+;       in a direct graphics draw widget. The coordinate system of the Cat_Polygon
 ;       object is either passed to it (a CatCoord object) or is a normalized
 ;       coordinate system by default.
 ;
@@ -25,7 +25,7 @@
 ;
 ; SYNTAX:
 ;
-;       polygonObject = Obj_New("POLYGON", XPTS, YPTS)
+;       polygonObject = Obj_New("CAT_POLYGON", XPTS, YPTS)
 ;       drawObject -> Add, polygonObject
 ;
 ; SUPERCLASSES:
@@ -38,7 +38,7 @@
 ;
 ; CLASS_STRUCTURE:
 ;
-;   class = { POLYGON, $
+;   class = { CAT_POLYGON, $
 ;             background: 0L, $           ; A flag to indicate if a background polygon is drawn.
 ;             bg_color: "", $             ; The background color.
 ;             color: "", $                ; The name of a color to draw polygon in.
@@ -54,7 +54,7 @@
 ;
 ; MESSAGES:
 ;
-;   POLYGON_CHANGED:   This message is sent whenever SetProperty method is called and the NOMESSAGE
+;   CAT_POLYGON_CHANGED:   This message is sent whenever SetProperty method is called and the NOMESSAGE
 ;                      keyword is NOT set.
 ;
 ; EVENT_STRUCTURE:
@@ -102,7 +102,7 @@
 ;******************************************************************************************;
 ;+
 ; NAME:
-;       POLYGON::ADDTOEVENTSTRUCTURE
+;       CAT_POLYGON::ADDTOEVENTSTRUCTURE
 ;
 ; PURPOSE:
 ;
@@ -124,7 +124,7 @@
 ;
 ;-
 ;*****************************************************************************************************
-FUNCTION Polygon::AddToEventStructure, event
+FUNCTION Cat_Polygon::AddToEventStructure, event
 
    @cat_func_error_handler
 
@@ -145,7 +145,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::CALCULATEBOUNDARYBOX
+;       CAT_POLYGON::CALCULATEBOUNDARYBOX
 ;
 ; PURPOSE:
 ;
@@ -165,7 +165,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Polygon::CalculateBoundaryBox
+PRO Cat_Polygon::CalculateBoundaryBox
 
    @cat_pro_error_handler
 
@@ -194,11 +194,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::CONTROLPANEL
+;       CAT_POLYGON::CONTROLPANEL
 ;
 ; PURPOSE:
 ;
-;       This method creates a control panel for the POLYGON object.
+;       This method creates a control panel for the CAT_POLYGON object.
 ;
 ; SYNTAX:
 ;
@@ -215,18 +215,18 @@ END
 ;       _EXTRA:       Any keywords appropriate for the CATCONTROLPANEL::INIT method.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::ControlPanel, baseObject, _EXTRA=extraKeywords
+PRO Cat_Polygon::ControlPanel, baseObject, _EXTRA=extraKeywords
 
    @cat_pro_error_handler
 
       ; Create a new control panel
 
    cp = OBJ_NEW ('CatControlPanel', self, PARENT=baseObject, COLUMN=1, $
-      TITLE='Polygon Control Panel', _EXTRA=extraKeywords, /No_Cancel, /No_Apply, /No_OK)
+      TITLE='Cat_Polygon Control Panel', _EXTRA=extraKeywords, /No_Cancel, /No_Apply, /No_OK)
 
    IF (NOT OBJ_VALID (cp)) THEN RETURN
 
-   aproperties = Obj_New('PROPERTYSHEETWIDGET', cp, Value=self, Name='POLYGON PROPERTYSHEET', YSize=8)
+   aproperties = Obj_New('PROPERTYSHEETWIDGET', cp, Value=self, Name='CAT_POLYGON PROPERTYSHEET', YSize=8)
    aproperties -> SetProperty, Event_Object=self
 
    ; Display the control panel if it created its own TLB.
@@ -240,7 +240,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::CREATENEWOBJECT
+;       CAT_POLYGON::CREATENEWOBJECT
 ;
 ; PURPOSE:
 ;
@@ -254,17 +254,17 @@ END
 ;
 ; ARGUMENTS:
 ;
-;       drawID:    The draw widget which will contain the new arrow object. Required in normal operation.
+;       drawID:    The draw widget which will contain the new polygon object. Required in normal operation.
 ;
-;       pixmapID:  The pixmap which will contain the new arrow object. Optional.
+;       pixmapID:  The pixmap which will contain the new polygon object. Optional.
 ;
 ; KEYWORDS:
 ;
-;       NEWOBJECT: An output keyword containing the new arrow object that gets created.
+;       NEWOBJECT: An output keyword containing the new polygon object that gets created.
 ;
 ;-
 ;*****************************************************************************************************
-PRO Polygon::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
+PRO Cat_Polygon::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
 
    @cat_pro_error_handler
 
@@ -278,7 +278,7 @@ PRO Polygon::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
       XPTS=xpts, $
       YPTS=ypts
 
-   newObject = Obj_New('POLYGON',  $
+   newObject = Obj_New('CAT_POLYGON',  $
       BACKGROUND=background, $
       BG_COLOR=bg_color, $
       COLOR=color, $
@@ -318,7 +318,7 @@ PRO Polygon::CreateNewObject, drawID, pixmapID, NEWOBJECT=newObject
       IF Obj_Valid(pixmapID) THEN pixmapID -> Add, newObject
       self.insertedObject = newObject
 
-      ; Draw the new arrow.
+      ; Draw the new polygon.
       newObject -> Draw
 
    ENDELSE
@@ -331,7 +331,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::DRAW
+;       CAT_POLYGON::DRAW
 ;
 ; PURPOSE:
 ;
@@ -351,7 +351,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Polygon::Draw, _Extra=extrakeywords
+PRO Cat_Polygon::Draw, _Extra=extrakeywords
 
    @cat_pro_error_handler
 
@@ -367,10 +367,10 @@ PRO Polygon::Draw, _Extra=extrakeywords
    ; Draw the background if required.
    IF self.background THEN $
       PolyFill, *self.xpts, *self.ypts, $
-                 Fill=1, Color=FSC_Color(self.bg_color)
+                 Fill=1, Color=cgColor(self.bg_color)
 
    ; Draw the polygon.
-   PlotS, *self.xpts, *self.ypts, Color=FSC_Color(self.color), $
+   PlotS, *self.xpts, *self.ypts, Color=cgColor(self.color), $
           Thick=self.thickness, Linestyle=self.linestyle
 
    self -> Report, /Completed
@@ -382,7 +382,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::DRAWSELECTIONBOX
+;       CAT_POLYGON::DRAWSELECTIONBOX
 ;
 ; PURPOSE:
 ;
@@ -402,7 +402,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Polygon::DrawSelectionBox, Color=color
+PRO Cat_Polygon::DrawSelectionBox, Color=color
 
    @cat_pro_error_handler
 
@@ -418,7 +418,7 @@ PRO Polygon::DrawSelectionBox, Color=color
    self -> ApplyCoords
 
    ; Draw the selection box.
-   PLOTS, *self.xpts, *self.ypts, PSYM=6, Color=FSC_Color(color), Symsize=1.25
+   PLOTS, *self.xpts, *self.ypts, PSYM=6, Color=cgColor(color), Symsize=1.25
 
    self -> Report, /Completed
 
@@ -429,7 +429,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::EVENTHANDLER
+;       CAT_POLYGON::EVENTHANDLER
 ;
 ; PURPOSE:
 ;
@@ -448,7 +448,7 @@ END
 ;       None.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::EventHandler, event
+PRO Cat_Polygon::EventHandler, event
 
    @cat_pro_error_handler
 
@@ -457,7 +457,7 @@ PRO Polygon::EventHandler, event
    CASE eventName OF
 
 
-      'POLYGON PROPERTYSHEET': BEGIN
+      'CAT_POLYGON PROPERTYSHEET': BEGIN
 
          IF event.type EQ 0 THEN BEGIN
             CASE StrUpCase(event.identifier) OF
@@ -518,11 +518,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::GETPROPERTY
+;       CAT_POLYGON::GETPROPERTY
 ;
 ; PURPOSE:
 ;
-;       This method allows the user to obtain POLYGON properties. Be sure
+;       This method allows the user to obtain CAT_POLYGON properties. Be sure
 ;       you ALWAYS call the superclass GETPROPERTY method if you have extra
 ;       keywords!
 ;
@@ -557,7 +557,7 @@ END
 ;     _REF_EXTRA:     Any keywords appropriate for the superclass GetProperty method.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::GetProperty, $
+PRO Cat_Polygon::GetProperty, $
    HEIGHT=height, $
    INSERTEDOBJECT=insertedObject, $
    LAYER=layer, $
@@ -600,7 +600,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::INITIALIZE
+;       CAT_POLYGON::INITIALIZE
 ;
 ; PURPOSE:
 ;
@@ -619,7 +619,7 @@ END
 ;       None.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::Initialize
+PRO Cat_Polygon::Initialize
 
    @cat_pro_error_handler
 
@@ -638,7 +638,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::INTERACTIONEVENTS
+;       CAT_POLYGON::INTERACTIONEVENTS
 ;
 ; PURPOSE:
 ;
@@ -663,7 +663,7 @@ END
 ;
 ;-
 ;*****************************************************************************************************
-PRO Polygon::InteractionEvents, event, Interaction=interaction
+PRO Cat_Polygon::InteractionEvents, event, Interaction=interaction
 
    @cat_pro_error_handler
 
@@ -791,7 +791,7 @@ PRO Polygon::InteractionEvents, event, Interaction=interaction
                         self.npoints = self.npoints + 1
                         IF self.npoints GE 2 THEN BEGIN
                            self.pointsPixID -> SetWindow
-                           PlotS, (*self.xpts)[self.npoints-2:self.npoints-1], Color=FSC_Color(self.color), $
+                           PlotS, (*self.xpts)[self.npoints-2:self.npoints-1], Color=cgColor(self.color), $
                                  (*self.ypts)[self.npoints-2:self.npoints-1], Thick=self.thickness, $
                                  Linestyle=self.linestyle
                         ENDIF
@@ -837,7 +837,7 @@ PRO Polygon::InteractionEvents, event, Interaction=interaction
                   self.pointsPixID -> Copy
                   c = Convert_Coord(event.x, event.y, /Device, /To_Data)
 
-                  PlotS, [(*self.xpts)[self.npoints-1], c[0,0]], Color=FSC_Color(self.color), $
+                  PlotS, [(*self.xpts)[self.npoints-1], c[0,0]], Color=cgColor(self.color), $
                          [(*self.ypts)[self.npoints-1], c[1,0]], Thick=self.thickness, $
                          Linestyle=self.linestyle
                ENDIF
@@ -945,7 +945,7 @@ PRO Polygon::InteractionEvents, event, Interaction=interaction
                         self.npoints = self.npoints + 1
                         IF self.npoints GE 2 THEN BEGIN
                            self.pointsPixID -> SetWindow
-                           PlotS, (*self.xpts)[self.npoints-2:self.npoints-1], Color=FSC_Color(self.color), $
+                           PlotS, (*self.xpts)[self.npoints-2:self.npoints-1], Color=cgColor(self.color), $
                                  (*self.ypts)[self.npoints-2:self.npoints-1], Thick=self.thickness, $
                                  Linestyle=self.linestyle
                         ENDIF
@@ -995,7 +995,7 @@ PRO Polygon::InteractionEvents, event, Interaction=interaction
                   self.pointsPixID -> Copy
                   c = Convert_Coord(event.x, event.y, /Device, /To_Data)
 
-                  PlotS, [(*self.xpts)[self.npoints-1], c[0,0]], Color=FSC_Color(self.color), $
+                  PlotS, [(*self.xpts)[self.npoints-1], c[0,0]], Color=cgColor(self.color), $
                          [(*self.ypts)[self.npoints-1], c[1,0]], Thick=self.thickness, $
                          Linestyle=self.linestyle
                ENDIF
@@ -1081,7 +1081,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::MOVE
+;       CAT_POLYGON::MOVE
 ;
 ; PURPOSE:
 ;
@@ -1105,7 +1105,7 @@ END
 ;                   contents of the window.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::Move, x, y, PIXMAP=pixmap, NODRAW=noDraw
+PRO Cat_Polygon::Move, x, y, PIXMAP=pixmap, NODRAW=noDraw
 
    @cat_pro_error_handler
 
@@ -1136,7 +1136,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::SELECT
+;       CAT_POLYGON::SELECT
 ;
 ; PURPOSE:
 ;
@@ -1158,7 +1158,7 @@ END
 ;       SUCCESS:   Set to 1 if a selection is made. To 0 otherwise.
 ;-
 ;*****************************************************************************************************
-FUNCTION Polygon::Select, x, y, SUCCESS=success
+FUNCTION Cat_Polygon::Select, x, y, SUCCESS=success
 
    @cat_func_error_handler
 
@@ -1220,7 +1220,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::SELECTVERTEX
+;       CAT_POLYGON::SELECTVERTEX
 ;
 ; PURPOSE:
 ;
@@ -1242,7 +1242,7 @@ END
 ;                   the proper device coodinate system.
 ;-
 ;*****************************************************************************************************
-FUNCTION Polygon::SelectVertex, x, y, DRAWID=drawID
+FUNCTION Cat_Polygon::SelectVertex, x, y, DRAWID=drawID
 
    @cat_func_error_handler
 
@@ -1272,11 +1272,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::SETPROPERTY
+;       CAT_POLYGON::SETPROPERTY
 ;
 ; PURPOSE:
 ;
-;       This method allows the user to set the POLYGON object's properties. Be sure
+;       This method allows the user to set the CAT_POLYGON object's properties. Be sure
 ;       you ALWAYS call the superclass SETPROPERTY method if you have extra keywords!
 ;
 ;
@@ -1310,7 +1310,7 @@ END
 ;    _EXTRA:        Any keywords appropriate for the superclass SetProperty method.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::SetProperty, $
+PRO Cat_Polygon::SetProperty, $
    DRAW=draw, $
    LAYER=layer, $
    LINESTYLE=linestyle, $
@@ -1362,7 +1362,7 @@ PRO Polygon::SetProperty, $
    ENDIF
 
    ; Send message?
-   IF sendMessage AND ~Keyword_Set(nomessage) THEN self -> SendMessage, 'POLYGON_CHANGED'
+   IF sendMessage AND ~Keyword_Set(nomessage) THEN self -> SendMessage, 'CAT_POLYGON_CHANGED'
 
    IF Keyword_Set(draw) THEN self -> Draw
 
@@ -1376,7 +1376,7 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::UPDATE_MODEMAP
+;       CAT_POLYGON::UPDATE_MODEMAP
 ;
 ; PURPOSE:
 ;
@@ -1395,7 +1395,7 @@ END
 ;      CLEAR:     If this keyword is set, the modemap is cleared of all information.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::Update_Modemap, CLEAR=clear
+PRO Cat_Polygon::Update_Modemap, CLEAR=clear
 
    @cat_pro_error_handler
 
@@ -1474,11 +1474,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::CLEANUP
+;       CAT_POLYGON::CLEANUP
 ;
 ; PURPOSE:
 ;
-;       This is the POLYGON object class destructor method.
+;       This is the CAT_POLYGON object class destructor method.
 ;
 ; SYNTAX:
 ;
@@ -1493,7 +1493,7 @@ END
 ;      None.
 ;-
 ;*****************************************************************************************************
-PRO Polygon::CLEANUP
+PRO Cat_Polygon::CLEANUP
 
    @cat_pro_error_handler
 
@@ -1511,11 +1511,11 @@ END
 ;*****************************************************************************************************
 ;+
 ; NAME:
-;       POLYGON::INIT
+;       CAT_POLYGON::INIT
 ;
 ; PURPOSE:
 ;
-;       This is the POLYGON object class initialization method
+;       This is the CAT_POLYGON object class initialization method
 ;
 ; SYNTAX:
 ;
@@ -1540,7 +1540,7 @@ END
 ;     _EXTRA:       Any keywords appropriate for the SELECTABLEOBJECT INIT method.
 ;-
 ;*****************************************************************************************************
-FUNCTION Polygon::INIT, $
+FUNCTION Cat_Polygon::INIT, $
    LAYER=layer, $
    LINESTYLE=linestyle, $
    THICKNESS=thickness, $
@@ -1552,7 +1552,7 @@ FUNCTION Polygon::INIT, $
    @cat_func_error_handler
 
 
-   ok = self -> SELECTABLEOBJECT::INIT (DESCRIPTION='Polygon Properties', _EXTRA=extraKeywords)
+   ok = self -> SELECTABLEOBJECT::INIT (DESCRIPTION='Cat_Polygon Properties', _EXTRA=extraKeywords)
    IF ~ok THEN RETURN, 0
 
    ; If a coordinate object wasn't provided, try to copy one from the
@@ -1607,16 +1607,16 @@ END
 ;*****************************************************************************************************
 ;
 ; NAME:
-;       POLYGON CLASS DEFINITION
+;       CAT_POLYGON CLASS DEFINITION
 ;
 ; PURPOSE:
 ;
-;       This is the structure definition code for the POLYGON object.
+;       This is the structure definition code for the CAT_POLYGON object.
 ;
 ;*****************************************************************************************************
-PRO Polygon__Define
+PRO Cat_Polygon__Define
 
-   class = { POLYGON, $
+   class = { CAT_POLYGON, $
              insertedObject: Obj_New(), $; The new object created in the CreateNewObject method. (Ignored in CLEANUP.)
              layerObject: Obj_New(), $   ; A CATLAYER object for holding the annotation.
              linestyle: 0L, $            ; The line style of the polygon.

@@ -85,29 +85,29 @@ PRO SystemColors::Show
    Device, Decomposed=1, Get_Decomposed=theState
    x = [0, 50, 50, 0, 0]
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*0, /Device, Color=self.face
-   Plots, x, [0, 0, 50, 50, 0] + (50)*0, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 25, 'Face', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*0, /Device, Color=cgColor('white')
+   XYOuts, 75, 25, 'Face', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*1, /Device, Color=self.selected
-   Plots, x, [0, 0, 50, 50, 0] + (50)*1, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 75, 'Selected', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*1, /Device, Color=cgColor('white')
+   XYOuts, 75, 75, 'Selected', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*2, /Device, Color=self.edge
-   Plots, x, [0, 0, 50, 50, 0] + (50)*2, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 125, 'Edge', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*2, /Device, Color=cgColor('white')
+   XYOuts, 75, 125, 'Edge', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*3, /Device, Color=self.highlight
-   Plots, x, [0, 0, 50, 50, 0] + (50)*3, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 175, 'Highlight', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*3, /Device, Color=cgColor('white')
+   XYOuts, 75, 175, 'Highlight', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*4, /Device, Color=self.shadow
-   Plots, x, [0, 0, 50, 50, 0] + (50)*4, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 225, 'Shadow', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*4, /Device, Color=cgColor('white')
+   XYOuts, 75, 225, 'Shadow', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*5, /Device, Color=self.active
-   Plots, x, [0, 0, 50, 50, 0] + (50)*5, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 275, 'Active', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*5, /Device, Color=cgColor('white')
+   XYOuts, 75, 275, 'Active', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*6, /Device, Color=self.text
-   Plots, x, [0, 0, 50, 50, 0] + (50)*6, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 325, 'Text', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*6, /Device, Color=cgColor('white')
+   XYOuts, 75, 325, 'Text', /Device, Font=0, Color=cgColor('white')
    Polyfill, x, [0, 0, 50, 50, 0] + (50)*7, /Device, Color=self.frame
-   Plots, x, [0, 0, 50, 50, 0] + (50)*7, /Device, Color=FSC_Color('white')
-   XYOuts, 75, 375, 'Frame', /Device, Font=0, Color=FSC_Color('white')
+   Plots, x, [0, 0, 50, 50, 0] + (50)*7, /Device, Color=cgColor('white')
+   XYOuts, 75, 375, 'Frame', /Device, Font=0, Color=cgColor('white')
    Device, Decomposed=theState
 
    self -> Report, /Completed

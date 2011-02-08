@@ -239,7 +239,7 @@ PRO Ruler::Draw, _Extra=extrakeywords
       AXIS, x, y, $
          YAXIS=yaxis, $
          CHARSIZE=self.charsize, $
-         COLOR=FSC_COLOR(self.color), $
+         COLOR=cgColor(self.color), $
          SAVE=1, $
          YMINOR=self.minor, $
          YRANGE=[0.0,theLength], $
@@ -290,7 +290,7 @@ PRO Ruler::Draw, _Extra=extrakeywords
       AXIS, x, y, $
          XAXIS=xaxis, $
          CHARSIZE=self.charsize, $
-         COLOR=FSC_COLOR(self.color), $
+         COLOR=cgColor(self.color), $
          XMINOR=self.minor, $
          XRANGE=[0.0,theLength], $
          XTHICK=self.thick, $

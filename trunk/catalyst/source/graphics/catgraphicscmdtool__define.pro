@@ -500,7 +500,7 @@ PRO CatGraphicsCmdTool::Undo
    IF WindowAvailable(cache.wid) THEN $
    BEGIN
       WSet, cache.wid
-      TVImage, cache.contents, /NoInterpolate
+      cgImage, cache.contents, /NoInterpolate
    ENDIF
 
    self -> Report, /Completed

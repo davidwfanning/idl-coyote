@@ -1397,10 +1397,10 @@ FUNCTION CatColors::INIT, $
    @cat_func_error_handler
 
    ; Try to locate the brewer file. Check resource/colors directory, then directory
-   ; containing CTLOAD source code, then current directory, then ask, then give up.
+   ; containing cgLoadCT source code, then current directory, then ask, then give up.
    ; Look for either FSC_BREWER.TBL or BREWER.TBL.
    ; Try to locate the brewer file. Check resource/colors directory, then directory
-   ; containing CTLOAD source code, then current directory, then ask, then give up.
+   ; containing cgLoadCT source code, then current directory, then ask, then give up.
    ; Look for either FSC_BREWER.TBL or BREWER.TBL.
     brewerfile = Filepath(SubDir=['resource','colors'], 'fsc_brewer.tbl')
     IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = File_Which('fsc_brewer.tbl', INCLUDE_CURRENT_DIR=1)

@@ -87,7 +87,7 @@
 ;       The following programs (at least) are required from the Coyote Library:
 ;
 ;                     http://www.dfanning.com/programs/error_message.pro
-;                     http://www.dfanning.com/programs/fsc_color.pro
+;                     http://www.dfanning.com/programs/cgcolor.pro
 ;                     http://www.dfanning.com/programs/symcat.pro
 ;
 ; MODIFICATION HISTORY:
@@ -187,7 +187,7 @@ PRO Map_PlotS::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
     ; Draw the lines or symbols.
     PlotS, lons, lats,  $
         CLIP=clip, $
-        COLOR=FSC_COLOR(self.color), $
+        COLOR=cgColor(self.color), $
         LINESTYLE=self.linestyle, $
         NOCLIP=self.noclip, $
         PSYM=psym, $
