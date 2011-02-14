@@ -114,6 +114,7 @@ FUNCTION Parse_NSIDC_Filename_0001, filename, INFO=info, SUCCESS=success
      'N': BEGIN
               CASE Fix(freq) OF
                  85:   image = IntArr(608,896)
+                 91:   image = IntArr(608,896)
                  ELSE: image = IntArr(304,448)
               ENDCASE
           END
@@ -121,6 +122,7 @@ FUNCTION Parse_NSIDC_Filename_0001, filename, INFO=info, SUCCESS=success
      'S': BEGIN
              CASE Fix(freq) OF
                 85:   image = IntArr(632,664)
+                91:   image = IntArr(632,664)
                 ELSE: image = IntArr(316,332)
              ENDCASE
           END
