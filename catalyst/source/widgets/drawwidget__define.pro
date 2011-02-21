@@ -452,7 +452,7 @@ PRO DrawWidget::Copy, $
    BEGIN
       thisWindow = !D.Window
       WSet, windowID
-      image = TVRead()
+      image = cgSnapshot()
       IF thisWindow GT 0 THEN WSet, thisWindow
    ENDIF $
    ELSE DEVICE, COPY=[origin[0], origin[1], extent[0], extent[1], destination[0], destination[1], windowID]
@@ -927,7 +927,7 @@ PRO DrawWidget::Output, $
    self -> SetWindow
    aspectRatio = Float(!D.Y_Size) / !D.X_Size
    IF aspectRatio LT 1 THEN landscape = 1 ELSE landscape = 0
-   snapshot = TVRead()
+   snapshot = cgSnapshot()
    position = PSWindow(LANDSCAPE=landscape)
    
 

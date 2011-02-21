@@ -402,7 +402,7 @@ PRO ContrastBox::SetDisplay
 
    ; Make a a light image for display in the pixmap.
    self._drawID -> SetWindow
-   image = TVRead(True=3)
+   image = cgSnapshot(True=3)
 
    image24 = BytArr(xsize, ysize, 3)
    Color_Convert, Reform(image[*,*,0]), Reform(image[*,*,1]), Reform(image[*,*,2]), hue, light, sat, /RGB_HLS

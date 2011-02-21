@@ -110,7 +110,7 @@ PRO CatGraphicsCmdTool::Draw, _Extra=extraKeywords
    ; Cache the current graphics window.
 
    IF (!D.FLAGS AND 256) NE 0 THEN BEGIN
-      IF self._noCache EQ 0 THEN self -> Cache, {wid: !D.Window, contents:TVREAD()}
+      IF self._noCache EQ 0 THEN self -> Cache, {wid: !D.Window, contents:cgSnapshot()}
 
       ; Set the correct color decomposition state for this command.
 
