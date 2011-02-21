@@ -427,7 +427,7 @@ PRO Interaction::GetProperty, $
    IF Arg_Present(drawimage) THEN BEGIN
       IF Obj_Valid(self._drawID) THEN BEGIN
          self._drawID -> SetWindow
-         drawimage = TVRead()
+         drawimage = cgSnapshot()
       ENDIF
    ENDIF
 

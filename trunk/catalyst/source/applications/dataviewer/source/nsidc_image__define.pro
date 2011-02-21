@@ -800,7 +800,7 @@ PRO NSIDC_Image::DrawPNG, filename, XSIZE=xsize, YSIZE=ysize, MAXSIZE=maxsize
    self -> Draw
    IF StrUpCase(StrMid(filename, 3, 4, /REVERSE_OFFSET)) EQ '.PNG' $
         THEN filename = StrMid(filename, 0, StrLen(filename)-4)
-   void = TVRead(/PNG, /NODIALOG, FILENAME=filename)
+   void = cgSnapshot(/PNG, /NODIALOG, FILENAME=filename)
    
    self -> Report, /Completed
 
