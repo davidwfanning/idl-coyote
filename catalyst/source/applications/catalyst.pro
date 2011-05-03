@@ -411,7 +411,7 @@ PRO Catalyst::EventHandler, event
          ENDIF
          self.currentInteraction = Obj_New('Selectinteraction', self.draw5ID, /Start_Now, $
             Name='INTERACTION', /ASK_ON_UP, UVALUE='ELLIPSE', Thick=2, Color='Yellow', $
-            /NoPicRestore, Coord_Object=zcoord, SelectedObject=Obj_New('Ellipse'), MODE='INSERT')
+            /NoPicRestore, Coord_Object=zcoord, SelectedObject=Obj_New('Cat_Ellipse'), MODE='INSERT')
          ruler = self.draw5ID -> Get('Ruler', /Recursive_Search)
          IF Obj_Valid(ruler) THEN ruler -> SetProperty, Selectable=0
          self.draw5ID -> SetProperty, Motion=0
