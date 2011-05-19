@@ -8,7 +8,7 @@
 ;       This object implements a methodology for displaying object graphics in
 ;       the Catalyst Object Library. The object contains an IDLgrView or IDLgrScene
 ;       object, written in object graphics that can be displayed in an ODrawWidget
-;       object. If fact, the ODrawWidget will *only* accept a CATOBJECTVEW object.
+;       object. If fact, the ODrawWidget will *only* accept a CATOBJECTVIEW object.
 ;
 ; AUTHORS:
 ;
