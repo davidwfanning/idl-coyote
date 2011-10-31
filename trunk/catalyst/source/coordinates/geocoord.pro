@@ -96,6 +96,9 @@
 ;          can now also be "PixelIsPoint". 10 February 2010. DWF.
 ;       Added ability to add MAP_OUTLINE and MAP_GRID objects to the output MapCoord object.
 ;          New keywords OUTLINE_COLOR, MAP_OUTLINE, GRID_COLOR, and MAP_GRID. 20 Feb 2010, DWF.
+;       Switch UTM datum from WGS84 to WALBECK to avoid UTM projection bug in all versions
+;            of IDL prior to IDL 8.2, when it is suppose to be fixed. For more information,
+;            see this article: http://www.idlcoyote.com/map_tips/utmwrong.php. 31 Oct 2011. DWF.
 ;-
 ;******************************************************************************************;
 ;  Copyright (c) 2009-2010, by Fanning Software Consulting, Inc.                           ;
@@ -846,6 +849,16 @@ Function GeoCoord, image, geotiff, $
         thisProjection = 101 ; UTM
         thisDatum = 8        ; WGS 84
         zone = projCode - 32600
+
+        ; There is a bug in all versions of IDL up to IDL 8.1 apparently that
+        ; produces the wrong result when a UTM projection is used in conjunction
+        ; with a WGS84 datum (the most common datum used in this projection). Here
+        ; we substitute the WALBECK datum, which is nearly identical to WGS84 are
+        ; results in position errors of less than a meter typically.
+        IF (Float(!version.release) LE 8.2) THEN BEGIN
+              Print, 'Switching UTM datum from WGS84 to WALBECK to avoid UTM projection bug.'
+              thisDatum = 12
+        ENDIF   
         
         CASE 1 OF ; Longitude
               (Where(fields EQ 'PROJNATORIGINLONGGEOKEY'))[0] NE -1 :        lon = geotiff.PROJNATORIGINLONGGEOKEY
@@ -875,6 +888,16 @@ Function GeoCoord, image, geotiff, $
         thisDatum = 8        ; WGS 84
         zone = -(projCode - 32700)
         
+        ; There is a bug in all versions of IDL up to IDL 8.1 apparently that
+        ; produces the wrong result when a UTM projection is used in conjunction
+        ; with a WGS84 datum (the most common datum used in this projection). Here
+        ; we substitute the WALBECK datum, which is nearly identical to WGS84 are
+        ; results in position errors of less than a meter typically.
+        IF (Float(!version.release) LE 8.2) THEN BEGIN
+              Print, 'Switching UTM datum from WGS84 to WALBECK to avoid UTM projection bug.'
+              thisDatum = 12
+        ENDIF
+
         CASE 1 OF ; Longitude
               (Where(fields EQ 'PROJNATORIGINLONGGEOKEY'))[0] NE -1 :        lon = geotiff.PROJNATORIGINLONGGEOKEY
               (Where(fields EQ 'PROJORIGINLONGGEOKEY'))[0] NE -1 :           lon = geotiff.PROJORIGINLONGGEOKEY
@@ -930,6 +953,16 @@ Function GeoCoord, image, geotiff, $
         thisProjection = 101 ; UTM
         thisDatum = 8        ; WGS84 or NAD83
         zone = projCode - 26900
+        
+        ; There is a bug in all versions of IDL up to IDL 8.1 apparently that
+        ; produces the wrong result when a UTM projection is used in conjunction
+        ; with a WGS84 datum (the most common datum used in this projection). Here
+        ; we substitute the WALBECK datum, which is nearly identical to WGS84 are
+        ; results in position errors of less than a meter typically.
+        IF (Float(!version.release) LE 8.2) THEN BEGIN
+              Print, 'Switching UTM datum from WGS84 to WALBECK to avoid UTM projection bug.'
+              thisDatum = 12
+        ENDIF
         
         CASE 1 OF ; Longitude
               (Where(fields EQ 'PROJNATORIGINLONGGEOKEY'))[0] NE -1 :        lon = geotiff.PROJNATORIGINLONGGEOKEY
@@ -988,6 +1021,16 @@ Function GeoCoord, image, geotiff, $
         thisDatum = 8        ; WGS84 or NAD83
         zone = projCode - 32100
         
+        ; There is a bug in all versions of IDL up to IDL 8.1 apparently that
+        ; produces the wrong result when a UTM projection is used in conjunction
+        ; with a WGS84 datum (the most common datum used in this projection). Here
+        ; we substitute the WALBECK datum, which is nearly identical to WGS84 are
+        ; results in position errors of less than a meter typically.
+        IF (Float(!version.release) LE 8.2) THEN BEGIN
+              Print, 'Switching UTM datum from WGS84 to WALBECK to avoid UTM projection bug.'
+              thisDatum = 12
+        ENDIF
+
         CASE 1 OF ; Longitude
               (Where(fields EQ 'PROJNATORIGINLONGGEOKEY'))[0] NE -1 :        lon = geotiff.PROJNATORIGINLONGGEOKEY
               (Where(fields EQ 'PROJORIGINLONGGEOKEY'))[0] NE -1 :           lon = geotiff.PROJORIGINLONGGEOKEY

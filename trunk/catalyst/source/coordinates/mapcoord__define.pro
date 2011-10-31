@@ -168,6 +168,9 @@
 ;       Modified the way map overlays are added with MAP_OVERLAY keyword to INIT and SetProperty
 ;           methods. 15 June 2010. DWF.
 ;       Added ZONE keyword to the GetProperty method. 22 June 2010. DWF.
+;       Switch UTM datum from WGS84 to WALBECK to avoid UTM projection bug in all versions
+;            of IDL prior to IDL 8.2, when it is suppose to be fixed. For more information,
+;            see this article: http://www.idlcoyote.com/map_tips/utmwrong.php. 31 Oct 2011. DWF.
 ;-
 ;*******************************************************************************************
 ;* Copyright (c) 2008-2010, jointly by Fanning Software Consulting, Inc.                   *
@@ -1301,6 +1304,18 @@ FUNCTION MapCoord::INIT, map_projection, $
             thisDatum = theDatums[index]
         ENDIF ELSE thisDatum = theDatums[0 > datum < 19]
    ENDELSE
+   
+   ; There is a bug in all versions of IDL up to IDL 8.1 apparently that
+   ; produces the wrong result when a UTM projection is used in conjunction
+   ; with a WGS84 datum (the most common datum used in this projection). Here
+   ; we substitute the WALBECK datum, which is nearly identical to WGS84 are
+   ; results in position errors of less than a meter typically.
+   IF (StrUpCase(thisDatum.Name) EQ 'WGS 84') && $
+      (StrUpCase(this_map_projection.Name) EQ 'UTM') && $
+      (Float(!version.release) LE 8.2) THEN BEGIN
+          Print, 'Switching UTM datum from WGS84 to WALBECK to avoid UTM projection bug.'
+          thisDatum = { MAPCOORD_DATUM, 12, 'Walbeck', 6378137.0, 6356752.314245 }
+   ENDIF
    
    ; Modify the radii?
    IF N_Elements(sphere_radius) NE 0 THEN BEGIN
