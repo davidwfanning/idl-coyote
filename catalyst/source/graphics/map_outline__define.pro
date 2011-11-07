@@ -155,7 +155,7 @@
 ;  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS           ;
 ;  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            ;
 ;******************************************************************************************;
-PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
+PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
 
     ; Error handling.
     Catch, theError
@@ -168,14 +168,10 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
     ; Find a map structure, if you can.
     IF Obj_Valid(self.map_object) THEN BEGIN
         mapStruct = self.map_object -> GetMapStructure() 
-        IF ~Keyword_Set(nomapdraw) THEN self.map_object -> Draw
-    ENDIF ELSE Message, 'There is no valid map object from which a map structure can be obtained.'
+    ENDIF
     
     ; Do this in decomposed color, if possible.
-    IF (!D.Flags AND 256) NE 0 THEN BEGIN
-       DEVICE, GET_DECOMPOSED=theState
-       Device, DECOMPOSED=1
-    ENDIF
+    SetDecomposedState, 1, CURRENT=currentState
     
     ; Draw the appropriate map outline.
     IF self.gshhs THEN BEGIN
@@ -198,9 +194,9 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
            WATER_COLOR=self.water_color
     ENDIF ELSE BEGIN
         IF self.fill AND (self.color NE self.land_color) THEN BEGIN
-            MAP_CONTINENTS, $
+            cg_MAP_CONTINENTS, $
                 COASTS=self.coasts, $
-                COLOR=cgColor(self.land_color), $
+                COLOR=self.land_color, $
                 CONTINENTS=self.continents, $
                 COUNTRIES=self.countries, $
                 FILL=1, $
@@ -212,9 +208,9 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
                 USA=self.usa, $
                 T3D=self.t3d, $
                 ZVALUE=self.zvalue
-            MAP_CONTINENTS, $
+            cg_MAP_CONTINENTS, $
                 COASTS=self.coasts, $
-                COLOR=cgColor(self.color), $
+                COLOR=self.color, $
                 CONTINENTS=self.continents, $
                 COUNTRIES=self.countries, $
                 FILL=0, $
@@ -227,9 +223,9 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
                 T3D=self.t3d, $
                 ZVALUE=self.zvalue
         ENDIF ELSE BEGIN
-            MAP_CONTINENTS, $
+            cg_MAP_CONTINENTS, $
                 COASTS=self.coasts, $
-                COLOR=cgColor(self.color), $
+                COLOR=self.color, $
                 CONTINENTS=self.continents, $
                 COUNTRIES=self.countries, $
                 FILL=self.fill, $
@@ -243,7 +239,7 @@ PRO MAP_OUTLINE::DRAW, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
                 ZVALUE=self.zvalue
          ENDELSE
     ENDELSE
-    IF (!D.Flags AND 256) NE 0 THEN DEVICE, DECOMPOSED=theState
+    SetDecomposedState, currentState
     
     ; Draw children?
     self -> CatAtom::Draw, _EXTRA=extrakeywords
