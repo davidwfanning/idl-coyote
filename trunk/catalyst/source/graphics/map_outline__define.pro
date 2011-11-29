@@ -183,7 +183,7 @@ PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
             IF self.filename EQ "" THEN success = 0 ELSE success = 1
         ENDELSE
         IF ~success THEN Message, 'Cannot file requested GSHHS Shoreline Data File.'
-        Map_GSHHS_Shoreline, gshhsFileName, $ 
+        cgMap_GSHHS, gshhsFileName, $ 
            COLOR=self.color, $                    
            FILL=self.fill, $                      
            LAND_COLOR=self.land_color, $          
@@ -194,7 +194,7 @@ PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
            WATER_COLOR=self.water_color
     ENDIF ELSE BEGIN
         IF self.fill AND (self.color NE self.land_color) THEN BEGIN
-            cg_MAP_CONTINENTS, $
+            cgMAP_CONTINENTS, $
                 COASTS=self.coasts, $
                 COLOR=self.land_color, $
                 CONTINENTS=self.continents, $
@@ -208,22 +208,8 @@ PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
                 USA=self.usa, $
                 T3D=self.t3d, $
                 ZVALUE=self.zvalue
-            cg_MAP_CONTINENTS, $
-                COASTS=self.coasts, $
-                COLOR=self.color, $
-                CONTINENTS=self.continents, $
-                COUNTRIES=self.countries, $
-                FILL=0, $
-                HIRES=self.hires, $
-                MAP_STRUCTURE=mapStruct, $
-                LINESTYLE=self.linestyle, $
-                THICK=self.thick, $
-                RIVERS=self.rivers, $
-                USA=self.usa, $
-                T3D=self.t3d, $
-                ZVALUE=self.zvalue
         ENDIF ELSE BEGIN
-            cg_MAP_CONTINENTS, $
+                cgMAP_CONTINENTS, $
                 COASTS=self.coasts, $
                 COLOR=self.color, $
                 CONTINENTS=self.continents, $
