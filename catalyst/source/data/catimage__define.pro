@@ -80,6 +80,7 @@
 ;       Modified the CreateDisplayImage to allow image display in PostScript. 7 November 2009. DWF.
 ;       Refactored CreateDisplayImage to two new methods: CheckMultiPlotPosition and CheckKeepAspectRatio.
 ;           7 November 2009. DWF.
+;       Modified the Pixel_To_Value function to allow for true-color images with four channels. 12 Jan 2012. DWF.
 ;-
 ;*******************************************************************************************
 ;* Copyright (c) 2003-2009, jointly by Fanning Software Consulting, Inc.                   *
@@ -1432,6 +1433,7 @@ END
 ;       YDATA:         The y data value with respect to the image data coordinate system,
 ;
 ;       YPIXEL:        The y pixel value in terms of image (rather than window) device coordinates.
+;       
 ;-
 ;*****************************************************************************************************
 FUNCTION CatImage::Pixel_to_Value, x, y, $
@@ -1454,7 +1456,7 @@ FUNCTION CatImage::Pixel_to_Value, x, y, $
    
    ; Where is th image in the window, and what size is it?
    thePos = self._location[0:3, 0]
-   dims = Image_Dimensions(*self._dataPtr, XSIZE=xsize, YSIZE=ysize)
+   dims = Image_Dimensions(*self._dataPtr, XSIZE=xsize, YSIZE=ysize, TRUEINDEX=trueIndex)
    
    ; Create vectors for locating the image dimensions with VALUE_LOCATE.
    xvec = Scale_Vector(Findgen(xsize+1), thePos[0], thePos[2])
@@ -1462,9 +1464,6 @@ FUNCTION CatImage::Pixel_to_Value, x, y, $
    xpixel = 0 > Value_Locate(xvec, x) < (xsize - 1)
    ypixel = 0 > Value_Locate(yvec, y) < (ysize - 1)
    
-   ; Output depends in whether this is 2D or 3D image.
-   trueIndex = Where(dims EQ 3)
-
    IF trueIndex[0] EQ -1 THEN BEGIN
 
          value = (*self._dataPtr)[xpixel, ypixel]
