@@ -69,7 +69,7 @@
 ;      PARENT:          An object reference to an object that will be the parent of this object.
 ;      
 ;      PSYM:            The plotting symbol to use for the plot. Can use any symbol available in
-;                       the Coyote Library routine SYMCAT. Set to 0 by default.
+;                       the Coyote Library routine cgSYMCAT. Set to 0 by default.
 ;                       
 ;      SYMSIZE:         Set this keyword to the size of symbols. Default is 1.0.
 ;      
@@ -86,9 +86,9 @@
 ;
 ;       The following programs (at least) are required from the Coyote Library:
 ;
-;                     http://www.dfanning.com/programs/error_message.pro
-;                     http://www.dfanning.com/programs/cgcolor.pro
-;                     http://www.dfanning.com/programs/symcat.pro
+;                     http://www.idlcoyote.com/programs/error_message.pro
+;                     http://www.idlcoyote.com/programs/cgcolor.pro
+;                     http://www.idlcoyote.com/programs/cgsymcat.pro
 ;
 ; MODIFICATION HISTORY:
 ;
@@ -176,8 +176,8 @@ PRO Map_PlotS::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
         lats = *self.lats
     ENDELSE
     
-    ; Accommodate SYMCAT symbols
-    IF self.psym GE 0 THEN psym = SymCat(self.psym) ELSE psym = (-1) * SymCat(Abs(self.psym))
+    ; Accommodate cgSYMCAT symbols
+    IF self.psym GE 0 THEN psym = cgSymCat(self.psym) ELSE psym = (-1) * cgSymCat(Abs(self.psym))
     
     ; If clip is not defined, then set it here.
     IF Total(self.clip) EQ 0 $

@@ -90,9 +90,9 @@
 ;
 ;       The following programs (at least) are required from the Coyote Library:
 ;
-;                     http://www.dfanning.com/programs/error_message.pro
-;                     http://www.dfanning.com/programs/cgcolor.pro
-;                     http://www.dfanning.com/programs/symcat.pro
+;                     http://www.idlcoyote.com/programs/error_message.pro
+;                     http://www.idlcoyote.com/programs/cgcolor.pro
+;                     http://www.idlcoyote.com/programs/cgsymcat.pro
 ;
 ; MODIFICATION HISTORY:
 ;
