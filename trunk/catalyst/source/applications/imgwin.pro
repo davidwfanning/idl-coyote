@@ -664,7 +664,25 @@ FUNCTION ImgWin::INIT, image, $
                 IF Obj_Valid(colors) THEN BEGIN
                     theImageObj = Obj_New('CatImage', theImage, COORD_OBJECT=mapCoord, COLOR_OBJECT=colors)
                 ENDIF ELSE BEGIN
-                    theImageObj = Obj_New('ScaleImage', theImage, COORD_OBJECT=mapCoord)
+                    theImageObj = Obj_New('ScaleImage', theImage, theImage, $
+                        NAME='IMGWIN_IMAGE', $
+                        BETA=beta, $
+                        BOTTOM=bottom, $
+                        COORD_OBJECT=coords, $
+                        EXPONENT=exponent, $
+                        GAMMA=gamma, $
+                        KEEP_ASPECT=keep_aspect, $
+                        MEAN=mean, $
+                        MISSING_COLOR=missing_color, $
+                        MISSING_VALUE=missing_value, $
+                        NCOLORS=ncolors, $
+                        NOINTERPOLATE=nointerp, $
+                        POSITION=position, $
+                        SCALETYPE=scaletype, $
+                        SCLMIN=sclmin, $
+                        SCLMAX=sclmax, $
+                        SELECTABLE=1, $
+                        SIGMA=sigma)
                 ENDELSE
                 imageIsObject = 1
                 GOTO, DefineWidgets
@@ -747,7 +765,25 @@ FUNCTION ImgWin::INIT, image, $
                     IF Obj_Valid(colors) THEN BEGIN
                         theImageObj = Obj_New('CatImage', theImage, COORD_OBJECT=mapCoord, COLOR_OBJECT=colors)
                     ENDIF ELSE BEGIN
-                        theImageObj = Obj_New('ScaleImage', theImage, COORD_OBJECT=mapCoord)
+                        theImageObj = Obj_New('ScaleImage', theImage,$
+                            NAME='IMGWIN_IMAGE', $
+                            BETA=beta, $
+                            BOTTOM=bottom, $
+                            COORD_OBJECT=coords, $
+                            EXPONENT=exponent, $
+                            GAMMA=gamma, $
+                            KEEP_ASPECT=keep_aspect, $
+                            MEAN=mean, $
+                            MISSING_COLOR=missing_color, $
+                            MISSING_VALUE=missing_value, $
+                            NCOLORS=ncolors, $
+                            NOINTERPOLATE=nointerp, $
+                            POSITION=position, $
+                            SCALETYPE=scaletype, $
+                            SCLMIN=sclmin, $
+                            SCLMAX=sclmax, $
+                            SELECTABLE=1, $
+                            SIGMA=sigma)
                     ENDELSE
                     imageIsObject = 1
                     GOTO, DefineWidgets
