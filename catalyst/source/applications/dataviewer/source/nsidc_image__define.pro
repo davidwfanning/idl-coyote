@@ -773,7 +773,7 @@ PRO NSIDC_Image::DrawPNG, filename, XSIZE=xsize, YSIZE=ysize, MAXSIZE=maxsize
    @cat_pro_error_handler
    
    IF N_Elements(filename) EQ 0 THEN BEGIN
-        rootname = FSC_Base_Filename(self.filename)
+        rootname = cgRootName(self.filename)
         filename = Dialog_Pickfile(TITLE='Select Name of PNG File...', FILE=rootname + '.png')
         IF filename EQ "" THEN RETURN
    ENDIF
@@ -881,7 +881,7 @@ PRO NSIDC_Image::EventHandler, event
             thisImageFilename = Obj_New('TEXTLINE', FILE_BASENAME(filename), COLOR=fn_color, $
                 ALIGNMENT=1, X=0.5, Y=0.05, COORD_OBJECT=coords)
             AnnotateWindow, wid, GROUP_LEADER=drawID, BG_COLOR=bg_color, $
-                ADD_OBJECT=thisImageFilename, COLOR='black', OUTPUT_FILENAME=FSC_Base_Filename(filename)
+                ADD_OBJECT=thisImageFilename, COLOR='black', OUTPUT_FILENAME=cgRootName(filename)
             END
             
      'CHANGE_COLORS': BEGIN
@@ -1135,7 +1135,7 @@ PRO NSIDC_Image::EventHandler, event
             Obj_Destroy, self.contextMenu
             currentWindow = !D.Window
             self -> GetProperty, FILENAME=filename, DISPLAYNAME=displayName
-            root_name = FSC_Base_Filename(filename, EXTENSION=extension)
+            root_name = cgRootName(filename, EXTENSION=extension)
             IF StrUpCase(extension) EQ 'HDF' THEN filename = filename + '@' + displayName
                 
            ; Make a new image from this file.
@@ -1217,7 +1217,7 @@ PRO NSIDC_Image::EventHandler, event
             drawID -> Remove, self.contextMenu
             Obj_Destroy, self.contextMenu
             self -> GetProperty, FILENAME=filename
-            basename = FSC_Base_Filename(filename)
+            basename = cgRootName(filename)
             varname = TextBox(Title='Provide IDL Main-Level Variable Name...', Group_Leader=drawID->GetID(), $
                Label='Image Variable Name: ', Cancel=cancelled, XSize=300, Value=IDL_ValidName(basename, /CONVERT_ALL))
             IF NOT cancelled THEN BEGIN
@@ -1990,8 +1990,8 @@ FUNCTION NSIDC_Image::INIT, image, $
    self.no_colorbar_display = Keyword_Set(no_colorbar_display)
    self.nsidc_tag = nsidc_tag
    IF N_Elements(filename) NE 0 THEN self.filename = filename
-   IF self.filename NE "" THEN self -> SetProperty, NAME=FSC_Base_Filename(self.filename)
-   IF N_Elements(displayName) EQ 0 THEN displayName = FSC_Base_Filename(self.filename)
+   IF self.filename NE "" THEN self -> SetProperty, NAME=cgRootName(self.filename)
+   IF N_Elements(displayName) EQ 0 THEN displayName = cgRootName(self.filename)
    self.displayName = displayName
 
    ; Register properties.

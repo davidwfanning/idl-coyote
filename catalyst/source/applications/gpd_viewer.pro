@@ -2593,7 +2593,7 @@ PRO GPD_Viewer::Write_LatLon_Files, EXPORT=export
          IF filename EQ "" THEN RETURN
          
          ; Add "lat" and "lon" extensions to whatever name you got.
-         rootname = FSC_Base_Filename(filename, DIRECTORY=theDirectory)
+         rootname = cgRootName(filename, DIRECTORY=theDirectory)
          latFile = Filepath(Root_Dir=theDirectory, rootname + '.lat')
          lonFile = Filepath(Root_Dir=theDirectory, rootname + '.lon')
          
@@ -2713,7 +2713,7 @@ PRO GPD_Viewer::Write_XYGrid_Files, EXPORT=export
          IF filename EQ "" THEN RETURN
          
          ; Add "xgrid" and "ygrid" extensions to whatever name you got.
-         rootname = FSC_Base_Filename(filename, DIRECTORY=theDirectory)
+         rootname = cgRootName(filename, DIRECTORY=theDirectory)
          xFile = Filepath(Root_Dir=theDirectory, rootname + '.xgrid')
          yFile = Filepath(Root_Dir=theDirectory, rootname + '.ygrid')
          

@@ -102,7 +102,7 @@ FUNCTION Parse_NSIDC_Filename_0051, filename, INFO=info, SUCCESS=success
    
    ; If this is not a compressed file, with extension .gz, then we will have to add the extension
    ; back to the filename and set the extension to a null string.
-   root_name = FSC_Base_Filename(filename, DIRECTORY=theDirectory, EXTENSION=theExtension)
+   root_name = cgRootName(filename, DIRECTORY=theDirectory, EXTENSION=theExtension)
    IF StrUpCase(theExtension) NE 'GZ' THEN BEGIN
         root_name = root_name + '.' + theExtension
         theExtension = ''

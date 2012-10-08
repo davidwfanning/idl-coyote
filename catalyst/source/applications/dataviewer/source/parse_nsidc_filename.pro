@@ -138,7 +138,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
        parts = StrSplit(filename, '@', /EXTRACT)
        filename = parts[0]
        variable = parts[1]
-       rootName = FSC_Base_Filename(filename, EXTENSION=ext)
+       rootName = cgRootName(filename, EXTENSION=ext)
        
        ; HDFEOS file processed in the same way as HDF files.
        IF StrUpCase(ext) EQ 'HDFEOS' THEN ext = 'HDF'
@@ -182,7 +182,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
    
    ; As a first test, we check the file extension to see if this is a file IDL
    ; knows how to read (e.g., JPEG, TIFF, PNG, etc.)
-   root_name = FSC_Base_Filename(filename, DIRECTORY=theDirectory, EXTENSION=theExtension)
+   root_name = cgRootName(filename, DIRECTORY=theDirectory, EXTENSION=theExtension)
    check = Query_Image(filename, CHANNELS=channels, HAS_PALETTE=palette, TYPE=image_type) 
    IF check THEN BEGIN
    
@@ -419,7 +419,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
    ENDIF
 
    ; NSIDC-0046 data.
-   root_name = FSC_Base_Filename(root_name, EXTENSION=theExtension)
+   root_name = cgRootName(root_name, EXTENSION=theExtension)
    IF StrUpCase(theExtension) EQ 'SI' THEN BEGIN
         theImage = Parse_NSIDC_Filename_0046(filename, INFO=info, SUCCESS=success)
         IF ~success THEN RETURN, -1

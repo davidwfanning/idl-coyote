@@ -863,7 +863,7 @@ PRO DataViewer::EventHandler, event
 
       'LOAD_CONFIG_FILE': BEGIN
 
-             suggestFilename = FSC_Base_Filename(self.configFile, DIRECTORY=thePath, EXTENSION=theExtension)
+             suggestFilename = cgRootName(self.configFile, DIRECTORY=thePath, EXTENSION=theExtension)
              filename = Dialog_Pickfile(FILE=suggestFilename + '.txt', $
                   PATH=thepath, TITLE='Open CONFIG file...')
              IF filename EQ "" THEN RETURN
@@ -1908,7 +1908,7 @@ END ;***************************************************************************
 ;    IF hdf_file[0] EQ '' THEN RETURN
 ;    
 ;    ; Set the data directory system variable.
-;    void = FSC_Base_Filename(hdf_file[0], DIRECTORY=newDir)
+;    void = cgRootName(hdf_file[0], DIRECTORY=newDir)
 ;    CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', newDir
 ;            
 ;    ; Set the grid to its default values. (Necessary to load image correctly!)
@@ -1995,7 +1995,7 @@ PRO DataViewer::Select_Files
     
     ; Special processing if this is an HDF file.
     testFile = theFiles[0]
-    filename = FSC_Base_Filename(testFile, EXTENSION=ext, DIRECTORY=dir)
+    filename = cgRootName(testFile, EXTENSION=ext, DIRECTORY=dir)
     IF StrLowCase(ext) EQ 'hdf' OR StrLowCase(ext) EQ 'hdfeos' THEN BEGIN
     
        ; Open the HDF file
@@ -2035,7 +2035,7 @@ PRO DataViewer::Select_Files
        HDF_SD_END, hdfID
         
         ; Set the data directory system variable.
-        void = FSC_Base_Filename(theFiles[0], DIRECTORY=newDir)
+        void = cgRootName(theFiles[0], DIRECTORY=newDir)
         CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', newDir
             
        ; Set the grid to its default values. (Necessary to load image correctly!)
@@ -2049,7 +2049,7 @@ PRO DataViewer::Select_Files
     ENDIF
             
     ; Set the data directory system variable.
-    void = FSC_Base_Filename(theFiles[0], DIRECTORY=newDir)
+    void = cgRootName(theFiles[0], DIRECTORY=newDir)
     CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', newDir
             
     ; Set the grid to its default values. (Necessary to load image correctly!)
@@ -2107,7 +2107,7 @@ PRO DataViewer::SingleFileSetup, imageObject
     ENDELSE
     self.gridWindow -> SetProperty, XSIZE=xsize, YSIZE=ysize
     self._statusbar -> Resize, self.gridWindow
-    self -> SetProperty, TITLE='NSIDC DataViewer: ' + FSC_Base_Filename((*self.theFiles)[0])
+    self -> SetProperty, TITLE='NSIDC DataViewer: ' + cgRootName((*self.theFiles)[0])
 
 
       ; Set the name on/off button.
@@ -2400,7 +2400,7 @@ PRO DataViewer::Write_Config_File, filename, NOCURRENTWINDOW=noCurrentWindow
 
     ; If the configuration file doesn't exist. Ask for a filename.
     IF N_Elements(filename) EQ 0 THEN BEGIN
-      suggestFilename = FSC_Base_Filename(self.configFile, DIRECTORY=thePath, EXTENSION=theExtension)
+      suggestFilename = cgRootName(self.configFile, DIRECTORY=thePath, EXTENSION=theExtension)
       filename = Dialog_Pickfile(FILE=suggestFilename + '.txt', /Write, $
            PATH=thepath, TITLE='Save CONFIG file as...')
       IF filename EQ "" THEN RETURN
@@ -2411,7 +2411,7 @@ PRO DataViewer::Write_Config_File, filename, NOCURRENTWINDOW=noCurrentWindow
     noCurrentWindow = Keyword_Set(noCurrentWindow)
 
     ; Is the filename such that it will write into the config directory?
-    basename = FSC_Base_Filename(filename, DIRECTORY=theDir, EXTENSION=extension)
+    basename = cgRootName(filename, DIRECTORY=theDir, EXTENSION=extension)
     IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
     IF theDir EQ "" THEN filename = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
       SUBDIR='config', filename)
