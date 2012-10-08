@@ -681,7 +681,7 @@ FUNCTION ImgWin::INIT, image, $
        
        ; Some PNG files (from ImageMagick, for example) are created with 16-bits per channel.
        ; Convert this to 8-bits per channel, and also remove any alpha channel for this application.
-       root_name = FSC_Base_Filename(imageFile, EXTENSION=ext)
+       root_name = cgRootName(imageFile, EXTENSION=ext)
        IF StrUpCase(ext) EQ 'PNG' THEN BEGIN
             IF Size(theImage, /TNAME) NE 'BYTE' THEN theImage = BytScl(theImage)
             IF Size(theImage, /N_DIMENSIONS) GT 3 THEN BEGIN

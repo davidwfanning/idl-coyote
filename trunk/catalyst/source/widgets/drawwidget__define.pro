@@ -937,7 +937,7 @@ PRO DrawWidget::Output, $
       'JPEG': BEGIN
 
          IF N_Elements(filename) EQ 0 THEN filename='output.jpg' 
-         basename = FSC_Base_Filename(filename, EXTENSION=ext, DIRECTORY=theDirectory)
+         basename = cgRootName(filename, EXTENSION=ext, DIRECTORY=theDirectory)
          IF ext EQ "" THEN basename = basename + '.jpg'
          IF nodialog EQ 0 THEN BEGIN
             CD, theDirectory, CURRENT=thisDir
@@ -951,7 +951,7 @@ PRO DrawWidget::Output, $
       'TIFF': BEGIN
 
          IF N_Elements(filename) EQ 0 THEN filename='output.tif'
-         basename = FSC_Base_Filename(filename, EXTENSION=ext, DIRECTORY=theDirectory)
+         basename = cgRootName(filename, EXTENSION=ext, DIRECTORY=theDirectory)
          IF ext EQ "" THEN basename = basename + '.tif'
          IF nodialog EQ 0 THEN BEGIN
             CD, theDirectory, CURRENT=thisDir
@@ -969,7 +969,7 @@ PRO DrawWidget::Output, $
 
       'BMP': BEGIN
          IF N_Elements(filename) EQ 0 THEN filename='output.bmp'
-         basename = FSC_Base_Filename(filename, EXTENSION=ext, DIRECTORY=theDirectory)
+         basename = cgRootName(filename, EXTENSION=ext, DIRECTORY=theDirectory)
          IF ext EQ "" THEN basename = basename + '.bmp'
          IF nodialog EQ 0 THEN BEGIN
             CD, theDirectory, CURRENT=thisDir
@@ -981,7 +981,7 @@ PRO DrawWidget::Output, $
 
       'PNG': BEGIN
          IF N_Elements(filename) EQ 0 THEN filename='output.png'
-         basename = FSC_Base_Filename(filename, EXTENSION=ext, DIRECTORY=theDirectory)
+         basename = cgRootName(filename, EXTENSION=ext, DIRECTORY=theDirectory)
          IF ext EQ "" THEN basename = basename + '.png'
          IF nodialog EQ 0 THEN BEGIN
             CD, theDirectory, CURRENT=thisDir
@@ -1015,7 +1015,7 @@ PRO DrawWidget::Output, $
          ENDIF
          position = PSWindow(LANDSCAPE=landscape)
          IF N_Elements(filename) EQ 0 THEN filename='output.ps'
-         basename = FSC_Base_Filename(filename, EXTENSION=ext)
+         basename = cgRootName(filename, EXTENSION=ext)
          IF ext EQ "" THEN filename = filename + '.ps'
          IF nodialog EQ 1 THEN BEGIN
             keywords = PSConfig(Filename=filename, /NoGUI, _Extra=position, LANDSCAPE=landscape)

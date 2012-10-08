@@ -274,7 +274,7 @@ PRO DataViewer_Edit_Config_File_Events, event
                configfile = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
                   SUBDIR='config', info.configFile)
            ENDIF ELSE configFile = info.configFile
-           root_file = FSC_Base_Filename(configFile, DIRECTORY=configDir, EXTENSION=ext)
+           root_file = cgRootName(configFile, DIRECTORY=configDir, EXTENSION=ext)
            
            ; What would you like to name the file?
            configFile = Dialog_Pickfile(PATH=configDir, FILE=root_file + '.' + ext, /WRITE)

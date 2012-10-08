@@ -449,8 +449,8 @@ PRO GridWindow::Draw, $
          IF Obj_Valid(self._buffer_pixmap) THEN $
             self._buffer_pixmap -> SetWindow ELSE $
             self -> SetWindow
-         IF count GT 1 THEN progressBar = Obj_New("PROGRESSBAR", /START, $
-            /NOCANCEL, TEXT='Updating images...')
+         IF count GT 1 THEN progressBar = Obj_New("cgProgressBar", /START, $
+            TEXT='Updating images...')
          FOR j=0,count-1 DO BEGIN
                children[j] -> Draw
                IF Obj_Valid(progressBar) THEN progressBar -> Update, Float(j)/count*100
