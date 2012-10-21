@@ -1197,7 +1197,7 @@ PRO NSIDC_Image::EventHandler, event
                 indices = Where(image GT 100, count)
                 IF count GT 0 THEN image[indices] = !VALUES.F_NAN
             ENDIF
-            XStretch, image, GROUP_LEADER=drawID->GetID(), /NO_WINDOW, $
+            cgStretch, image, GROUP_LEADER=drawID->GetID(), /NO_WINDOW, $
                 BETA=beta, $
                 BOTTOM=bottom, $
                 EXPONENT=exponent, $

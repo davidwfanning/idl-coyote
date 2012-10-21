@@ -17,7 +17,7 @@
 ;       Scaling or stretching types include: linear, 2% linear, gamma, log, hyperbolic sine,
 ;       square-root, equilization, and gaussian. See this article for additional information:
 ;       
-;           http://www.dfanning.com/ip_tips/xstretch.html
+;           http://www.idlcoyote.com/ip_tips/xstretch.html
 ;       
 ;       Scaling only applies to 2D images. True-color images are not scaled and none
 ;       of the scaling parameters apply to them. 
