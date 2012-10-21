@@ -350,7 +350,7 @@ PRO DrawWidget::ControlPanelEvents, event
 
                   event.component -> GetProperty, Initial_Color=color
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader)
+                  color = cgPickColorName(color, Group_Leader=group_leader)
                   event.component -> SetProperty, Initial_Color=color
 
                   ; Update changes

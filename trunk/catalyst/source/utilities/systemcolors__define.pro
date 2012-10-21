@@ -140,14 +140,14 @@ FUNCTION SystemColors::INIT, _Extra=extraKeywords
    IF ~ok THEN RETURN, 0
 
    ; Fill the object fields.
-   self.face = Color24(colors.face_3d)
-   self.selected = Color24(colors.highlight)
-   self.edge = Color24(colors.light_edge_3d)
-   self.highlight = Color24(colors.light_3d)
-   self.shadow = Color24(colors.shadow_3d)
-   self.active = Color24(colors.active_border)
-   self.text = Color24(colors.button_text)
-   self.frame = color24(colors.window_frame)
+   self.face = cgColor24(colors.face_3d)
+   self.selected = cgColor24(colors.highlight)
+   self.edge = cgColor24(colors.light_edge_3d)
+   self.highlight = cgColor24(colors.light_3d)
+   self.shadow = cgColor24(colors.shadow_3d)
+   self.active = cgColor24(colors.active_border)
+   self.text = cgColor24(colors.button_text)
+   self.frame = cgColor24(colors.window_frame)
 
    self -> Report, /Completed
 

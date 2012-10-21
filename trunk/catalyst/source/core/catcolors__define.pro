@@ -1552,35 +1552,6 @@ FUNCTION CatColors::INIT, $
    ; in a cron job). Check for system variable !FSC_Display_Connection. If not
    ; defined, check the connection.
    haveConnection = 0
-;   DefSysV, '!FSC_Display_Connection', EXISTS=sysvarExists
-;   IF sysvarExists $
-;          THEN haveConnection = !FSC_Display_Connection $
-;          ELSE haveConnection = CanConnect()
-;      
-;   IF (Float(!Version.Release) GE 5.6) && Keyword_Set(haveConnection) THEN BEGIN
-;
-;      tlb = Widget_Base()
-;      sc = Widget_Info(tlb, /System_Colors)
-;      Widget_Control, tlb, /Destroy
-;      frame = sc.window_frame
-;      text = sc.window_text
-;      active = sc.active_border
-;      shadow = sc.shadow_3d
-;      highlight = sc.light_3d
-;      edge = sc.light_edge_3d
-;      selected = sc.highlight
-;      face = sc.face_3d
-;      colors  = [colors,  'Frame',  'Text',  'Active',  'Shadow']
-;      rvalue =  [rvalue,   frame[0], text[0], active[0], shadow[0]]
-;      gvalue =  [gvalue,   frame[1], text[1], active[1], shadow[1]]
-;      bvalue =  [bvalue,   frame[2], text[2], active[2], shadow[2]]
-;      colors  = [colors,  'Highlight',  'Edge',  'Selected',  'Face']
-;      rvalue =  [rvalue,   highlight[0], edge[0], selected[0], face[0]]
-;      gvalue =  [gvalue,   highlight[1], edge[1], selected[1], face[1]]
-;      bvalue =  [bvalue,   highlight[2], edge[2], selected[2], face[2]]
-;
-;   ENDIF
-
    ; Populate the objects.
    self._colornames = Ptr_New(StrUpCase(StrCompress(StrTrim(colors,2), /Remove_All)))
    self._rvalue = Ptr_New(rvalue)
