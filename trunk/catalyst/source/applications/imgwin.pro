@@ -387,7 +387,7 @@ PRO ImgWin::EventHandler, event
 
             ; Make sure you are drawing in the right window. Start XSTRETCH.
             self.theDrawWidget -> SetWindow
-            XStretch, image, GROUP_LEADER=self->GetID(), /NO_WINDOW, $
+            cgStretch, image, GROUP_LEADER=self->GetID(), /NO_WINDOW, $
                BETA=beta, $
                EXPONENT=exponent, $
                GAMMA=gamma, $
