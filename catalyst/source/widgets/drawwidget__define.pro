@@ -1030,7 +1030,7 @@ PRO DrawWidget::Output, $
          self -> Draw
          Device, /Close_File
          Set_Plot, thisDevice
-         IF landscape THEN FixPS, keywords.filename
+         IF landscape THEN cgFixPS, keywords.filename
          END
 
    ENDCASE
