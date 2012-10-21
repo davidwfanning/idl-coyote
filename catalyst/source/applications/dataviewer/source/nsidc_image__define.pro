@@ -905,7 +905,7 @@ PRO NSIDC_Image::EventHandler, event
             Obj_Destroy, self.contextMenu
             currentWindow = !D.Window
             self -> GetProperty, COLOR_OBJECT=colors, LANDMASK_COLOR=landmask_color
-            colorname = colors -> PickColorName(landmask_color, TITLE='Change LANDMASK Color')
+            colorname = colors -> cgPickColorName(landmask_color, TITLE='Change LANDMASK Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             color = cgColor(colorname, /TRIPLE)
             r[252] = color[0]
@@ -923,7 +923,7 @@ PRO NSIDC_Image::EventHandler, event
             Obj_Destroy, self.contextMenu
             currentWindow = !D.Window
             self -> GetProperty, COLOR_OBJECT=colors, MISSING_COLOR=missing_color
-            colorname = colors -> PickColorName(missing_color, TITLE='Change MISSING Color')
+            colorname = colors -> cgPickColorName(missing_color, TITLE='Change MISSING Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             color = cgColor(colorname, /TRIPLE)
             r[255] = color[0]
@@ -941,7 +941,7 @@ PRO NSIDC_Image::EventHandler, event
             Obj_Destroy, self.contextMenu
             currentWindow = !D.Window
             self -> GetProperty, COLOR_OBJECT=colors, OOB_LOW_COLOR=oob_low_color
-            colorname = colors -> PickColorName(oob_low_color, TITLE='Change OUT-OF-BOUNDS LOW Color')
+            colorname = colors -> cgPickColorName(oob_low_color, TITLE='Change OUT-OF-BOUNDS LOW Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             color = cgColor(colorname, /TRIPLE)
             r[254] = color[0]
@@ -959,7 +959,7 @@ PRO NSIDC_Image::EventHandler, event
             Obj_Destroy, self.contextMenu
             currentWindow = !D.Window
             self -> GetProperty, COLOR_OBJECT=colors, OOB_HIGH_COLOR=oob_high_color
-            colorname = colors -> PickColorName(oob_high_color, TITLE='Change OUT-OF-BOUNDS HIGH Color')
+            colorname = colors -> cgPickColorName(oob_high_color, TITLE='Change OUT-OF-BOUNDS HIGH Color')
             colors -> GetProperty, RED=r, GREEN=g, BLUE=b
             color = cgColor(colorname, /TRIPLE)
             r[253] = color[0]
@@ -980,7 +980,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, FN_COLOR=color, COLOR_OBJECT=colors, PARENT=parent
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select FILENAME Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select FILENAME Color')
                   event.component -> SetProperty, FN_COLOR=color
 
                   ; Redraw yourself.
@@ -995,7 +995,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, GRID_COLOR=color, COLOR_OBJECT=colors, PARENT=parent
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select Map Grid Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select Map Grid Color')
                   event.component -> SetProperty, GRID_COLOR=color
 
                   ; Redraw yourself.
@@ -1010,7 +1010,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, MISSING_COLOR=color, COLOR_OBJECT=colors
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select MISSING Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select MISSING Color')
                   event.component -> SetProperty, MISSING_COLOR=color
                   colors -> LoadColor, color, 255
 
@@ -1026,7 +1026,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, OOB_LOW_COLOR=color, COLOR_OBJECT=colors, PARENT=parent
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select OUT-OF-BOUNDS LOW Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select OUT-OF-BOUNDS LOW Color')
                   event.component -> SetProperty, OOB_LOW_COLOR=color
                   colors -> LoadColor, color, 254
 
@@ -1042,7 +1042,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, OOB_LOW_COLOR=color, COLOR_OBJECT=colors, PARENT=parent
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select OUT-OF-BOUNDS LOW Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select OUT-OF-BOUNDS LOW Color')
                   event.component -> SetProperty, OOB_LOW_COLOR=color
                   colors -> LoadColor, color, 253
 
@@ -1058,7 +1058,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, OOB_LOW_COLOR=color, COLOR_OBJECT=colors, PARENT=parent
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select OUT-OF-BOUNDS LOW Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select OUT-OF-BOUNDS LOW Color')
                   event.component -> SetProperty, OOB_LOW_COLOR=color
                   colors -> LoadColor, color, 252
 
@@ -1074,7 +1074,7 @@ PRO NSIDC_Image::EventHandler, event
 
                   event.component -> GetProperty, OUTLINE_COLOR=color, COLOR_OBJECT=colors, PARENT=parent
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader, TITLE='Select Map Outline Color')
+                  color = cgPickColorName(color, Group_Leader=group_leader, TITLE='Select Map Outline Color')
                   event.component -> SetProperty, OUTLINE_COLOR=color
 
                   ; Redraw yourself.

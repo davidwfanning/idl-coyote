@@ -435,7 +435,7 @@ PRO ScaleImage::EventHandler, event
 
                   event.component -> GetProperty, Color=color
                   event.id -> GetProperty, ID=group_leader
-                  color = PickColorName(color, Group_Leader=group_leader)
+                  color = cgPickColorName(color, Group_Leader=group_leader)
                   event.component -> SetProperty, Color=color
 
                   ; Refresh the graphics hierarchy.

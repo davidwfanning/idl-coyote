@@ -378,7 +378,7 @@ PRO DataViewer::EventHandler, event
             
       'CHANGE_ANNOTATE_COLOR': BEGIN
             annotateColor = CatGetDefault('DATAVIEWER_ANNOTATE_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), annotateColor, TITLE='Change Annotation Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), annotateColor, TITLE='Change Annotation Color')
             CatSetDefault, 'DATAVIEWER_ANNOTATE_COLOR', colorname
             theImages = self.gridWindow -> Get(/ALL, COUNT=count)
             FOR j=0,count-1 DO BEGIN
@@ -392,7 +392,7 @@ PRO DataViewer::EventHandler, event
       'CHANGE_BACKGROUND_COLOR': BEGIN
             self -> GetProperty, ID=tlbID
             backgroundColor = CatGetDefault('DATAVIEWER_BACKGROUND_COLOR')
-            color = PickColorName(GROUP_LEADER=tlbID, backgroundcolor, TITLE='Change BACKGROUND Color')
+            color = cgPickColorName(GROUP_LEADER=tlbID, backgroundcolor, TITLE='Change BACKGROUND Color')
             CatSetDefault, 'DATAVIEWER_BACKGROUND_COLOR', color
             self.gridWindow -> SetProperty, INITIAL_COLOR=color
             self.gridWindow -> Draw
@@ -439,7 +439,7 @@ PRO DataViewer::EventHandler, event
 
       'CHANGE_GRID_COLOR': BEGIN
             gridColor = CatGetDefault('DATAVIEWER_GRID_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), gridColor, TITLE='Change Map Grid Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), gridColor, TITLE='Change Map Grid Color')
             CatSetDefault, 'DATAVIEWER_GRID_COLOR', colorname
             theImages = self.gridWindow -> Get(/ALL, COUNT=count)
             FOR j=0,count-1 DO BEGIN
@@ -457,7 +457,7 @@ PRO DataViewer::EventHandler, event
 
       'CHANGE_LANDMASK_COLOR': BEGIN
             landmaskColor = CatGetDefault('DATAVIEWER_LANDMASK_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), landmaskColor, TITLE='Change LANDMASK Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), landmaskColor, TITLE='Change LANDMASK Color')
             CatSetDefault, 'DATAVIEWER_LANDMASK_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
             color = cgColor(colorname, /Triple)
@@ -479,7 +479,7 @@ PRO DataViewer::EventHandler, event
 
       'CHANGE_MISSING_COLOR': BEGIN
             missingColor = CatGetDefault('DATAVIEWER_MISSING_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), missingColor, TITLE='Change MISSING Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), missingColor, TITLE='Change MISSING Color')
             CatSetDefault, 'DATAVIEWER_MISSING_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
             color = cgColor(colorname, /Triple)
@@ -501,7 +501,7 @@ PRO DataViewer::EventHandler, event
 
       'CHANGE_OOB_HIGH_COLOR': BEGIN
             oob_high_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), oob_high_color, TITLE='Change OUT-OF-BOUNDS HIGH Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), oob_high_color, TITLE='Change OUT-OF-BOUNDS HIGH Color')
             CatSetDefault, 'DATAVIEWER_OUTOFBOUNDS_HIGH_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
             color = cgColor(colorname, /Triple)
@@ -523,7 +523,7 @@ PRO DataViewer::EventHandler, event
 
       'CHANGE_OOB_LOW_COLOR': BEGIN
             oob_low_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), oob_low_color, TITLE='Change OUT-OF-BOUNDS LOW Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), oob_low_color, TITLE='Change OUT-OF-BOUNDS LOW Color')
             CatSetDefault, 'DATAVIEWER_OUTOFBOUNDS_LOW_COLOR', colorname
             self.gridWindow -> GetProperty, COLOR_OBJECT=colors
             color = cgColor(colorname, /Triple)
@@ -545,7 +545,7 @@ PRO DataViewer::EventHandler, event
 
       'CHANGE_OUTLINE_COLOR': BEGIN
             outlineColor = CatGetDefault('DATAVIEWER_OUTLINE_COLOR')
-            colorname = PickColorName(GROUP_LEADER=self->GetID(), outlineColor, TITLE='Change Map Outline Color')
+            colorname = cgPickColorName(GROUP_LEADER=self->GetID(), outlineColor, TITLE='Change Map Outline Color')
             CatSetDefault, 'DATAVIEWER_OUTLINE_COLOR', colorname
             theImages = self.gridWindow -> Get(/ALL, COUNT=count)
             FOR j=0,count-1 DO BEGIN

@@ -351,7 +351,7 @@ PRO SelectableObject::EventHandler, event
 
       'FOREGROUND_COLOR': BEGIN
                   self -> GetProperty, Color=color
-                  color = PickColorName(color, Group_Leader=self.contextmenu->GetID())
+                  color = cgPickColorName(color, Group_Leader=self.contextmenu->GetID())
                   self -> SetProperty, Color=color
 
                   ; Refresh the graphics hierarchy.
@@ -361,7 +361,7 @@ PRO SelectableObject::EventHandler, event
 
       'BACKGROUND_COLOR': BEGIN
                   self -> GetProperty, BG_Color=color
-                  color = PickColorName(color, Group_Leader=self.contextmenu->GetID())
+                  color = cgPickColorName(color, Group_Leader=self.contextmenu->GetID())
                   self -> SetProperty, BG_Color=color
 
                   ; Refresh the graphics hierarchy.
