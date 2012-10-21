@@ -12,7 +12,7 @@
 ;
 ;******************************************************************************************;
 ;                                                                                          ;
-;  Copyright (c) 2010, by Fanning Software Consulting, Inc. All rights reserved.           ;
+;  Copyright (c) 2012, by Fanning Software Consulting, Inc. All rights reserved.           ;
 ;                                                                                          ;
 ;  Redistribution and use in source and binary forms, with or without                      ;
 ;  modification, are permitted provided that the following conditions are met:             ;
@@ -63,21 +63,18 @@
 ;       Window, XSize=maxsize[0], YSize=maxsize[1], /Free
 ;
 ; :Author:
-;       FANNING SOFTWARE CONSULTING::
-;           David W. Fanning 
-;           1645 Sheely Drive
-;           Fort Collins, CO 80526 USA
-;           Phone: 970-221-0438
-;           E-mail: davidf@dfanning.com
-;           Coyote's Guide to IDL Programming: http://www.dfanning.com
+;    FANNING SOFTWARE CONSULTING::
+;       David W. Fanning 
+;       1645 Sheely Drive
+;       Fort Collins, CO 80526 USA
+;       Phone: 970-221-0438
+;       E-mail: davidf@dfanning.com
+;       Coyote's Guide to IDL Programming: http://www.dfanning.com
 ;
 ; :History:
 ;     Change History::
 ;        Written, 26 October 2010. DWF.
-;        Misunderstood Macintosh result. Now Mac treated like UNIX. 27 Oct 2010. DWF.
-;        No known method for Macintosh computers. Resorting to a fudge factor
-;           of 22 pixels to account for the Macintosh dock. 27 Oct 2010. DWF.
 ;
 ; :Copyright:
-;     Copyright (c) 2010, Fanning Software Consulting, Inc.
+;     Copyright (c) 2012, Fanning Software Consulting, Inc.
 ;-
