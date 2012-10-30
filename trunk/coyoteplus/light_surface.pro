@@ -295,22 +295,6 @@ END ;-------------------------------------------------------------------------
 
 
 
-PRO PickColor_CenterTLB, tlb
-
-Device, Get_Screen_Size=screenSize
-xCenter = screenSize(0) / 2
-yCenter = screenSize(1) / 2
-
-geom = Widget_Info(tlb, /Geometry)
-xHalfSize = geom.Scr_XSize / 2
-yHalfSize = geom.Scr_YSize / 2
-
-Widget_Control, tlb, XOffset = xCenter-xHalfSize, $
-   YOffset = yCenter-yHalfSize
-END ;---------------------------------------------------------------------------
-
-
-
 PRO PickColor_Select_Color, event
 
 ; This event handler permits color selection by clicking on a color window.
@@ -499,7 +483,7 @@ acceptID = Widget_Button(buttonbase, VALUE='Accept')
 
    ; Center the TLB.
 
-PickColor_CenterTLB, tlb
+cgCenterTLB, tlb
 Widget_Control, tlb, /Realize
 
    ; Load the drawing colors.
