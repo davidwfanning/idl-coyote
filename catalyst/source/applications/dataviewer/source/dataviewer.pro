@@ -736,7 +736,7 @@ PRO DataViewer::EventHandler, event
          xoffset = xoffset + (xsize/2)
          yoffset = yoffset + (ysize/2)
          XDisplayFile, readmeFile, GROUP=self._ID, TITLE='NSIDC DataViewer Help', RETURN_ID=displayTLB
-         CenterTLB, displayTLB, xoffset, yoffset, /DEVICE
+         cgCenterTLB, displayTLB, xoffset, yoffset, /DEVICE
          END
 
       'IMAGE NAMES ON/OFF': BEGIN
