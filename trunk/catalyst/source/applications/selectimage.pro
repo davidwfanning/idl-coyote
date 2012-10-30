@@ -145,7 +145,7 @@
 ;
 ; OTHER COYOTE LIBRARY FILES REQUIRED:
 ;
-;  http://www.dfanning.com/programs/centertlb.pro
+;  http://www.dfanning.com/programs/cgcentertlb.pro
 ;  http://www.dfanning.com/programs/error_message.pro
 ;  http://www.dfanning.com/programs/fsc_fileselect.pro
 ;  http://www.dfanning.com/programs/image_dimensions.pro
@@ -1779,7 +1779,7 @@ IF N_Elements(offsets) NE 0 THEN BEGIN
    IF N_Elements(offsets) NE 2 THEN offsets = [offsets[0], offsets[0]]
    Widget_Control, tlb, XOffset=offsets[0], YOffset=offsets[1]
 ENDIF ELSE BEGIN
-   CenterTLB, tlb
+   cgCenterTLB, tlb
    offsets = LonArr(2)
 ENDELSE
 Widget_Control, tlb, /Realize

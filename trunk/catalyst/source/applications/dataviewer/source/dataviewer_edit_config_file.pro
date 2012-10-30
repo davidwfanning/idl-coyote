@@ -448,7 +448,7 @@ FUNCTION DataViewer_Edit_Config_File, configurationFile, group_leader, dataViewe
     button = Widget_Button(buttonBase, Value='Save Configuration', UVALUE='SAVE')
     
     ; Realize the program.
-    CenterTLB, tlb
+    cgCenterTLB, tlb
     Widget_Control, tlb, /REALIZE
     
     ; Info structure to hold all needed program information. This structure
