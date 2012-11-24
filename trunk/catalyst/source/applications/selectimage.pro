@@ -586,8 +586,8 @@ PRO SelectImage_FilenameEvents, event
    Widget_Control, info.labelXSizeID, Set_Value="X Size: " + StrTrim(xsize, 2)
    Widget_Control, info.labelYSizeID, Set_Value="Y Size: " + StrTrim(ysize, 2)
    Widget_Control, info.labelDataTypeID, Set_Value="Type: " + imageDataType
-   Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formater(Min(image))
-   Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formater(Max(image))
+   Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formatter(Min(image))
+   Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formatter(Max(image))
 
    ; Draw the preview image.
    WSet, info.previewWID
@@ -764,11 +764,11 @@ PRO SelectImage_ListEvents, event
          Widget_Control, info.labelYSizeID, Set_Value="Y Size: " + StrTrim(ysize, 2)
          Widget_Control, info.labelDataTypeID, Set_Value="Type: " + imageDataType
          IF imageDataType NE 'FLOAT' THEN BEGIN
-            Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formater(Min(image))
-            Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formater(Max(image))
+            Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formatter(Min(image))
+            Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formatter(Max(image))
          ENDIF ELSE BEGIN
-            Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formater(Min(image))
-            Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formater(Max(image))
+            Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formatter(Min(image))
+            Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formatter(Max(image))
          ENDELSE
 
          ; Draw the preview image.
@@ -867,11 +867,11 @@ PRO SelectImage_ListEvents, event
       Widget_Control, info.labelYSizeID, Set_Value="Y Size: " + StrTrim(ysize, 2)
       Widget_Control, info.labelDataTypeID, Set_Value="Type: " + imageDataType
       IF imageDataType NE 'FLOAT' THEN BEGIN
-         Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formater(Min(image))
-         Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formater(Max(image))
+         Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formatter(Min(image))
+         Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formatter(Max(image))
       ENDIF ELSE BEGIN
-         Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formater(Min(image))
-         Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formater(Max(image))
+         Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formatter(Min(image))
+         Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formatter(Max(image))
       ENDELSE
 
       ; Draw the preview image.
@@ -1374,8 +1374,8 @@ PRO SelectImage_SetFilter, event
    Widget_Control, info.labelXSizeID, Set_Value="X Size: " + StrTrim(xsize, 2)
    Widget_Control, info.labelYSizeID, Set_Value="Y Size: " + StrTrim(ysize, 2)
    Widget_Control, info.labelDataTypeID, Set_Value="Type: " + imageDataType
-   Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formater(Min(image))
-   Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formater(Max(image))
+   Widget_Control, info.labelminvalID, Set_Value="Min Value: " + cgNumber_Formatter(Min(image))
+   Widget_Control, info.labelmaxvalID, Set_Value="Max Value: " + cgNumber_Formatter(Max(image))
 
    ; Draw the preview image.
    WSet, info.previewWID
@@ -1700,8 +1700,8 @@ labeltypeID = Widget_Label(labelBaseID, Value=imageType, /Dynamic_Resize)
 labelxsizeID = Widget_Label(labelBaseID, Value="X Size: " + StrTrim(xsize, 2), /Dynamic_Resize)
 labelysizeID = Widget_Label(labelBaseID, Value="Y Size: " + StrTrim(ysize, 2), /Dynamic_Resize)
 labeldataTypeID = Widget_Label(labelBaseID, Value="Type: " + imageDataType, /Dynamic_Resize)
-labelminvalID = Widget_Label(labelBaseID, Value="Min Value: " + cgNumber_Formater(Min(image)), /Dynamic_Resize)
-labelmaxvalID = Widget_Label(labelBaseID, Value="Max Value: " + cgNumber_Formater(Max(image)), /Dynamic_Resize)
+labelminvalID = Widget_Label(labelBaseID, Value="Min Value: " + cgNumber_Formatter(Min(image)), /Dynamic_Resize)
+labelmaxvalID = Widget_Label(labelBaseID, Value="Max Value: " + cgNumber_Formatter(Max(image)), /Dynamic_Resize)
 
 ; Size the draw widget appropriately.
 ; Calculate a window size for the image preview.
