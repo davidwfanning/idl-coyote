@@ -7,18 +7,18 @@
 ;
 ;       The purpose of this routine is to parse the name of an NSIDC image
 ;       file so that the program can call the specific file reading program
-;       that returns the image and information about the image. When this 
-;       information is provided, this program creates and returns an 
+;       that returns the image and information about the image. When this
+;       information is provided, this program creates and returns an
 ;       NSIDC image object.
-;       
+;
 ;       If you wanted to modify the DataViewer program, for example, to
 ;       read another type of NSIDC image, you would first add a section
 ;       to this file that could identify an image of that type from its
 ;       filename. Then you would call the reader for that program (which
 ;       you would also have to write). The reader would read the file,
-;       extract the image and information about the image, which this 
+;       extract the image and information about the image, which this
 ;       program can then package into the NSIDC image object.
-;       
+;
 ; AUTHOR:
 ;
 ;       David W. Fanning, Ph.D
@@ -34,29 +34,29 @@
 ; SYNTAX:
 ;
 ;       nsidcImage = Parse_NSIDC_Filename(filename)
-;       
+;
 ; RETURN_VALUE:
-; 
+;
 ;       nsidcImage:  Either an NSIDC_IMAGE object, or the actual image data, depending
 ;                    upon whether the RETURN_IMAGE keyword is set.
-;       
+;
 ; ARGUMENTS:
-; 
+;
 ;       filename:    The name of an NSIDC image file. Or, alternatively, any
-;                    the name of any image file capable of being read by READ_IMAGE. 
+;                    the name of any image file capable of being read by READ_IMAGE.
 ;                    That is JPEG, PNG, TIFF, etc. files.
-;                    
+;
 ; INPUT_KEYWORDS:
-; 
+;
 ;       RETURN_IMAGE:  Set this keyword to have the function return the actual image
 ;                      data, rather than packaging the image up into an NSIDC_IMAGE
 ;                      object.
-;                      
+;
 ; OUTPUT_KEYWORDS:
-; 
+;
 ;        INFO:         An output structure containing information about the image. The structure
 ;                      varies, depending upon the image, but a typical structure looks like this:
-;                      
+;
 ;                        info = {directory :   "", $      ; The image directory
 ;                                filename:     "", $      ; The image file name
 ;                                extension:    "", $      ; The image file extension
@@ -74,11 +74,11 @@
 ;                                ysize:        0, $       ; The Y size of the image
 ;                                sclmin:       0.0, $     ; The minimum value for image scaling.
 ;                                sclmax:       0.0, $     ; The maximum value for image scaling.
-;                                mapinfo:      {mapStruct:mapStruct, xrange:xrange, yrange:yrange} } ; Map information.  
-;                                
-; 
+;                                mapinfo:      {mapStruct:mapStruct, xrange:xrange, yrange:yrange} } ; Map information.
+;
+;
 ;        SUCCESS:      Set to 1 if the file was successfully read, otherwise to 0.
-;       
+;
 ; MODIFICATION_HISTORY:
 ;
 ;       Written by: David W. Fanning, 23 June 2008.
@@ -104,7 +104,7 @@
 ;  WARRANTIES OF MERCHANTABILITY  AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.     ;
 ;  IN NO EVENT SHALL THE REGENTS OF THE UNIVERSITY OF COLORADO BE LIABLE FOR ANY DIRECT,   ;
 ;  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT      ;
-;  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR      ;         
+;  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR      ;
 ;  PROFITS OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,        ;
 ;  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)      ;
 ;  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE              ;
@@ -116,11 +116,11 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
 
    ; Simple error handling. Return to caller.
    ON_ERROR, 2
-   
+
    ; Check parameters.
    success = 0 ; Assume no success
    IF N_Elements(filename) EQ 0 THEN Message, "A filename is a required input parameter."
-   
+
    ; Set up colors for reading data.
    missing_color = CatGetDefault('DATAVIEWER_MISSING_COLOR')
    oob_low_color = CatGetDefault('DATAVIEWER_OUTOFBOUNDS_LOW_COLOR')
@@ -130,23 +130,23 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
    grid_color = CatGetDefault('DATAVIEWER_GRID_COLOR')
    vector_color = CatGetDefault('DATAVIEWER_VECTOR_COLOR')
    outline_color = CatGetDefault('DATAVIEWER_OUTLINE_COLOR')
-   
+
    ; Does the filename have a "@" symbol in the name. It if does, then this is a special
    ; type of file (HDF, netCDF, CDF, etc.)
    IF StrPos(filename, '@') NE -1 THEN BEGIN
-   
+
        parts = StrSplit(filename, '@', /EXTRACT)
        filename = parts[0]
        variable = parts[1]
        rootName = cgRootName(filename, EXTENSION=ext)
-       
+
        ; HDFEOS file processed in the same way as HDF files.
        IF StrUpCase(ext) EQ 'HDFEOS' THEN ext = 'HDF'
-       
+
        CASE StrUpCase(ext) OF
-       
+
             'HDF': BEGIN
-            
+
                    IF StrUpCase(StrMid(rootname, 0, 16)) EQ 'AMSR_E_L3_SEAICE' THEN BEGIN
                         theImage = Parse_NSIDC_AMSR_E_L3_SeaIce(filename, variable, INFO=info, SUCCESS=success)
                         IF ~success THEN RETURN, -1
@@ -164,29 +164,29 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                    ENDIF
 
                 END ; of HDF file extension.
-            
+
             'CDF': BEGIN
                 void = Dialog_Message('DataViewer does not currently know how to parse this CDF file.')
                 RETURN, ""
                 END
-                
+
              'NETCDF': BEGIN
                 void = Dialog_Message('DataViewer does not currently know how to parse this netCDF file.')
                 RETURN, ""
                  END
-                 
+
             ELSE: Message, 'Do not know how to process this kind of special file.'
        ENDCASE
    ENDIF
-   
-   
+
+
    ; As a first test, we check the file extension to see if this is a file IDL
    ; knows how to read (e.g., JPEG, TIFF, PNG, etc.)
    root_name = cgRootName(filename, DIRECTORY=theDirectory, EXTENSION=theExtension)
-   check = Query_Image(filename, CHANNELS=channels, HAS_PALETTE=palette, TYPE=image_type) 
+   check = Query_Image(filename, CHANNELS=channels, HAS_PALETTE=palette, TYPE=image_type)
    IF check THEN BEGIN
-   
-   
+
+
            IF image_type EQ 'TIFF' THEN BEGIN
              ok = Query_TIFF(filename, fileInfo, GEOTIFF=geotiff)
              IF ok THEN BEGIN
@@ -212,13 +212,13 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                         theImageObject = Obj_New('NSIDC_Image', theImage, FILENAME=filename, COORD_OBJECT=mapCoord, $
                            COLORCHANGENCOLORS=256, COLORCHANGEALLOWED=colorChangeAllowed, NSIDC_TAG=image_type, $
                            COLOR_OBJECT=colors, SCALETYPE=scaletype, GRID_COLOR=grid_color, OUTLINE_COLOR=outline_color)
-                        
+
                     ENDIF ELSE BEGIN
                         theImageObject = Obj_New('NSIDC_Image', theImage, FILENAME=filename, COORD_OBJECT=mapCoord, $
                            COLORCHANGENCOLORS=256, COLORCHANGEALLOWED=colorChangeAllowed, NSIDC_TAG=image_type, $
                            COLOR_OBJECT=colors, SCALETYPE=scaletype, GRID_COLOR=grid_color, OUTLINE_COLOR=outline_color)
                     ENDELSE
-                    
+
                     imageIsObject = 1
                 ENDIF
              ENDIF
@@ -227,7 +227,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                 IF N_Elements(theImage) EQ 1 THEN Message, 'Image file can not be read with READ_IMAGE.'
                 imageIsObject = 0
            ENDELSE
-           
+
        ; Some PNG files (from ImageMagick, for example) are created with 16-bits per channel.
        ; Convert this to 8-bits per channel, and also remove any alpha channel for this application.
        IF StrUpCase(theExtension) EQ 'PNG' THEN BEGIN
@@ -261,17 +261,17 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                         COLOR_OBJECT=colors, SCALETYPE=scaletype)
                    success = 1
                    END
-                   
+
                 3: BEGIN
                    theImageObject = Obj_New('NSIDC_Image', theImage, FILENAME=filename, $
                        COLORCHANGEALLOWED=0, NSIDC_TAG=image_type)
                    success = 1
                    END
-                   
+
                 ELSE: Message, 'Cannot read image with ' + StrTrim(channels,2) + ' channels.'
            ENDCASE
        ENDIF
-       IF Keyword_Set(return_image) THEN RETURN, theImage ELSE RETURN, theImageObject    
+       IF Keyword_Set(return_image) THEN RETURN, theImage ELSE RETURN, theImageObject
    ENDIF
 
    ; Parse the root file name to determine the parameters that need to be set appropriately.
@@ -281,13 +281,13 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
         root_name = root_name + '.' + theExtension
         theExtension = ''
    ENDIF
-   
+
    ; The first two letters of the root_name can be used as the first division point.
    firstTwoLetters = StrUpCase(StrMid(root_name, 0, 2))
-   
+
    ; DMSP SSM/I Gridded Brightness Temperatures (e.g, nsidc_0081).
    IF firstTwoLetters EQ 'NT' THEN BEGIN
-   
+
         ; Is this near real time data?
         nearRealTime = StrUpCase(StrMid(root_name, 16, 3))
         IF nearRealTime EQ 'NRT' THEN BEGIN
@@ -299,7 +299,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                 COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                 NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord, LANDMASK_VALUE=info.landmaskValue)
         ENDIF ELSE BEGIN
-        
+
             theImage = Parse_NSIDC_Filename_0051(filename, INFO=info, SUCCESS=success)
             IF ~success THEN RETURN, -1
             mapCoord = info.mapCoord
@@ -307,13 +307,13 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                 SCLMIN=info.sclmin, SCLMAX=info.sclmax, FILENAME=info.filename, NCOLORS=250, $
                 COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                 NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord, LANDMASK_VALUE=info.landmaskValue)
-        ENDELSE 
-        
+        ENDELSE
+
    ENDIF
-   
+
    ; TB - DMSP SSM/I Gridded Brightness Temperatures (e.g., nsidc_0001, nsidc_0080).
    IF firstTwoLetters EQ 'TB' THEN BEGIN
-      
+
         ; Is this near real time data?
         nearRealTime = StrUpCase(StrMid(root_name, 16, 3))
         IF nearRealTime EQ 'NRT' THEN BEGIN
@@ -324,9 +324,9 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                 SCLMIN=info.sclmin, SCLMAX=info.sclmax, FILENAME=info.filename, NCOLORS=250, $
                 COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                 NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
-                
+
         ENDIF ELSE BEGIN
-        
+
             theImage = Parse_NSIDC_Filename_0001(filename, INFO=info, SUCCESS=success)
             IF ~success THEN RETURN, -1
             mapCoord = info.mapCoord
@@ -334,17 +334,35 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                 SCLMIN=info.sclmin, SCLMAX=info.sclmax, FILENAME=info.filename, NCOLORS=250, $
                 COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                 NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
-                
+
         ENDELSE
    ENDIF
-   
+
+
+   IF is_nsidc0046( root_name ) THEN BEGIN
+      theImage = Parse_NSIDC_Filename_0046_new( filename, INFO = info, SUCCESS = success )
+      IF ~success THEN RETURN, -1
+      mapCoord = info.mapCoord
+      colors = info.colors
+
+      ; Turn color bars off.
+      CatSetDefault, 'DATAVIEWER_COLORBARS_OFF', 1
+      theImageObject = Obj_New( 'NSIDC_Image', theImage, FILENAME = info.filename, NCOLORS = 256, $
+            COLORCHANGEALLOWED=0, COLORCHANGENCOLORS=info.colorChangeNColors, CB_TYPE=2, $
+            NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord, COLOR_OBJECT=colors)
+
+   ENDIF
+
+
+
+
    ; EA - EASE Gridded files, either SSM/I Brightness Temperature (nsidc_0032)
    ; or SMMR Brightness Temperatures (nsidc_0071)
-   IF firstTwoLetters EQ 'EA' THEN BEGIN
-   
+   IF firstTwoLetters EQ 'EA' and  ~( is_nsidc0046( root_name ) )THEN BEGIN
+
         easeType = StrMid(root_name, 5, 4)
         CASE StrUpCase(easeType) OF
-        
+
             'SMMR': BEGIN
                 theImage = Parse_NSIDC_Filename_0071(filename, INFO=info, SUCCESS=success)
                 IF ~success THEN RETURN, -1
@@ -354,7 +372,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                      COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                      NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
                END
-               
+
             ELSE: BEGIN
                 theImage = Parse_NSIDC_Filename_0032(filename, INFO=info, SUCCESS=success)
                 IF ~success THEN RETURN, -1
@@ -363,16 +381,16 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                      SCLMIN=info.sclmin, SCLMAX=info.sclmax, FILENAME=info.filename, NCOLORS=250, $
                      COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                      NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
-                     
+
                END
-               
+
         ENDCASE
    ENDIF
-   
+
    ; ID - AMSR-E Gridded Brightness Temperatures in Quarter-Degree Grids (nsidc_0302)
    ; or in EASE grids (nsidc_0301). Added Near Real Time SSM/I (nsidc_0342) data, too.
    IF firstTwoLetters EQ 'ID' THEN BEGIN
-   
+
         IF StrMid(root_name, 0, 4) EQ 'ID2-' THEN BEGIN
                 theImage = Parse_NSIDC_Filename_0342(filename, INFO=info, SUCCESS=success)
                 IF ~success THEN RETURN, -1
@@ -382,10 +400,10 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                      COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                      NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
         ENDIF
-        
-        
+
+
         IF StrPos(root_name, 'D.25') NE -1 THEN BEGIN
-        
+
                 theImage = Parse_NSIDC_Filename_0302(filename, INFO=info, SUCCESS=success)
                 IF ~success THEN RETURN, -1
                 mapCoord = info.mapCoord
@@ -393,7 +411,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                      SCLMIN=info.sclmin, SCLMAX=info.sclmax, FILENAME=info.filename, NCOLORS=250, $
                      COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                      NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
-         ENDIF 
+         ENDIF
 
          IF (StrPos(root_name, 'D.25') EQ -1) AND StrMid(root_name, 0, 4) EQ 'ID2r' THEN BEGIN
                 theImage = Parse_NSIDC_Filename_0301(filename, INFO=info, SUCCESS=success)
@@ -404,9 +422,9 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
                      COLORCHANGEALLOWED=info.colorChangeAllowed, COLORCHANGENCOLORS=info.colorChangeNColors, $
                      NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord)
          ENDIF
-               
+
    ENDIF
-   
+
    ; BT Bootstrap Sea Ice Concentration (nsidc-0079).
    IF firstTwoLetters EQ 'BT' THEN BEGIN
         theImage = Parse_NSIDC_Filename_0079(filename, INFO=info, SUCCESS=success)
@@ -425,7 +443,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
         IF ~success THEN RETURN, -1
         mapCoord = info.mapCoord
         colors = info.colors
-        
+
         ; Turn color bars off.
         CatSetDefault, 'DATAVIEWER_COLORBARS_OFF', 1
         theImageObject = Obj_New('NSIDC_Image', theImage, FILENAME=info.filename, NCOLORS=256, $
@@ -439,7 +457,7 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
         theImage = Parse_NSIDC_Filename_0116(filename, INFO=info, SUCCESS=success)
         IF ~success THEN RETURN, -1
         mapCoord = info.mapCoord
-        
+
         ; Turn color bars off and grid on.
         CatSetDefault, 'DATAVIEWER_COLORBARS_OFF', 1
         CatSetDefault, 'DATAVIEWER_MAP_GRID_ON', 1
@@ -456,8 +474,8 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
         ok = Dialog_Message(['Cannot find code to read this image file:', filename], /ERROR)
         RETURN, -1
     ENDIF
-   
+
    ; Otherwise, return the image or image object, whichever is requested.
    IF Keyword_Set(return_image) THEN RETURN, theImage ELSE RETURN, theImageObject
-    
+
 END
