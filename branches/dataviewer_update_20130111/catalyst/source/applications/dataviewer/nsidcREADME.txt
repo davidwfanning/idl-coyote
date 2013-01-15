@@ -57,7 +57,7 @@ The DataViewer works with the following NSIDC data sets, listed by data set titl
 Additionally, the program reads BMP, GIF, JPEG, PNG, PPM, SRF, TIFF, DICOM, or
 JPEG2000 image files.
 
-The DataViewer no longer support the following NSIDC data set:
+The DataViewer no longer supports the following NSIDC data set:
 
    Polar Pathfinder Daily 25km EASE-Grid Sea Ice Motion Vectors*
 	http://nsidc.org/data/nsidc-0116.html
