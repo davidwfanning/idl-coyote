@@ -52,8 +52,6 @@
 ;               http://nsidc.org/data/nsidc-0080.html
 ;   nsidc-0081: Near Real Time SMSP SSM/I Daily Polar Gridded Sea Ice Concentrations
 ;               http://nsidc.org/data/nsidc-0081.html
-;   nsidc-0116: Sea Ice Motion Vectors for Daily, Monthly, and Yearly Gridded Products
-;               http://nsidc.org/data/nsidc-0116.html
 ;   nsidc-0301: AMSR-E/Aqua Daily EASE-Grid Brightness Temperatures
 ;               http://nsidc.org/data/nsidc-0301.html
 ;   nsidc-0302: AMSR-E/Aqua Daily Global Quarter-Degree Gridded Brightness Temperatures
@@ -66,6 +64,11 @@
 ;   Additionally, the program reads BMP, GIF, JPEG, PNG, PPM, SRF, TIFF, DICOM, or
 ;   JPEG2000 image files .
 ;
+;   The DataViewer no longer supports the following NSIDC data set:
+;
+;   nsidc-0116: Sea Ice Motion Vectors for Daily, Monthly, and Yearly Gridded Products
+;               http://nsidc.org/data/nsidc-0116.html
+
 ; MODIFICATION_HISTORY:
 ;
 ;       Written by: David W. Fanning and version 1.0 released to the public 11 November 2008.

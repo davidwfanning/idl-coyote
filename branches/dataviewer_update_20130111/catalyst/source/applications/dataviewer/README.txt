@@ -38,10 +38,6 @@ The DataViewer works with the following NSIDC data sets, listed by data set titl
    Near-Real-Time DMSP SSM/I-SSMIS Daily Polar Gridded Sea Ice Concentrations 
 	http://nsidc.org/data/nsidc-0081.html
 	
-   Polar Pathfinder Daily 25km EASE-Grid Sea Ice Motion Vectors* 
-	http://nsidc.org/data/nsidc-0116.html
-	* Please note: The ice motion vectors only display the mean gridded fields.
-   
    AMSR-E/Aqua Daily EASE-Grid Brightness Temperatures 
 	http://nsidc.org/data/nsidc-0301.html
    	
@@ -57,6 +53,11 @@ The DataViewer works with the following NSIDC data sets, listed by data set titl
 Additionally, the program reads BMP, GIF, JPEG, PNG, PPM, SRF, TIFF, DICOM, or 
 JPEG2000 image files.
 
+The DataViewer no longer supports the following NSIDC data set:
+
+   Polar Pathfinder Daily 25km EASE-Grid Sea Ice Motion Vectors* 
+	http://nsidc.org/data/nsidc-0116.html
+	* Please note: The ice motion vectors only display the mean gridded fields.
 
 SET-UP
 
