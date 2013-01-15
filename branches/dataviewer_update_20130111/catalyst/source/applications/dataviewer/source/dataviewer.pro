@@ -23,15 +23,15 @@
 ; SYNTAX:
 ;
 ;       IDL> DataViewer, files
-;       
+;
 ; ARGUMENTS:
-; 
+;
 ;       files:   The definition of "files" is fairly broad. This can be the name of one or more
 ;                of the image files DataViewer can read (see below), an actual image variable,
 ;                or it can be the name of a directory containing image files that DataViewer can
 ;                read, in which case DataViewer reads all the image files in the directory. This
-;                is an optional argument. 
-;                
+;                is an optional argument.
+;
 ; DATA_FILES:
 ;
 ;   Currently the DataViewer program reads the following NSIDC image data files.
@@ -63,7 +63,7 @@
 ;   nsidc-ae_si25: AMSR-E Daily 25 km Gridded Brightness Temperature and Sea Ice Concentration
 ;               http://nsidc.org/data/ae_si25.html
 ;
-;   Additionally, the program reads BMP, GIF, JPEG, PNG, PPM, SRF, TIFF, DICOM, or 
+;   Additionally, the program reads BMP, GIF, JPEG, PNG, PPM, SRF, TIFF, DICOM, or
 ;   JPEG2000 image files .
 ;
 ; MODIFICATION_HISTORY:
@@ -95,7 +95,7 @@
 ;  WARRANTIES OF MERCHANTABILITY  AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.     ;
 ;  IN NO EVENT SHALL THE REGENTS OF THE UNIVERSITY OF COLORADO BE LIABLE FOR ANY DIRECT,   ;
 ;  INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT      ;
-;  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR      ;         
+;  NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR      ;
 ;  PROFITS OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,        ;
 ;  WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)      ;
 ;  ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE              ;
@@ -133,28 +133,28 @@ PRO DataViewer::ChangeGrid, grid, NOLOAD=noload
 
    ; No more than 64 images per page due to memory considerations.
    grid = 1 > grid < 8
-   
+
    ; Update the grid in various locations.
    self.numImages = grid[0] * grid[1]
    self.gridWindow -> SetProperty, GRID=grid
-   
+
    ; If you are not loading images, then out of here.
    IF Keyword_Set(noload) THEN RETURN
- 
+
    ; Remove all the current images from the window.
    currentImages = self.gridWindow -> Get(/ALL, ISA='NSIDC_IMAGE', COUNT=count)
-   
+
    ; Find the first current image in the list of names.
    IF count GT 0 THEN BEGIN
        currentImages[0] -> GetProperty, FILENAME=filename
        currentFilePtr = Where(*self.theFiles EQ filename)
-       self.fileStackPtr = (currentFilePtr / self.numimages) * self.numimages 
-       
+       self.fileStackPtr = (currentFilePtr / self.numimages) * self.numimages
+
        ; Remove all the image objects from the window and destroy them.
        FOR j=0,count-1 DO currentImages[j] -> RemoveParent, self.gridWindow
-       self.gridWindow -> Remove, /ALL, ISA='NSIDC_IMAGE'   
+       self.gridWindow -> Remove, /ALL, ISA='NSIDC_IMAGE'
   ENDIF
-  
+
    ; Read the new images.
    IF count GT 0 THEN BEGIN
        FOR j=0,self.numImages-1 DO BEGIN
@@ -181,12 +181,12 @@ PRO DataViewer::ChangeGrid, grid, NOLOAD=noload
             IF self.filestackPtr EQ N_Elements(*self.theFiles) THEN BREAK
       ENDFOR
   ENDIF
-   
+
    ; The images in the window need new positions.
    self.gridWindow -> GetProperty, POSITIONS=positions
    currentImages = self.gridWindow -> Get(/ALL, COUNT=numCurrentImages, ISA='NSIDC_IMAGE')
    FOR j=0,numCurrentImages-1 DO currentImages[j] -> SetProperty, POSITION=positions[*,j]
-   
+
    ; You have to unregister the GridWindow Color object from messages, and re-register
    ; it, otherwise, it will get the notification to redraw the images before the images
    ; have received the message to change their colors. This results in a one-click "delay"
@@ -275,10 +275,10 @@ END
 PRO DataViewer::EditConfigFile, event
 
   @cat_pro_error_handler
-  
+
   success = DataViewer_Edit_Config_File(self.configFile, self->GetID(), self)
   IF ~success THEN RETURN
-  
+
 END
 
 
@@ -338,7 +338,7 @@ PRO DataViewer::EventHandler, event
             ; How many images do we have?
             numfiles = N_Elements(*self.theFiles)
 
-            ; Start it up. 
+            ; Start it up.
             XInterAnimate, /SHOWLOAD, SET=[xsize, ysize, numfiles], TITLE='DataViewer Animation'
             animateWindow = !D.Window
             missing_color = CatGetDefault('DATAVIEWER_MISSING_COLOR')
@@ -351,7 +351,7 @@ PRO DataViewer::EventHandler, event
             IF success NE 1 THEN moOn = 0
             gridOn = CatGetDefault('DATAVIEWER_MAP_GRID_ON', SUCCESS=success)
             IF success NE 1 THEN gridOn = 0
-            
+
             ; Read each file, display it in the window, then leave.
             FOR j=0,numfiles-1 DO BEGIN
                newObject = Parse_NSIDC_Filename((*self.theFiles)[j], INFO=info, SUCCESS=success)
@@ -375,7 +375,7 @@ PRO DataViewer::EventHandler, event
 
 
             END
-            
+
       'CHANGE_ANNOTATE_COLOR': BEGIN
             annotateColor = CatGetDefault('DATAVIEWER_ANNOTATE_COLOR')
             colorname = cgPickColorName(GROUP_LEADER=self->GetID(), annotateColor, TITLE='Change Annotation Color')
@@ -569,7 +569,7 @@ PRO DataViewer::EventHandler, event
          event.id -> SetProperty, UVALUE=1-buttonChangeValue
 
          END
-         
+
       'EDIT_CONFIGURATION_FILE': BEGIN
 
          self -> EditConfigFile, event
@@ -584,10 +584,10 @@ PRO DataViewer::EventHandler, event
            ; the image, if we can find it.
            CASE event.event_name OF
                 'WIDGET_DRAW': BEGIN
-                
+
                    ; Make this the current window/
                    self.gridWindow -> SetWindow
-                   
+
                    IF (event.type EQ 2) THEN BEGIN
                         ; Which image are we talking about?
                         images = event.ID -> Get(/ALL, Count=count)
@@ -598,7 +598,7 @@ PRO DataViewer::EventHandler, event
                         ENDFOR
                         ; If there is no success, you haven't clicked on an image.
                         IF success EQ 0 THEN RETURN
-                   
+
                                selectedImage -> GetProperty, Filename=filename, SCLMIN=sclmin, $
                                     SCLMAX=sclmax, IMAGE=image, MISSING_VALUE=missing_value
                                value = selectedImage -> Pixel_To_Value(event.x, event.y, XDATA=xpix, YDATA=ypix)
@@ -614,7 +614,7 @@ PRO DataViewer::EventHandler, event
                                     filename = "" ELSE $
                                     filename = File_Basename(filename, '.gz')
                                CASE N_Elements(value) OF
-                               
+
                                    1: BEGIN
                                      IF Size(value, /TNAME) NE 'STRING' THEN  value = String(value, Format='(F0.2)')
                                      theText = filename + $
@@ -639,7 +639,7 @@ PRO DataViewer::EventHandler, event
                                ENDCASE
                                self._statusbar -> SetProperty, Text=theText
                    ENDIF
-                   
+
                    ; Only interested in  BUTTON DOWN.
                     IF (event.type EQ 0) THEN BEGIN
 
@@ -752,7 +752,7 @@ PRO DataViewer::EventHandler, event
          event.id -> SetProperty, UVALUE=1-buttonChangeValue
 
          END
-         
+
       'MAP_OUTLINES ON/OFF': BEGIN
 
          event.id -> GetProperty, UVALUE=buttonChangeValue, VALUE=buttonValue
@@ -779,8 +779,8 @@ PRO DataViewer::EventHandler, event
             event.id -> SetProperty, VALUE='Map Grid On'
          event.id -> SetProperty, UVALUE=1-buttonChangeValue
 
-         END      
-         
+         END
+
       'NEXT_PAGE': BEGIN
 
             ; How many files are there to load?
@@ -840,7 +840,7 @@ PRO DataViewer::EventHandler, event
 
             ; Display them.
             self.gridWindow -> Draw
-            
+
             ; You have to unregister the GridWindow Color object from messages, and re-register
             ; it, otherwise, it will get the notification to redraw the images before the images
             ; have received the message to change their colors. This results in a one-click "delay"
@@ -850,7 +850,7 @@ PRO DataViewer::EventHandler, event
             gridColors -> RegisterForMessage, self.gridWindow, 'COLORTOOL_SETPROPERTY', /UNREGISTER
             gridColors -> RegisterForMessage, self.gridWindow, 'COLORTOOL_TABLECHANGE'
             gridColors -> RegisterForMessage, self.gridWindow, 'COLORTOOL_SETPROPERTY'
-            
+
             ; Check to see if buttons should be turned on or off.
             IF self.fileStackPtr EQ (N_Elements(*self.theFiles)) $
                 THEN self.nextButton -> SetProperty, SENSITIVE=0 $
@@ -858,7 +858,7 @@ PRO DataViewer::EventHandler, event
             IF self.fileStackPtr GT self.numimages $
                 THEN self.prevButton -> SetProperty, SENSITIVE=1 $
                 ELSE self.prevButton -> SetProperty, SENSITIVE=0
-                        
+
             END
 
       'LOAD_CONFIG_FILE': BEGIN
@@ -876,7 +876,7 @@ PRO DataViewer::EventHandler, event
                config_file = CatGetDefault('DATAVIEWER_CONFIG_FILE', SUCCESS=success)
                IF success THEN BEGIN
                     IF StrUpCase(File_BaseName(config_file, '.txt')) NE 'DATAVIEWER_DEFAULT' THEN BEGIN
-            
+
                        ; Is this a relative file name or a complete file name?
                        IF StrUpCase(File_BaseName(config_file)) EQ StrUpCase(config_file) THEN BEGIN
                            IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
@@ -888,7 +888,7 @@ PRO DataViewer::EventHandler, event
                         DataViewer_Parse_Configuration, config_file
                     ENDIF
                ENDIF
-            
+
                ; Check to be sure the data directory has a file separator at the end of the directory
                ; name. If it doesn't, the path is indeterminate.
                dataDir = CatGetDefault('DATAVIEWER_DATA_DIRECTORY', SUCCESS=success)
@@ -908,7 +908,7 @@ PRO DataViewer::EventHandler, event
                         dataDir = dataDir + Path_Sep()
                         CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
                     ENDIF
-            
+
                     ; Make sure the file separators are appropriate for the machine
                     ; we are running on. Byte('\') = 92, Byte('/') = 47.
                     CASE Path_Sep() OF
@@ -921,7 +921,7 @@ PRO DataViewer::EventHandler, event
                                 CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
                              ENDIF
                              END
-            
+
                         '\': BEGIN ; Windows
                              thisArray = Byte(dataDir)
                              i = Where(thisArray EQ 47, count)
@@ -931,19 +931,19 @@ PRO DataViewer::EventHandler, event
                                 CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
                              ENDIF
                              END
-            
+
                          ELSE: ; Strange machine. Everyone for himself...
-            
+
                     ENDCASE
                ENDIF
-               
+
              ; Set the data directory.
-             CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir   
+             CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
 
              self -> Update_GUI_From_Config, filename
-             
+
             END
-            
+
       'OPEN_HDF_FILE': BEGIN
             self -> Open_HDF_File
             END
@@ -957,7 +957,7 @@ PRO DataViewer::EventHandler, event
                 self.fileStackPtr =  0 > (self.fileStackPtr - (self.fileStackPtr MOD self.numImages) $
                     - self.numImages) <  N_Elements(*self.theFiles)
             ENDELSE
-            
+
             ; Remove the image files currently on the display.
             currentImages = self.gridWindow -> Get(/ALL)
             self.gridWindow -> Remove, /ALL
@@ -1232,7 +1232,7 @@ PRO DataViewer::EventHandler, event
             ; window.
             self.gridWindow -> SetWindow
             self.gridWindow -> Output, TYPE=fileType, FILENAME='dataviewer', /DRAW
-            
+
             END
 
       'SELECT_FILES': self -> Select_Files
@@ -1253,30 +1253,30 @@ PRO DataViewer::EventHandler, event
                 RETURN
             ENDIF
             CD, thisDir
-            
+
             ; The files need to have the complete path name.
             theFiles = File_Search(theDirectory + '*.*', COUNT=newcount)
-            
+
             ; Set the grid to its default values. (Necessary to load image correctly!)
             self -> ChangeGrid, /NOLOAD
- 
+
             ; Load the files into the DataViewer.
             self -> LoadFiles, theFiles
-            
+
             ; Make this the default directory
             CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', theDirectory
             END
-            
+
       'SPLASHWINDOW': BEGIN
-      
+
             ; Only button down events.
             IF event.type NE 0 THEN RETURN
-            
+
             ; Get the location in normalized coordinates.
             event.id -> GetProperty, XSIZE=xsize, YSIZE=ysize
             xnorm = event.x / Float(xsize)
             ynorm = event.y / Float(ysize)
-            
+
             ; Are you inside the information button?
             IF (xnorm GE 0.88) AND (xnorm LE 0.98) AND (ynorm GE 0.89) AND (ynorm LE 0.99) THEN BEGIN
                  IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
@@ -1293,8 +1293,8 @@ PRO DataViewer::EventHandler, event
                                      'splash screen for DataViewer information.'], /INFORMATION)
             ENDELSE
             END
-      
-       
+
+
       'TLB': BEGIN ; A TLB re-size event. Resize the draw widget and re-draw.
 
          drawObject = self -> Get("GridWindow", /Recursive_Search)
@@ -1305,7 +1305,7 @@ PRO DataViewer::EventHandler, event
          ENDIF ELSE BEGIN
             s = [event.x - self.xoffset + 1, event.y - self.yoffset + 1]
          ENDELSE
- 
+
          ; Resize the draw widget.
          drawObject -> Resize, s[0], s[1]
 
@@ -1346,7 +1346,7 @@ END
 ;     None.
 ;
 ; KEYWORDS:
-; 
+;
 ;    VERSION:         The current version number of the program.
 ;
 ;     _REF_EXTRA:     Any keywords appropriate for the superclass GetProperty method.
@@ -1355,7 +1355,7 @@ END
 PRO DataViewer::GetProperty,  VERSION=version, _Ref_Extra=extrakeywords
 
    @cat_pro_error_handler
-   
+
    version = self.version
 
    IF N_Elements(extrakeywords) NE 0 THEN self -> TOPLEVELBASE::GetProperty, _Extra=extrakeywords
@@ -1449,19 +1449,19 @@ PRO DataViewer::GUI, menubarID
         Value='Histogram Stretch All Images', Sensitive=0)
    button = OBJ_NEW('ButtonWidget', ops, Name='REFRESH_IMAGES', $
         Value='Refresh All Images', Sensitive=0)
-        
+
    namesOff = CatGetDefault('DATAVIEWER_IMAGE_NAMES_OFF', SUCCESS=success)
    IF success EQ 0 THEN namesOff = 0
    IF namesOff THEN nameValue = 'Image Names On' ELSE nameValue = 'Image Names Off'
    button = OBJ_NEW ('ButtonWidget', ops,  Name='IMAGE NAMES ON/OFF', $
       Value=nameValue, /Separator, /DYNAMIC_RESIZE, UVALUE=1-namesOff, SENSITIVE=0)
-      
+
    cbOff = CatGetDefault('DATAVIEWER_COLORBARS_OFF', SUCCESS=success)
    IF success EQ 0 THEN cbOff = 0
    IF cbOff THEN cbValue = 'Colorbars On' ELSE cbValue = 'Colorbars Off'
    button = OBJ_NEW ('ButtonWidget', ops,  Name='COLORBARS ON/OFF', $
       Value=cbValue, /DYNAMIC_RESIZE, UVALUE=1-cbOff, SENSITIVE=0)
-      
+
    moOn = CatGetDefault('DATAVIEWER_MAP_OUTLINE_ON', SUCCESS=success)
    IF success EQ 0 THEN moOn = 0
    IF moOn THEN moValue = 'Map Outlines Off' ELSE moValue = 'Map Outlines On'
@@ -1474,7 +1474,7 @@ PRO DataViewer::GUI, menubarID
    button = OBJ_NEW ('ButtonWidget', ops,  Name='MAP_GRID ON/OFF', $
       Value=gridValue, /DYNAMIC_RESIZE, UVALUE=1-gridOn, SENSITIVE=0)
 
- 
+
    ; Configuration buttons.
    button = OBJ_NEW('ButtonWidget', fileMenu, Name='LOAD_CONFIG_FILE', $
         Value='Load a Configuration File...', /Separator)
@@ -1493,7 +1493,7 @@ PRO DataViewer::GUI, menubarID
    grid = CatGetDefault('DATAVIEWER_GRIDWINDOW_GRID')
    xsize = CatGetDefault('DATAVIEWER_GRIDWINDOW_XSIZE')
    ysize = CatGetDefault('DATAVIEWER_GRIDWINDOW_YSIZE')
-   
+
    ; No matter what the preferred size, constrain the data viewer
    ; to no more than 95% of the screen size.
    s = Get_Screen_Size()
@@ -1591,9 +1591,9 @@ END
 PRO DataViewer::LoadFiles, files
 
     @cat_pro_error_handler
-    
+
     Obj_Destroy, self.splashWindow
-    
+
     ; Is the argument there?
     IF N_Elements(files) EQ 0 THEN Message, 'A file or directory name must be supplied.'
 
@@ -1658,7 +1658,7 @@ PRO DataViewer::LoadFiles, files
            IF success NE 1 THEN moOn = 0
            gridOn = CatGetDefault('DATAVIEWER_MAP_GRID_ON', SUCCESS=success)
            IF success NE 1 THEN gridOn = 0
-           
+
            newObject -> SetProperty, SELECTABLE=1, MISSING_COLOR=missing_color, MISSING_INDEX=255, OOB_LOW_COLOR=oob_low_color, $
                 OOB_HIGH_COLOR=oob_high_color, LANDMASK_COLOR=landmask_color, NO_NAME_DISPLAY=namesOff, $
                 NO_COLORBAR_DISPLAY=cbOff, FN_COLOR=annotate_color, MAP_OUTLINE=moOn, MAP_GRID=gridOn
@@ -1686,7 +1686,7 @@ PRO DataViewer::LoadFiles, files
            self.gridWindow -> Add, newObject
            self.fileStackPtr = self.fileStackPtr + 1
     ENDFOR
-    
+
     ; We must have loaded at least one image to continue with this method.
     IF self.fileStackPtr EQ 0 THEN RETURN
 
@@ -1773,9 +1773,9 @@ PRO DataViewer::LoadFiles, files
     Ptr_Free, self.scaling_values
 
     ; Should the NEXT button be made sensitive?
-    
+
     IF N_Elements(*self.theFiles) GT numImagesToLoad THEN BEGIN
-        self.nextButton -> SetProperty, SENSITIVE=1 
+        self.nextButton -> SetProperty, SENSITIVE=1
         IF self.fileStackPtr LE self.numimages $
             THEN self.prevButton -> SetProperty, SENSITIVE=0 $
             ELSE self.prevButton -> SetProperty, SENSITIVE=1
@@ -1868,7 +1868,7 @@ PRO DataViewer::MessageHandler, title, DATA=data, SENDER=sender
 
             END
 
-        ELSE: Message, 'Received an upexpected message in the message handler.
+        ELSE: Message, 'Received an upexpected message in the message handler.'
 
     ENDCASE
 
@@ -1901,34 +1901,34 @@ END ;***************************************************************************
 ;PRO DataViewer::Open_HDF_File
 ;
 ;    @cat_pro_error_handler
-;    
+;
 ;    ; Select an HDF file to open.
 ;    dataDir = CatGetDefault('DATAVIEWER_DATA_DIRECTORY')
-;    hdf_file = Dialog_Pickfile(FILTER='*.hdf', TITLE='Select HDF File', PATH=dataDir)            
+;    hdf_file = Dialog_Pickfile(FILTER='*.hdf', TITLE='Select HDF File', PATH=dataDir)
 ;    IF hdf_file[0] EQ '' THEN RETURN
-;    
+;
 ;    ; Set the data directory system variable.
 ;    void = cgRootName(hdf_file[0], DIRECTORY=newDir)
 ;    CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', newDir
-;            
+;
 ;    ; Set the grid to its default values. (Necessary to load image correctly!)
 ;    self -> ChangeGrid, /NOLOAD
-;    
+;
 ;    ; Open the HDF file and search through it for SDs containing 2D images.
 ;    ; It is these we will display.
 ;    hdf_id = HDF_SD_START(hdf_file[0])
-;    
+;
 ;    ; How many variables are there in the file?
 ;    HDF_SD_FILEINFO, hdf_id, numVariables, numGlobalAtts
-;    
+;
 ;    ; Let the user know if there are no variables in this file.
 ;    IF numVariables EQ 0 THEN BEGIN
 ;         IF (!D.FLAGS AND 256) NE 0 THEN $
 ;            void = Dialog_Message('There are no scientific variables in file: ' + hdf_file) ELSE $
 ;            Message, 'There are no scientific variables in file: ' + hdf_file, /INFORMATIONAL
 ;         RETURN
-;    ENDIF 
-;    
+;    ENDIF
+;
 ;    ; Get each variable, see if it is 2D, and save its name, if so.
 ;    vars2d = StrArr(numVariables)
 ;    count = 0
@@ -1947,18 +1947,18 @@ END ;***************************************************************************
 ;            void = Dialog_Message('There are no 2D scientific variables in file: ' + hdf_file) ELSE $
 ;            Message, 'There are no 2D scientific variables in file: ' + hdf_file, /INFORMATIONAL
 ;         RETURN
-;    ENDIF 
-;    
-;    ; Close the HDF file access.    
+;    ENDIF
+;
+;    ; Close the HDF file access.
 ;    HDF_SD_END, hdf_id
 ;
 ;    ; Save the HDF filename.
 ;    self.hdf_filename = hdf_file
-;    
+;
 ;    vars = Name_Selector(vars2d, Label='Select SD to Read and Display', CANCEL=cancelled)
 ;    IF cancelled THEN RETURN
-;    
-;    
+;
+;
 ;    ; Load the variables.
 ;    self -> LoadFiles, vars2D, /HDF
 ;
@@ -1992,15 +1992,15 @@ PRO DataViewer::Select_Files
     dataDir = CatGetDefault('DATAVIEWER_DATA_DIRECTORY')
     theFiles = Dialog_Pickfile(/MULTIPLE, Title='Select Image Files', PATH=dataDir)
     IF theFiles[0] EQ '' THEN RETURN
-    
+
     ; Special processing if this is an HDF file.
     testFile = theFiles[0]
     filename = cgRootName(testFile, EXTENSION=ext, DIRECTORY=dir)
     IF StrLowCase(ext) EQ 'hdf' OR StrLowCase(ext) EQ 'hdfeos' THEN BEGIN
-    
+
        ; Open the HDF file
        hdfID = HDF_SD_Start(testFile)
-    
+
        ; Which variables would the user like to display from this file or files?
        ; We are only going to allow 2D scientific data sets.
        sd_list = HDF_SD_Varlist(hdfid)
@@ -2018,46 +2018,46 @@ PRO DataViewer::Select_Files
           RETURN
        ENDIF
        list2dvar = list2dvar[0:listCnt-1]
-       
+
        ; Allow the user to select the variables.
-       selectList = List_Selector(list2dvar, COUNT=selectCnt, CANCEL=cancelled, GROUP_LEADER=self->GetID())  
+       selectList = List_Selector(list2dvar, COUNT=selectCnt, CANCEL=cancelled, GROUP_LEADER=self->GetID())
        IF cancelled THEN BEGIN
           HDF_SD_END, hdfID
           RETURN
        ENDIF
-       
+
        tempFiles = StrArr(selectCnt)
        FOR j=0,selectCnt-1 DO BEGIN
           tempFiles[j] = testFile + '@' + selectList[j]
        ENDFOR
-       
+
        ; Close the file
        HDF_SD_END, hdfID
-        
+
         ; Set the data directory system variable.
         void = cgRootName(theFiles[0], DIRECTORY=newDir)
         CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', newDir
-            
+
        ; Set the grid to its default values. (Necessary to load image correctly!)
        self -> ChangeGrid, /NOLOAD
 
        ; Load the files into the DataViewer.
        self -> LoadFiles, tempFiles
-      
+
        RETURN
-       
+
     ENDIF
-            
+
     ; Set the data directory system variable.
     void = cgRootName(theFiles[0], DIRECTORY=newDir)
     CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', newDir
-            
+
     ; Set the grid to its default values. (Necessary to load image correctly!)
     self -> ChangeGrid, /NOLOAD
 
     ; Load the files into the DataViewer.
     self -> LoadFiles, theFiles
-    
+
 END ;--------------------------------------------------------------------------------------------------
 
 ;
@@ -2193,7 +2193,7 @@ PRO DataViewer::SingleFileSetup, imageObject
     button = self -> Get('ANIMATE_IMAGES', /RECURSIVE_SEARCH)
     IF Obj_Valid(button) THEN button -> SetProperty, SENSITIVE=0
 
-END 
+END
 
 ; ************************************************************************************************
 ;+
@@ -2265,7 +2265,7 @@ PRO DataViewer::Update_GUI_From_Config, filename
              IF Obj_Valid(colors) EQ 0 THEN BEGIN
                 colors = Obj_New('CatColors')
              ENDIF
-             
+
              ; New colors.
              cttype = CatGetDefault('DATAVIEWER_DEFAULT_CT_TYPE')
              IF StrUpCase(cttype) EQ 'BREWER' THEN brewer=1 ELSE brewer = 0
@@ -2300,7 +2300,7 @@ PRO DataViewer::Update_GUI_From_Config, filename
 
              ; Update the config file.
              self.configFile = filename
-                          
+
              ; New grid.
              self -> ChangeGrid
 
@@ -2383,7 +2383,7 @@ END
 ;
 ;     NOCURRENTWINDOW:   Normally, the window size is taken from the current graphics window.
 ;                        However, if this keyword is set, the window size is taken from the
-;                        current value of DATAVIEWER_GRIDWINDOW_XSIZE and 
+;                        current value of DATAVIEWER_GRIDWINDOW_XSIZE and
 ;                        DATAVIEWER_GRIDWINDOW_YSIZE.
 ;-
 ;*****************************************************************************************************
@@ -2575,7 +2575,7 @@ FUNCTION DataViewer::INIT, _Ref_Extra=extra
    IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
    self.configFile = Filepath(Root_Dir=ProgramRootDir(ONEUP=oneup), $
       SUBDIRECTORY='config', 'dataviewer_default.txt')
-      
+
    self.version = 1.0
 
    IF (ok) THEN self -> Report, /Completed $
@@ -2662,10 +2662,10 @@ PRO DataViewer, files
                 Message, 'Configuration file specified in "dataviewer_default.txt" cannot be found.'
             DataViewer_Parse_Configuration, config_file
         ENDIF ELSE BEGIN
-        
+
             ; This may not be a fully-qualified path to the Configuration file. Make
             ; sure it is.
-            ; 
+            ;
            ; Is this a relative file name or a complete file name?
            IF StrUpCase(File_BaseName(config_file)) EQ StrUpCase(config_file) THEN BEGIN
                IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
@@ -2674,7 +2674,7 @@ PRO DataViewer, files
            ENDIF
         ENDELSE
    ENDIF ELSE BEGIN
-   
+
         ; Look in the config directory for files. If the user can't find any, we
         ; are done.
         IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
@@ -2730,9 +2730,9 @@ PRO DataViewer, files
 
         ENDCASE
    ENDIF
-   
+
    ; Set the data directory.
-   CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir   
+   CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
 
     ; Create the widgets that make up the application. Widgets that generate
    ; events should be named explicitly and should be children (or grandchildren)
@@ -2746,7 +2746,7 @@ PRO DataViewer, files
    ; select one.
    test = File_Test(dataDir, /DIRECTORY)
    IF test EQ 0 THEN BEGIN
-   
+
       IF (StrUpCase(dataDir) EQ 'DEFAULT' + Path_Sep()) THEN dataDir = ProgramRootDir(ONEUP=oneup)
       answer = Dialog_Message(['The DataViewer needs to know where your images are located. ', $
                                'The current Data Directory is set to a currently non-existent directory: ', $
@@ -2763,11 +2763,11 @@ PRO DataViewer, files
                 tlb -> Write_Config_File, config_file
                 ok = Dialog_Message(['The current Data Directory has been set to', dataDir], CENTER=1)
           ENDIF ELSE RETURN
-      ENDIF ELSE BEGIN ; Answer is "no". 
-       
+      ENDIF ELSE BEGIN ; Answer is "no".
+
          ; Answer is no, but the current directory doesn't exist. Get a directory that
          ; does  exist, i.e., the DataViewer directory.
-         dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup),  "")     
+         dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup),  "")
          CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
          ok = Dialog_Message(['The current Data Directory has been set temporarily to', dataDir], CENTER=1)
       ENDELSE
