@@ -328,8 +328,7 @@ PRO DataViewer::EventHandler, event
             ; create an annomation the correct size.
             firstImage = self.gridWindow -> Get(POSITION=0)
             firstImage -> GetProperty, IMAGE=image, NO_NAME_DISPLAY=no_name, NO_COLORBAR_DISPLAY=no_colorbar
-            s = Size(image, /DIMENSIONS)
-            aspect = Float(s[1])/s[0]
+            aspect = image_aspect( image )
             IF aspect GE 1 THEN BEGIN
                 ysize = maxsize
                 xsize = maxsize / aspect
