@@ -206,10 +206,10 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ENDCASE
    position = [0., 0., 1., 1.]
     
-   ; Open a window if one is not currently open. If you are making
+   ; Open a graphics window. If you are making
    ; a PostScript file, this will have to be a pixmap.
-   IF (!D.Window LT 0) && ~(ps || png) THEN BEGIN
-        cgDisplay, win_xsize, win_ysize, /Free, Title=time
+   IF ~(ps || png) THEN BEGIN
+        cgDisplay, win_xsize, win_ysize, Title=time
         displayWindow = !D.Window
    ENDIF ELSE BEGIN
         IF (ps || png) THEN BEGIN
@@ -218,7 +218,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
             ps_pixmap = 1
         ENDIF
    ENDELSE
-   displayWindow = !D.Window
+   IF !D.Window GE 0 THEN displayWindow = !D.Window
 
    ; Set up the map projection space.
    CASE map_index OF
@@ -313,7 +313,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    terminatorImage = (imgsnap * alpha) + (1 - alpha) * darksnap
    
    ; Make the display window the current window
-   IF displayWindow GE 0 THEN WSet, displayWindow
+   IF (displayWindow GE 0) THEN WSet, displayWindow
    
    ; Copy the terminator image into a warp image variable. You will replace
    ; the warp contents in a moment.
@@ -321,12 +321,23 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    
    ; Now warp the image into the map projection. You have to do this plane by plane,
    ; as only 2D images are allowed.
+   ; Set up the map projection space.
+   CASE map_index OF
+      0: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /CYLINDRICAL
+      1: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /GOODESHOMOLOSINE
+      2: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /HAMMER
+      3: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /LAMBERT
+      4: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MERCATOR
+      5: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MILLER_CYLINDRICAL
+      6: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MOLLWEIDE
+      7: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /ROBINSON
+   ENDCASE
    FOR j=0,2 DO BEGIN
       warp[*,*,j] = Map_Image(terminatorImage[*,*,j], Compress=1, Missing=255) ; White pixels
    ENDFOR
    
    ; Need a PostScript file? Make sure you have a PostScript file extension.
-   IF N_Elements(outfilename) EQ 0 THEN outfilename = 'cgTeminatorMap.ps'
+   IF N_Elements(outfilename) EQ 0 THEN outfilename = 'cgterminatormap.ps'
    rootname = cgRootName(outfilename, EXTENSION=ext, DIRECTORY=dir)
    IF (StrUpCase(ext) EQ "PNG") && png THEN BEGIN
         outfilename = FilePath(ROOT_DIR=dir, rootname + '.' + 'ps')
@@ -341,6 +352,18 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ; Plot the sun on the map.
    cgPlotS, sun_lon, sun_lat, psym=cgSymCat(16), color='yellow', symsize=3
 
+   ; Set up the map projection space.
+   CASE map_index OF
+      0: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /CYLINDRICAL
+      1: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /GOODESHOMOLOSINE
+      2: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /HAMMER
+      3: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /LAMBERT
+      4: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MERCATOR
+      5: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MILLER_CYLINDRICAL
+      6: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MOLLWEIDE
+      7: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /ROBINSON
+   ENDCASE
+
    ; Add continental outlines and time zones.
    cgMap_Continents, Color='Medium Gray'
    cgMap_Continents, Color='Medium Gray', /Countries
@@ -349,7 +372,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
       LatLabel=-7.5
       
    ; Close the PostScrit file and create a PNG file, if required.
-   IF (ps || png) THEN PS_End, PNG=png, DELETE_PS=(1-ps)
+   IF (ps || png) THEN PS_End, PNG=png
       
    ; Need output image?
    IF Arg_Present(image) THEN image = cgSnapshot()
