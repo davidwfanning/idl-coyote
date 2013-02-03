@@ -5,7 +5,7 @@
 ; PURPOSE:
 ;
 ;       This is a demonstration program, used in the TOMS Tutorial
-;       (http://www.dfanning.com/graphics_tips/toms_tutorial.html),
+;       (http://www.idlcoyote.com/graphics_tips/toms_tutorial.html),
 ;       to show how to write a program that looks the same on the
 ;       display and in a PostScript file. TOMS satellite data is
 ;       overlaid on a map projection.
@@ -174,12 +174,12 @@ PRO Read_TOMS_Aerosol, filename, DATA=data, HEADER=header, LIMIT=limit, PS=ps
    LoadCT, 0, /Silent
 
    ; Aerosol colors, indices 1-7;
-   TVLCT, FSC_Color(['LIGHT GRAY', 'DARK GRAY', 'YELLOW', 'GREEN YELLOW', $
+   TVLCT, cgColor(['LIGHT GRAY', 'DARK GRAY', 'YELLOW', 'GREEN YELLOW', $
                      'RED', 'MAROON', 'DARK RED'], /Triple), 1
-   TVLCT, FSC_Color('BLACK', /Triple), 8 ; Drawing color.
-   TVLCT, FSC_Color('SKY BLUE', /Triple), 250 ; Ocean color.
-   TVLCT, FSC_Color('FOREST GREEN', /Triple), 251 ; Landmass color.
-   TVLCT, FSC_Color('WHITE', /Triple), 252 ; Background color.
+   TVLCT, cgColor('BLACK', /Triple), 8 ; Drawing color.
+   TVLCT, cgColor('SKY BLUE', /Triple), 250 ; Ocean color.
+   TVLCT, cgColor('FOREST GREEN', /Triple), 251 ; Landmass color.
+   TVLCT, cgColor('WHITE', /Triple), 252 ; Background color.
 
    ; The next part of the program takes place in the Z-graphics buffer.
    ; It is here we need to create a seamask and landmask image in order
