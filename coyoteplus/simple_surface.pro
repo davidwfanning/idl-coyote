@@ -65,11 +65,6 @@
 ; COMMON BLOCKS:
 ;       None.
 ;
-; RESTRICTIONS:
-;       Requires FSC_NORMALIZE from the Coyote Library.
-;
-;          http://www.idlcoyote.com/programs/fsc_normalize.pro
-;
 ; EXAMPLE:
 ;       To use this program with your 2D data, type:
 ;
@@ -469,9 +464,9 @@ zAxis->GetProperty, CRange=zrange
     ; surface is rotated we don't have to worry about translations. In
     ; other words, the rotations occur about the point (0,0,0).
 
-xs = FSC_Normalize(xrange, Position=[-0.5,0.5])
-ys = FSC_Normalize(yrange, Position=[-0.5,0.5])
-zs = FSC_Normalize(zrange, Position=[-0.5,0.5])
+xs = cgNormalize(xrange, Position=[-0.5,0.5])
+ys = cgNormalize(yrange, Position=[-0.5,0.5])
+zs = cgNormalize(zrange, Position=[-0.5,0.5])
 
     ; Scale the axes and place them in the coordinate space.
     ; Note that not all values in the Location keyword are
