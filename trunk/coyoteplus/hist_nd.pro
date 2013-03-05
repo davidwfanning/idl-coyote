@@ -8,7 +8,7 @@
 ;       density function of N variables, ala HIST_2D.
 ;
 ; CALLING SEQUENCE:
-;       hist=HIST_ND(V,BINSIZE,MIN=,MAX=,NBINS=,REVERSE_INDICES=)
+;       hist=HIST_ND(V,[BINSIZE,MIN=,MAX=,NBINS=,REVERSE_INDICES=])
 ;
 ; INPUTS:
 ;
@@ -58,9 +58,10 @@
 ;
 ; OUTPUTS:
 ;
-;       hist: The N-Dimensional histogram, of size N1xN2xN3x...xND
-;         where the Ni's are the number of bins implied by the data,
-;         and/or optional inputs min, max and binsize.
+;       hist: The N-Dimensional histogram, an array of size
+;         N1xN2xN3x...xND where the Ni's are the number of bins
+;         implied by the data, and/or the optional inputs min, max and
+;         binsize.
 ;
 ; OPTIONAL OUTPUTS:
 ;
@@ -76,6 +77,11 @@
 ;       HISTOGRAM, HIST_2D
 ;
 ; MODIFICATION HISTORY:
+;
+;       Wed Nov 3 17:40:21 2010, J.D. Smith 
+;               
+;               Handle 1D input with out of range elements.
+;		
 ;
 ;       Mon Mar 5 09:45:53 2007, J.D. Smith <jdsmith@as.arizona.edu>
 ;
@@ -106,7 +112,7 @@
 ;
 ; LICENSE
 ;
-;  Copyright (C) 2001-2003, 2004, 2007 J.D. Smith
+;  Copyright (C) 2001-2010 J.D. Smith
 ;
 ;  This file is free software; you can redistribute it and/or modify
 ;  it under the terms of the GNU General Public License as published
@@ -140,7 +146,9 @@ function hist_nd,V,bs,MIN=mn,MAX=mx,NBINS=nbins,REVERSE_INDICES=ri
      if n_elements(mx)    eq 1 then mx=replicate(mx,s[0])
      if n_elements(bs)    eq 1 then bs=replicate(bs,s[0])
      if n_elements(nbins) eq 1 then nbins=replicate(nbins,s[0])
-  endif 
+  endif else begin 
+     mn=[mn] & mx=[mx]
+  endelse 
   
   if ~array_equal(mn le mx,1b) then $
      message,'Min must be less than or equal to max.'
@@ -154,8 +162,9 @@ function hist_nd,V,bs,MIN=mn,MAX=mx,NBINS=nbins,REVERSE_INDICES=ri
   
   total_bins=product(nbins,/PRESERVE_TYPE) ;Total number of bins
   h=long((V[s[0]-1,*]-mn[s[0]-1])/bs[s[0]-1])
+  
   ;; The scaled indices, s[n]+N[n-1]*(s[n-1]+N[n-2]*(s[n-2]+...
-  for i=s[0]-2,0,-1 do h=nbins[i]*h + long((V[i,*]-mn[i])/bs[i])
+  for i=s[0]-2,0,-1 do h=nbins[i]*temporary(h) + long((V[i,*]-mn[i])/bs[i])
   
   out_of_range=[~array_equal(mn le imn,1b),~array_equal(mx ge imx,1b)]
   if ~array_equal(out_of_range,0b) then begin 
