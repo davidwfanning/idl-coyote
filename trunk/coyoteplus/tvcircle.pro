@@ -1,16 +1,17 @@
-Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
+Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, Device=device, $
                DATA= data, FILL=fill,_Extra = _extra
 ;+
 ; NAME:
 ;     TVCIRCLE
 ; PURPOSE:
-;     Draw circle(s) of specified radius at specified position(s)
-; EXPLANATION:
+;     Draw circle(s) of specified radius at specified position(s) 
+; EXPLANATION: 
 ;     If a position is not specified, and device has a cursor, then a circle
-;     is drawn at the current cursor position.
+;     is drawn at the current cursor position.    By default, TVCIRCLE now
+;     (since Jan 2012) assumes data coordinates if !X.crange is set.
 ;
 ; CALLING SEQUENCE:
-;     TVCIRCLE, rad, x, y, color, [ /DATA, /FILL, _EXTRA  =  ]
+;     TVCIRCLE, rad, x, y, color, [ /DATA, /FILL, _EXTRA  =  ]         
 ;
 ; INPUTS:
 ;     RAD - radius of circle(s) to be drawn, positive numeric scalar
@@ -18,43 +19,47 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
 ; OPTIONAL INPUT:
 ;      X - x position for circle center, vector or scalar
 ;      Y - y position for circle center, vector or scalar
-;               If X and Y are not specified, and the device has a cursor,
+;               If X and Y are not specified, and the device has a cursor, 
 ;               then program will draw a circle at the current cursor position
-;      COLOR - intensity value(s) (0 - !D.N_COLORS) used to draw the circle(s)
-;               If COLOR is a scalar then all circles are drawn with the same
-;               color value.   Otherwise, the Nth circle is drawn with the
-;               Nth value of color.    Default = !P.COLOR.
+;      COLOR -  color name or intensity value(s) (0 - !D.N_COLORS) used to draw
+;               the circle(s).   If COLOR is a scalar then all circles are drawn
+;               with the same color value.   Otherwise, the Nth circle is drawn
+;               with the  Nth value of color.  See cgCOLOR() for a list of color
+;               names.  Default = 'opposite' (i.e. color opposite the 
+;               background).   
 ;
-; OPTONAL KEYWORD INPUTS:
+; OPTIONAL KEYWORD INPUTS:
 ;       /DATA - if this keyword is set and non-zero, then the circle width and
-;              X,Y position center are interpreted as being in DATA
+;              X,Y position center are interpreted as being in DATA 
 ;              coordinates.   Note that data coordinates must be previously
 ;              defined (with a PLOT or CONTOUR call).    TVCIRCLE will
 ;              internally convert to device coordinates before drawing the
-;              circle, in order to maintain optimal smoothness.
-;       /FILL  - If set, fill the circle using POLYFILL
+;              circle, in order to maintain optimal smoothness.    The default
+;              is to assume data coordinates if !X.CRANGE is set.    Force
+;              device coordinates by setting DATA = 0 or /DEVICE
+;       /DEVICE - If set, then force use of device coordinates..
+;       /FILL  - If set, fill the circle using cgCOLORFILL
 ;
-;               Any keyword recognized by PLOTS (or POLYFILL if /FILL is set)
-;               is also recognized by TVCIRCLE.   In particular, the color,
-;               linestyle, and thickness of the circles are controlled by the
-;               COLOR, LINESTYLE, and THICK keywords.    If POLYFILL is set
-;               then available keywords are LINE_FILL and FILL_PATTERN.
+;               Any keyword recognized by cgPLOTS (or cgCOLORFILL if /FILL is 
+;               set) is also recognized by TVCIRCLE.   In particular, the color,
+;               linestyle, thickness and clipping of the circles are controlled
+;               by the  COLOR, LINESTYLE, THICK and NOCLIP keywords.  (Clipping
+;               is turned off by default, set NOCLIP=0 to activate it.)
+;               If /FILL is set then available keywords are LINE_FILL and 
+;               FILL_PATTERN. 
 ; OUTPUTS:
 ;       None
 ;
 ; RESTRICTIONS:
-;       (1) TVCIRCLE does not check whether it writes off of the edge of the
-;           display
-;       (2) Some round-off error may occur when non-integral values are
+;       (1) Some round-off error may occur when non-integral values are 
 ;           supplied for both the radius and the center coordinates
-;       (3) TVCIRCLE does not accept /NORMAL coordinates, only data coordinates
-;           (if /DATA is set) or device coordinates (the default)
-;       (4) TVCIRCLE always draws a circle --- even if /DATA is set, and the
-;           X and Y data scales are unequal.    (The X data scale is used to
-;           define the circle radius.)     If this is not the behaviour
+;       (2) TVCIRCLE does not accept /NORMAL coordinates.
+;       (3) TVCIRCLE always draws a circle --- even when in data coordinates 
+;           and the X and Y data scales are unequal.    (The X data scale is 
+;           used to define the circle radius.)     If this is not the behaviour
 ;           you want, then use TVELLIPSE instead.
 ; EXAMPLE:
-;       (1) Draw circles of radius 9 pixels at the positions specified by
+;       (1) Draw circles of radius 9 pixels at the positions specified by 
 ;           X,Y vectors, using double thickness lines
 ;
 ;           IDL> tvcircle, 9, x, y, THICK = 2
@@ -69,7 +74,7 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
 ;           p. 445 for the algorithm.
 ;
 ; REVISON HISTORY:
-;           Original version   written by B. Pfarr  STX   10-88
+;           Original version   written by B. Pfarr  STX   10-88 
 ;           Major rewrite adapted from CIRCLE by Allyn Saroyan   LNLL
 ;           Wayne Landsman   STX     Sep. 91
 ;           Added DATA keyword   Wayne Landsman  HSTX    June 1993
@@ -78,29 +83,41 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
 ;           colors.   Wayne Landsman, HSTX,  May 1995
 ;           Allow one to set COLOR = 0,   W. Landsman, HSTX, November 1995
 ;           Check if data axes reversed.  P. Mangifico, W. Landsman  May 1996
-;           Converted to IDL V5.0   W. Landsman   September 1997
+;           Use strict_extra to check input keywords W. Landsman  July 2005
+;           Update documentation to note NOCLIP=0 option W.L.  Oct. 2006
+;           Make all integers default to LONG  W. Landsman  Dec 2006
+;           Use Coyote Graphics procedures W. Landsman Feb 2011
+;           Default to data coordinates if !X.crange present  WL Jan 2012
+;           Add /DEVICE coords, fix Jan 2012 update.   Mar 2012
 ;-
 
    On_Error, 2   ; Return to caller
+   compile_opt idl2
 
    if ( N_params() LT 1) then begin
-         print, 'Syntax - TVCIRCLE, rad, [ xc, yc, color, /DATA, /FILL, _EXTRA= ]'
-         return
+       print, 'Syntax - TVCIRCLE, rad, [ xc, yc, color, /DATA, /FILL, _EXTRA= ]'
+       return
    endif
 
-
+; Default to data coordinates if !X.crange is set (previous plot) 
+   if keyword_set(device) then datacoord = 0 else begin
+      if N_elements(data) eq 0 then datacoord = !x.crange[0] NE !x.crange[1]  $
+                          else datacoord = logical_true(data)
+   endelse   			  
+		  
    if N_elements(radius) NE 1 then message, $
           'ERROR - Circle radius (first parameter) must be a scalar'
 
    if N_elements(TheColor) EQ 0 then begin
-      IF N_Elements( Color ) EQ 0 THEN Color = !P.COLOR
+      IF N_Elements( Color ) EQ 0 THEN Color = cgcolor('opposite')
    endif else color = TheColor
+
 
   if N_params() LT 3 then begin
         if (!D.WINDOW EQ -1) then message, $
                 'ERROR - Cursor not available for device ' + !D.NAME
         cursor, xc, yc, /DEVICE, /NOWAIT
-        if (xc LT 0) or (yc LT 0) then begin
+        if (xc LT 0) || (yc LT 0) then begin
         message,'Position cursor in window ' + strtrim(!D.WINDOW,2) + $
                 ' -- then hit mouse button',/INF
         cursor, xc, yc, /DEVICE, /WAIT
@@ -108,25 +125,27 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
                 strtrim(yc,2) + ')',/INF
   endif
 
-  endif
+  endif 
 
     N_circle = min( [ N_elements(xc), N_elements(yc) ] )
 
-    if keyword_set( DATA ) then begin
+
+    if datacoord then begin 
                 coord = abs(convert_coord(radius,0,/data,/to_dev) - $
-                        convert_coord(0,0,/data,/to_dev))
+                        convert_coord(0,0,/data,/to_dev)) 
                 irad =  round( coord[0] )
-    endif else irad = round(radius)
+    endif else $
+               irad = round(radius)	             
 
    x = 0
-   y = irad
+   y = irad 
    d = 3 - 2 * irad
 
 
    ; Find the x and y coordinates for one eighth of a circle.
    ; The maximum number of these coordinates is the radius of the circle.
 
-   xHalfQuad = Make_Array( irad + 1, /Int, /NoZero )
+   xHalfQuad = Make_Array( irad + 1, /Long, /NoZero )
    yHalfQuad = xHalfQuad
 
    path = 0
@@ -137,18 +156,18 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
       xHalfQuad[path] = x
       yHalfQuad[path] = y
 
-      path = path + 1
+      path++
 
       IF d lt 0 $
-      THEN d = d + (4*x) + 6 $
+      THEN d += 4*x + 6 $
       ELSE BEGIN
 
-           d = d + (4*(x-y)) + 10
-           y = y - 1
+           d +=  4*(x-y) + 10
+           y--
 
            END
 
-      x = x + 1
+      x++
 
       END
 
@@ -158,7 +177,7 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
         xHalfQuad[path] = x
         yHalfQuad[path] = y
 
-        path = path + 1
+        path++
 
         END ; Filling in last point
 
@@ -183,23 +202,24 @@ Pro Tvcircle, radius, xc, yc, color, COLOR = TheColor, $
    y = [ yQuad, -yQuadRev, -yQuad[1:*], yQuadRev ]
 
    ; Plot the coordinates about the given center
-
-   if keyword_set(data) then begin        ;Convert to device coordinates
+   
+   if datacoord then begin        ;Convert to device coordinates
         coord = convert_coord( xc, yc, /DATA, /TO_DEVICE)
         xcen = round(coord[0,*]) & ycen = round(coord[1,*])
    endif else begin
         xcen = round(xc) & ycen = round(yc)
    endelse
 
+
    Ncolor1 = N_elements(color) -1
    for i = 0l, N_circle-1 do begin
-        j = i < Ncolor1
+      j = i < Ncolor1
       if keyword_set(fill) then begin
-            polyfill, x+xcen[i],  y + ycen[i], COLOR=color[j], /DEV, $
-                _Extra = _extra
+            cgcolorfill, x+xcen[i],  y + ycen[i], COLOR=color[j], /DEV, $
+            _STRICT_Extra = _extra
       endif else begin
-            PlotS, x + xcen[i], y+ ycen[i], COLOR = Color[j], /DEV, $
-                _Extra = _extra
+            cgPlotS, x + xcen[i], y+ ycen[i], COLOR = Color[j], /DEV, $
+            _STRICT_Extra = _extra
       endelse
 
    endfor
