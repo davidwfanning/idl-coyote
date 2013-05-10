@@ -72,40 +72,6 @@
 ;-
 
 
-FUNCTION Normalize, range, Position=position
-
-    ; This is a utility routine to calculate the scaling vector
-    ; required to position a vector of specified range at a
-    ; specific position given in normalized coordinates. The
-    ; scaling vector is given as a two-element array like this:
-    ;
-    ;   scalingVector = [translationFactor, scalingFactor]
-    ;
-    ; The scaling vector should be used with the [XYZ]COORD_CONV
-    ; keywords of a graphics object or model. For example, if you
-    ; wanted to scale an X axis into the data range of -0.5 to 0.5,
-    ; you might type something like this:
-    ;
-    ;   xAxis->GetProperty, Range=xRange
-    ;   xScale = Normalize(xRange, Position=[-0.5, 0.5])
-    ;   xAxis, XCoord_Conv=xScale
-
-On_Error, 1
-IF N_Params() EQ 0 THEN Message, 'Please pass range vector as argument.'
-
-IF (N_Elements(position) EQ 0) THEN position = [0.0, 1.0] ELSE $
-    position=Float(position)
-range = Float(range)
-
-scale = [((position[0]*range[1])-(position[1]*range[0])) / $
-    (range[1]-range[0]), (position[1]-position[0])/(range[1]-range[0])]
-
-RETURN, scale
-END
-;-------------------------------------------------------------------------
-
-
-
 Pro Scatter_Surface_Cleanup, tlb
 
     ; Come here when program dies. Free all created objects.
@@ -286,7 +252,7 @@ IF result EQ 1 THEN BEGIN
    info.thisPolyline->SetProperty, Color=[70,70,70]
 
       ; I want the output on the page to have the same aspect ratio
-      ; as I see in the display window. I use the ASPECT function
+      ; as I see in the display window. I use the cgASPECT function
       ; from the Coyote library to modify the view appropriately.
       ; Note that the "position" is returned in Normalized units (Units=3).
 
@@ -294,7 +260,7 @@ IF result EQ 1 THEN BEGIN
    plotAspect = Float(wdims[1]) / wdims[0]
    info.thisPrinter->GetProperty, Dimensions=pdims
    windowAspect = Float(pdims[1]) / pdims[0]
-   position = Aspect(plotAspect, WindowAspect=windowAspect, Margin=0)
+   position = cgAspect(plotAspect, WindowAspect=windowAspect, Margin=0)
    info.thisView->SetProperty, Dimensions=[position[2]-position[0], position[3]-position[1]], $
       Location=[position[0], position[1]], Units=3
 
@@ -386,12 +352,12 @@ hidden_lines = Keyword_Set(hidden_lines)
 landscape = Keyword_Set(landscape)
 vector = Keyword_Set(vector)
 
-    ; Create a view. Use RGB color. Charcoal background.
+    ; Create a view. Use RGB color. White background.
     ; The coodinate system is chosen so that (0,0,0) is in the
     ; center of the window. This will make rotations easier.
 
-thisView = OBJ_NEW('IDLgrView', Color=[80,80,80], $
-   Viewplane_Rect=[-1.2,-1.1,2.3,2.1])
+thisView = OBJ_NEW('IDLgrView', Color=[255,255,255], $
+   Viewplane_Rect=[-1.1,-1.0,2.1,1.9])
 
     ; Create a model for the surface and axes and add it to the view.
     ; This model will rotate under the direction of the trackball object.
@@ -402,9 +368,9 @@ thisView->Add, thisModel
     ; Create helper objects. First, create title objects
     ; for the axes and plot. Color them green.
 
-xTitleObj = Obj_New('IDLgrText', xtitle, Color=[0,255,0])
-yTitleObj = Obj_New('IDLgrText', ytitle, Color=[0,255,0])
-zTitleObj = Obj_New('IDLgrText', ztitle, Color=[0,255,0])
+xTitleObj = Obj_New('IDLgrText', xtitle, Color=[0,0,0])
+yTitleObj = Obj_New('IDLgrText', ytitle, Color=[0,0,0])
+zTitleObj = Obj_New('IDLgrText', ztitle, Color=[0,0,0])
 
     ; Create font objects.
 
@@ -414,12 +380,12 @@ helvetica14pt = Obj_New('IDLgrFont', 'Helvetica', Size=14)
     ; Create a trackball for surface rotations. Center it in
     ; the 400-by-400 window. Give it a 200 pixel diameter.
 
-thisTrackball = OBJ_NEW('Trackball', [200, 200], 200)
+thisTrackball = OBJ_NEW('Trackball', [320, 206], 200)
 
    ; Create a color palette for coloring the symbols.
 
 thisPalette = Obj_New('IDLgrPalette')
-thisPalette->LoadCT, 5
+thisPalette->LoadCT, 34
 thisPalette->GetProperty, Red=r, Green=g, Blue=b
 Obj_Destroy, thisPalette
 
@@ -451,17 +417,17 @@ zrange = [Min(z), Max(z)]
     ; Set the RECOMPUTE_DIMENSIONS keyword on the axis text objects
     ; so the text doesn't go crazy when we change the data range.
 
-xAxis = Obj_New("IDLgrAxis", 0, Color=[0,255,0], Ticklen=0.1, $
+xAxis = Obj_New("IDLgrAxis", 0, Color=[0,0,0], Ticklen=0.1, $
    Minor=4, Title=xtitleObj, Range=xrange, Exact=Keyword_Set(exact))
 xAxis->GetProperty, Ticktext=xAxisText
 xAxisText->SetProperty, Font=helvetica10pt, Recompute_Dimensions=2
 
-yAxis = Obj_New("IDLgrAxis", 1, Color=[0,255,0], Ticklen=0.1, $
+yAxis = Obj_New("IDLgrAxis", 1, Color=[0,0,0], Ticklen=0.1, $
    Minor=4, Title=ytitleObj, Range=yrange, Exact=Keyword_Set(exact))
 yAxis->GetProperty, Ticktext=yAxisText
 yAxisText->SetProperty, Font=helvetica10pt, Recompute_Dimensions=2
 
-zAxis = Obj_New("IDLgrAxis", 2, Color=[0,255,0], Ticklen=0.1, $
+zAxis = Obj_New("IDLgrAxis", 2, Color=[0,0,0], Ticklen=0.1, $
    Minor=4, Title=ztitleObj, Range=zrange, Exact=Keyword_Set(exact))
 zAxis->GetProperty, Ticktext=zAxisText
 zAxisText->SetProperty, Font=helvetica10pt, Recompute_Dimensions=2
@@ -479,9 +445,9 @@ zAxis->GetProperty, CRange=zrange
     ; surface is rotated we don't have to worry about translations. In
     ; other words, the rotations occur about the point (0,0,0).
 
-xs = Normalize(xrange, Position=[-0.5,0.5])
-ys = Normalize(yrange, Position=[-0.5,0.5])
-zs = Normalize(zrange, Position=[-0.5,0.5])
+xs = cgNormalize(xrange, Position=[-0.5,0.5])
+ys = cgNormalize(yrange, Position=[-0.5,0.5])
+zs = cgNormalize(zrange, Position=[-0.5,0.5])
 
     ; Scale the axes and place them in the coordinate space.
     ; Note that not all values in the Location keyword are
@@ -515,7 +481,7 @@ thisModel->Rotate,[1,0,0],  30  ; Rotate it down slightly.
 
 tlb = Widget_Base(Title='Resizeable Window Surface Example', Column=1, $
    TLB_Size_Events=1, MBar=menubase)
-drawID = Widget_Draw(tlb, XSize=400, YSize=400, Graphics_Level=2, Retain=0, $
+drawID = Widget_Draw(tlb, XSize=640, YSize=512, Graphics_Level=2, Retain=0, $
    Expose_Events=1, Event_Pro='Scatter_Surface_Draw_Events', Button_Events=1)
 
     ; Create FILE menu buttons for printing and exiting.
