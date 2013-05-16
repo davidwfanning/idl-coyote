@@ -241,7 +241,7 @@ PRO Map_Grid::AutoDrawGrid
     latstep = (lat_max - lat_min) / 6.0
     lonstep = (lon_max - lon_min) / 6.0
     IF (center_lat GT (90.-0.05)) AND (center_lat LT (90.0 + 0.05)) THEN BEGIN
-       lats = Scale_Vector(Indgen(5), 0 > Round(lat_min), 80) 
+       lats = cgScaleVector(Indgen(5), 0 > Round(lat_min), 80) 
        latsdone = 1 
        IF lonstep GT 40 THEN BEGIN
           lons = Findgen(11) * 36
@@ -252,7 +252,7 @@ PRO Map_Grid::AutoDrawGrid
     ENDIF ELSE BEGIN
     
        IF (center_lat LT (-90.+0.05)) AND (center_lat GT (-90.0 - 0.05)) THEN BEGIN
-           lats = Scale_Vector(Indgen(5), -80, 0 < Round(lat_max))  
+           lats = cgScaleVector(Indgen(5), -80, 0 < Round(lat_max))  
            latsdone = 1    
            IF lonstep GT 40 THEN BEGIN
               lons = Findgen(11) * 36

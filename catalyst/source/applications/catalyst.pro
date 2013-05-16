@@ -559,7 +559,7 @@ PRO Catalyst::EventHandler, event
             ; system's range.
             IF order THEN BEGIN
                zcoord -> GetProperty, YRange=yrange
-               ypts = Scale_Vector(ypts, yrange[1], yrange[0], Minvalue=Min(yrange), MaxValue=Max(yrange))
+               ypts = cgScaleVector(ypts, yrange[1], yrange[0], Minvalue=Min(yrange), MaxValue=Max(yrange))
             ENDIF
 
            ; Create an ROI object for computing stats, etc.

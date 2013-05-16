@@ -1375,10 +1375,10 @@ PRO CatImage::Pan, movex, movey
    IF Ptr_Valid(self._z_orig_xr) EQ 0 THEN self._z_orig_xr = Ptr_New(xr)
    IF Ptr_Valid(self._z_orig_yr) EQ 0 THEN self._z_orig_yr = Ptr_New(yr)
 
-   xvec = Scale_Vector(Findgen(self._xsize), (*self._z_orig_xr)[0], (*self._z_orig_xr)[1])
+   xvec = cgScaleVector(Findgen(self._xsize), (*self._z_orig_xr)[0], (*self._z_orig_xr)[1])
    xr = [xvec[Round(x1)], xvec[Round(x2)]]
 
-   yvec = Scale_Vector(Findgen(self._ysize),  (*self._z_orig_yr)[0], (*self._z_orig_yr)[1])
+   yvec = cgScaleVector(Findgen(self._ysize),  (*self._z_orig_yr)[0], (*self._z_orig_yr)[1])
    yr = [yvec[Round(y1)], yvec[Round(y2)]]
 
    self._zoomcoords -> SetProperty, XRange=xr, YRange=yr
@@ -1459,8 +1459,8 @@ FUNCTION CatImage::Pixel_to_Value, x, y, $
    dims = Image_Dimensions(*self._dataPtr, XSIZE=xsize, YSIZE=ysize, TRUEINDEX=trueIndex)
    
    ; Create vectors for locating the image dimensions with VALUE_LOCATE.
-   xvec = Scale_Vector(Findgen(xsize+1), thePos[0], thePos[2])
-   yvec = Scale_Vector(Findgen(ysize+1  ), thePos[1], thePos[3])
+   xvec = cgScaleVector(Findgen(xsize+1), thePos[0], thePos[2])
+   yvec = cgScaleVector(Findgen(ysize+1  ), thePos[1], thePos[3])
    xpixel = 0 > Value_Locate(xvec, x) < (xsize - 1)
    ypixel = 0 > Value_Locate(yvec, y) < (ysize - 1)
    
@@ -2130,10 +2130,10 @@ PRO CatImage::ZoomIn, x_img, y_img, NoDraw=nodraw
    IF Ptr_Valid(self._z_orig_xr) EQ 0 THEN self._z_orig_xr = Ptr_New(xr)
    IF Ptr_Valid(self._z_orig_yr) EQ 0 THEN self._z_orig_yr = Ptr_New(yr)
 
-   xvec = Scale_Vector(Findgen(self._xsize), (*self._z_orig_xr)[0], (*self._z_orig_xr)[1])
+   xvec = cgScaleVector(Findgen(self._xsize), (*self._z_orig_xr)[0], (*self._z_orig_xr)[1])
    xr = [xvec[Round(x1)], xvec[Round(x2)]]
 
-   yvec = Scale_Vector(Findgen(self._ysize),  (*self._z_orig_yr)[0], (*self._z_orig_yr)[1])
+   yvec = cgScaleVector(Findgen(self._ysize),  (*self._z_orig_yr)[0], (*self._z_orig_yr)[1])
    yr = [yvec[Round(y1)], yvec[Round(y2)]]
 
    self._zoomcoords -> SetProperty, XRange=xr, YRange=yr
@@ -2221,10 +2221,10 @@ PRO CatImage::ZoomOut, x_img, y_img, ALLTHEWAY=allTheWay, NODRAW=nodraw
    ; Update the zoom coordinate system.
    self._coords -> GetProperty, XRange=xr, YRange=yr
 
-   xvec = Scale_Vector(Findgen(self._xsize), (*self._z_orig_xr)[0], (*self._z_orig_xr)[1])
+   xvec = cgScaleVector(Findgen(self._xsize), (*self._z_orig_xr)[0], (*self._z_orig_xr)[1])
    xr = [xvec[Round(x1)], xvec[Round(x2)]]
 
-   yvec = Scale_Vector(Findgen(self._ysize),  (*self._z_orig_yr)[0], (*self._z_orig_yr)[1])
+   yvec = cgScaleVector(Findgen(self._ysize),  (*self._z_orig_yr)[0], (*self._z_orig_yr)[1])
    yr = [yvec[Round(y1)], yvec[Round(y2)]]
 
    self._zoomcoords -> SetProperty, XRange=xr, YRange=yr

@@ -290,7 +290,7 @@ PRO CW_HistoStretch::EventHandler, event
 
    @cat_pro_error_handler
 
-   Forward_Function scale_vector
+   Forward_Function cgScaleVector
 
    ; What class of object created this event.
    ; We expect events from DRAWWIDGETs and BUTTONWIDGETS.
@@ -656,7 +656,7 @@ PRO CW_HistoStretch::Reset
    ; Create a new histoplot.
    self.histoplot = Ptr_New(Histogram(self.image -> GetData(), Min=range[0], Max=range[1], NBINS=nbins))
    self.xdata = Ptr_New(Findgen(N_Elements(*self.histoplot)))
-   *self.xdata = Scale_Vector(*self.xdata, range[0], range[1])
+   *self.xdata = cgScaleVector(*self.xdata, range[0], range[1])
 
    ; Draw the histogram plot in the display window.
 
@@ -849,7 +849,7 @@ FUNCTION CW_HistoStretch::INIT, parent, image, $
 
    @cat_func_error_handler
 
-   forward_function scale_vector
+   forward_function cgScaleVector
 
    IF N_Elements(parent) EQ 0 THEN Message, 'A parent object is required for CW_HISTOSTRETCH.'
    IF N_Elements(image) EQ 0 THEN  Message, 'An image object is required for CW_HISTOSTRETCH.'
@@ -915,7 +915,7 @@ FUNCTION CW_HistoStretch::INIT, parent, image, $
    self.pixmapID = Obj_New('PIXMAPWIDGET', XSIZE=draw_xsize, YSIZE=250, Name='PIXMAP', Retain=1)
    self.histoplot = Ptr_New(Histogram(image -> GetData(), Min=range[0], Max=range[1], NBINS=nbins))
    self.xdata = Ptr_New(Findgen(N_Elements(*self.histoplot)))
-   *self.xdata = Scale_Vector(*self.xdata, range[0], range[1])
+   *self.xdata = cgScaleVector(*self.xdata, range[0], range[1])
 
    ; Register the image for messages.
    self -> RegisterForMessage, image, 'HISTOSTRETCH_CHANGE'

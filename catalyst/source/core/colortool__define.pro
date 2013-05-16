@@ -2058,7 +2058,7 @@ PRO ColorTool::Stretch, minValue, maxValue,  DRAW=draw
    self._b_old = self._b
 
    ; Load color vectors.
-   f = Scale_Vector([minValue, maxValue], MinValue=0, MaxValue=255, 0, 255)
+   f = cgScaleVector([minValue, maxValue], MinValue=0, MaxValue=255, 0, 255)
    minv = f[0]
    maxv = f[1]
 
