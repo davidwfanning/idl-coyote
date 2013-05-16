@@ -438,8 +438,8 @@ PRO PlotCoord::SetCoordinates, $
    ; Set up data coordinate space.
 
    Window, /Pixmap, /Free, XSize=xsize, YSize=ysize
-   x = Scale_Vector(Findgen(10), xrange[0], xrange[1])
-   y = Scale_Vector(Findgen(10), yrange[0], yrange[1])
+   x = cgScaleVector(Findgen(10), xrange[0], xrange[1])
+   y = cgScaleVector(Findgen(10), yrange[0], yrange[1])
    currentPos = !P.Position
    !P.Position = position
    Plot, x, y, /NoData, XStyle=xstyle, YStyle=ystyle, XRange=xrange, YRange=yrange

@@ -1973,11 +1973,11 @@ PRO GPD_Viewer::UpdateGridLines
         'Orthographic': BEGIN
                 self.map_ref_latID -> GetProperty, Value=currentLat
                 self.map_ref_lonID -> GetProperty, Value=currentLon
-                lats = Round(Scale_Vector(Indgen(9), currentLat-80, currentLat+80))
+                lats = Round(cgScaleVector(Indgen(9), currentLat-80, currentLat+80))
                 IF currentLon EQ 0.0 THEN BEGIN
-                   lons = Round(Scale_Vector(Indgen(9), currentLon-144, currentLon+144))
+                   lons = Round(cgScaleVector(Indgen(9), currentLon-144, currentLon+144))
                 ENDIF ELSE BEGIN
-                   lons = Round(Scale_Vector(Indgen(17), currentLon-180, currentLon+180))
+                   lons = Round(cgScaleVector(Indgen(17), currentLon-180, currentLon+180))
                 ENDELSE
                 self.mapGrid -> SetProperty, $
                     LonLab = currentLat + 25, $

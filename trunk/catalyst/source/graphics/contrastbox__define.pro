@@ -406,7 +406,7 @@ PRO ContrastBox::SetDisplay
 
    image24 = BytArr(xsize, ysize, 3)
    Color_Convert, Reform(image[*,*,0]), Reform(image[*,*,1]), Reform(image[*,*,2]), hue, light, sat, /RGB_HLS
-   light = Scale_Vector(light, 0.5, 1.0)
+   light = cgScaleVector(light, 0.5, 1.0)
    Color_Convert, hue, light, sat, r, g, b, /HLS_RGB
    image24[*,*,0] = r
    image24[*,*,1] = g
