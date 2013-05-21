@@ -142,9 +142,12 @@
 ;       Updated to use Coyote Graphics, 6 September 2011. DWF.
 ;       Algorithm reworked and improved. 13 November 2011. DWF.
 ;       The map projection order seems to have gotten itself scrambled. Fixed. 1 March 2012. DWF.
+;       It appears that the problem above is due to a bug in MAP_IMAGE which sets the latitude
+;           values of the map projection incorrectly when exiting from MAP_IMAGE. The solution
+;           is to re-execute the Map_Set command that sets up the map projection space. 21 May 2013. DWF.
 ;
 ; :Copyright:
-;     Copyright (c) 2006-2011, Fanning Software Consulting, Inc.
+;     Copyright (c) 2006-2013, Fanning Software Consulting, Inc.
 ;-
 PRO cgTerminatorMap, center_lon, center_lat, $
    FlipDay=flipday, $
@@ -209,7 +212,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ; Open a graphics window. If you are making
    ; a PostScript file, this will have to be a pixmap.
    IF ~(ps || png) THEN BEGIN
-        cgDisplay, win_xsize, win_ysize, Title=time
+        cgDisplay, win_xsize, win_ysize, Title=time, /Free
         displayWindow = !D.Window
    ENDIF ELSE BEGIN
         IF (ps || png) THEN BEGIN
@@ -349,10 +352,8 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ; Display the image.
    cgImage, warp, Position=position
 
-   ; Plot the sun on the map.
-   cgPlotS, sun_lon, sun_lat, psym=cgSymCat(16), color='yellow', symsize=3
-
-   ; Set up the map projection space.
+   ; Set up the map projection space. This has to be done again, because the image warping with
+   ; MAP_IMAGE has a bug that throws the latitude of the map projection space off kilter.
    CASE map_index OF
       0: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /CYLINDRICAL
       1: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /GOODESHOMOLOSINE
@@ -364,10 +365,13 @@ PRO cgTerminatorMap, center_lon, center_lat, $
       7: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /ROBINSON
    ENDCASE
 
+   ; Plot the sun on the map.
+   cgPlotS, sun_lon, sun_lat, psym=cgSymCat(16), color='yellow', symsize=3
+   
    ; Add continental outlines and time zones.
    cgMap_Continents, Color='Medium Gray'
    cgMap_Continents, Color='Medium Gray', /Countries
-   cgMap_Grid, Color='charcoal', Lons=Scale_Vector(Indgen(25), -180, 180), LineStyle=5, $
+   cgMap_Grid, Color='charcoal', Lons=cgScaleVector(Indgen(25), -180, 180), LineStyle=5, $
       LonNames = Reverse(StrTrim(Indgen(25),2)), LonLabel=-10, /Label, LColor='Gray', $
       LatLabel=-7.5
       
