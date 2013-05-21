@@ -142,9 +142,7 @@
 ;       Updated to use Coyote Graphics, 6 September 2011. DWF.
 ;       Algorithm reworked and improved. 13 November 2011. DWF.
 ;       The map projection order seems to have gotten itself scrambled. Fixed. 1 March 2012. DWF.
-;       It appears that the problem above is due to a bug in MAP_IMAGE which sets the latitude
-;           values of the map projection incorrectly when exiting from MAP_IMAGE. The solution
-;           is to re-execute the Map_Set command that sets up the map projection space. 21 May 2013. DWF.
+;       Small problem with windows and window sizes fixed. Code cleaned up. 21 May 2013. DWF.
 ;
 ; :Copyright:
 ;     Copyright (c) 2006-2013, Fanning Software Consulting, Inc.
@@ -221,19 +219,6 @@ PRO cgTerminatorMap, center_lon, center_lat, $
             ps_pixmap = 1
         ENDIF
    ENDELSE
-   IF !D.Window GE 0 THEN displayWindow = !D.Window
-
-   ; Set up the map projection space.
-   CASE map_index OF
-      0: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /CYLINDRICAL
-      1: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /GOODESHOMOLOSINE
-      2: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /HAMMER
-      3: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /LAMBERT
-      4: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MERCATOR
-      5: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MILLER_CYLINDRICAL
-      6: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /MOLLWEIDE
-      7: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /ROBINSON
-   ENDCASE
 
    ; Obtain the AVHRR image, along with its color table vectors, to display.
    filename = Filepath(SubDirectory=['examples', 'data'], 'avhrr.png')
@@ -352,8 +337,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ; Display the image.
    cgImage, warp, Position=position
 
-   ; Set up the map projection space. This has to be done again, because the image warping with
-   ; MAP_IMAGE has a bug that throws the latitude of the map projection space off kilter.
+   ; Set up the map projection space to be certain of it.
    CASE map_index OF
       0: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /CYLINDRICAL
       1: cgMap_Set, center_lat, center_lon, 0, Position=position, /NoErase, /NoBorder, /GOODESHOMOLOSINE
@@ -366,7 +350,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ENDCASE
 
    ; Plot the sun on the map.
-   cgPlotS, sun_lon, sun_lat, psym=cgSymCat(16), color='yellow', symsize=3
+   cgPlotS, sun_lon, sun_lat, PSym=16, Color='yellow', SymSize=3
    
    ; Add continental outlines and time zones.
    cgMap_Continents, Color='Medium Gray'
