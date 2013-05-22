@@ -1,0 +1,14 @@
+     0.100000    Elasticity (alpha)
+     0.250000    Rididity (beta)
+      1.00000    Viscosity (gamma))
+      1.25000    External Force (kappa)
+     0.250000    Delta Min (dmin)
+      5.50000    Delta Max (dmax)
+     0.100000    Noise Parameter (mu)
+      1.75000    Gradient Scale Factor
+          30    GVF Iterations
+         120    Contour Iterations
+           1    Gaussian Blur
+      1.00000    Gaussian Sigma (sigma)
+     0.000000    Minimum Scale Value
+      255.000    Maximum Scale Value
