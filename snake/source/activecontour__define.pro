@@ -267,7 +267,7 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
       magSqr = (*self.fx)^2 + (*self.fy)^2
 
       ;Iteratively solve for the GVF u,v.
-      progressbar = Obj_New('ProgressBar', Title='GVF Iterations')
+      progressbar = Obj_New('cgProgressbar', Title='GVF Iterations', /Cancel)
       progressbar -> Start
       FOR j=1,self.gvf_iterations DO BEGIN
          IF progressBar -> CheckCancel() THEN BEGIN
@@ -287,8 +287,7 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
 
          ENDIF
 
-         progressbar -> Update, Float(j)/self.gvf_iterations * 100.0
-         progressbar -> SetProperty, Text=String(j, Format='(I3)')
+         progressbar -> Update, Float(j)/self.iterations * 100.0
          u_lap = self -> Laplacian(*self.u)
          v_lap = self -> Laplacian(*self.v)
          *self.u = *self.u + (self.mu * 4 * u_lap) - (magSqr * (*self.u-*self.fx))
@@ -328,19 +327,10 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
    y_orig = y
 
    ; Do the iterations.
-   progressbar = Obj_New('ProgressBar', Title='Snake Iterations', /Accept)
+   progressbar = Obj_New('cgProgressbar', Title='Snake Iterations', /Cancel)
    progressbar -> Start
    FOR j=1,self.iterations DO BEGIN
-      IF progressBar -> CheckButton(Accept=acceptButton) THEN BEGIN
-
-         IF acceptButton THEN BEGIN
-
-            WSet, self.wid
-            Device, Copy=[0, 0, !D.X_Size, !D.Y_Size, 0, 0, self.pixmap]
-            cgPlotS, x, y, /Data, Color=self.color, Thick=2
-            BREAK
-
-         ENDIF ELSE BEGIN
+      IF progressBar -> CheckCancel() THEN BEGIN
 
             ok = Dialog_Message('Operation cancelled.')
             cancel = 1
@@ -357,10 +347,8 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
             !Except = thisExcept
             RETURN, -1
 
-         ENDELSE
       ENDIF
       progressbar -> Update, Float(j)/self.iterations * 100.0
-      progressbar -> SetProperty, Text=String(j, Format='(I3)')
 
       ; Deform the snake.
       p = self -> SnakeDeform(x, y)
@@ -464,12 +452,12 @@ END
 
 
 ;+
-; This procedure receives stretch information from XSTRETCH when the image changes
+; This procedure receives stretch information from cgStretch when the image changes
 ; or is stretched. The image and stretch parameters are updated in the object.
 ; 
 ; :Params:
 ;     info: in, required, type=structure
-;         The info structure returned from XStretch when the image is stretched there.
+;         The info structure returned from cgStretch when the image is stretched there.
 ;-      
 PRO ActiveContour::Contrast_Stretch, info
 
@@ -952,7 +940,7 @@ PRO ActiveContour::Draw_Widget_Events, event
          ypixCoord = Round(Value_Locate(yvec, yNorm))
          value = (*self.original)[xpixCoord, ypixCoord]
          IF Widget_Info(self.valueID, /Valid_ID) THEN BEGIN
-            Widget_Control, self.valueID, Set_Value=Number_Formatter(value, Decimals=3)
+            Widget_Control, self.valueID, Set_Value=cgNumber_Formatter(value, Decimals=3)
          ENDIF
 
          ; Copy and draw the last two points.
@@ -1046,7 +1034,7 @@ PRO ActiveContour::Event_Handler, event
 
       'CLEAR_WINDOW': self -> ClearWindow
 
-      'COLOR':  self.color = PickColorName(self.color)
+      'COLOR':  self.color = cgPickColorName(self.color)
 
       'CONTOUR_LOAD': BEGIN
 
@@ -1122,7 +1110,7 @@ PRO ActiveContour::Event_Handler, event
                yoffset = offsets[1] + theSize[1] + 50
 
                ; Which filter should be apply?
-               XStretch, *self.original, Notify_Obj={object:self, method:'CONTRAST_STRETCH'}, $
+               cgStretch, *self.original, Notify_Obj={object:self, method:'CONTRAST_STRETCH'}, $
                   /No_Window, Group_Leader=event.top, XPos=xoffset, YPos=yoffset
 
             END
@@ -1436,7 +1424,7 @@ PRO ActiveContour::Event_Handler, event
 
             tlb = Widget_Base(Title='Edgemap', Group_Leader=self.drawID)
             draw = Widget_Draw(tlb, XSize=self.xsize, YSize=self.ysize)
-            CenterTLB, tlb
+            cgCenterTLB, tlb
             Widget_Control, tlb, /Realize
             Widget_Control, draw, Get_Value=wid
             WSet, wid
@@ -1451,7 +1439,7 @@ PRO ActiveContour::Event_Handler, event
 
             tlb = Widget_Base(Title='Gradients: Fx and Fy', Group_Leader=self.drawID)
             draw = Widget_Draw(tlb, XSize=self.xsize*2, YSize=self.ysize)
-            CenterTLB, tlb
+            cgCenterTLB, tlb
             Widget_Control, tlb, /Realize
             Widget_Control, draw, Get_Value=wid
             WSet, wid
@@ -1468,7 +1456,7 @@ PRO ActiveContour::Event_Handler, event
 
             tlb = Widget_Base(Title='Vector Force Field', Group_Leader=self.drawID)
             draw = Widget_Draw(tlb, XSize=600, YSize=600)
-            CenterTLB, tlb
+            cgCenterTLB, tlb
             Widget_Control, tlb, /Realize
             Widget_Control, draw, Get_Value=wid
             WSet, wid
