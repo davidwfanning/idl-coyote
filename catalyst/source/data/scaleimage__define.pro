@@ -84,6 +84,8 @@
 ;          handling. Tested more extensively, and passing all current tests. 10 October 2010. DWF.
 ;       Error searching for missing value. Was using FINITE(missing_value) and I should have
 ;          been using PTR_VALID(missing_value). 25 October 2010. DWF.
+;       Modified the  ScaleTheImage method to byte scale 24-bit images if they
+;          are not already byte type data. 8 August 2013. DWF.
 ;-
 ;*******************************************************************************************
 ;* Copyright (c) 2008-2009, jointly by Fanning Software Consulting, Inc.                   *
@@ -647,11 +649,18 @@ FUNCTION SCALEIMAGE::ScaleTheImage, image
 
    @cat_func_error_handler
    
-   ; Only 2D images are scaled. 24-bit images are returned immediately.
+   ; Only 2D images are scaled. 24-bit images are scaled if they are not
+   ; byte type.
    dims = Size(image, /N_DIMENSIONS)
    IF dims EQ 3 THEN BEGIN
       index = Where(Size(image, /DIMENSIONS) EQ 3, count)
-      IF count EQ 1 THEN RETURN, image
+      IF count EQ 1 THEN BEGIN
+        IF Size(image, /TNAME) EQ 'BYTE' THEN BEGIN
+            RETURN, image
+        ENDIF ELSE BEGIN
+            RETURN, BytScl(image)
+        ENDELSE
+      ENDIF
    ENDIF
    
    stretchTypes = ['Linear', 'Gamma', 'Log', 'Asinh', 'Linear 2%', 'Square Root', $
