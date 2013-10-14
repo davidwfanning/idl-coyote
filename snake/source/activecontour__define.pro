@@ -88,9 +88,12 @@
 ;       Removed the Coyote Library from the ActiveContour distribution. 15 June 2005.
 ;       Extensive updates for the latest Coyote Library routines and to make the 
 ;          program easier to use. 24 Oct 2011. DWF.
+;       When an initial ROI was being specified (via X and Y parameters to INIT method),
+;          the ROI was not being drawn properly. Fixed. Now assume initial ROI values are
+;          in image pixel coordinates. 13 October 2013. DWF.
 ;        
 ; :Copyright:
-;    Copyright (c) 2003-2011, Fanning Software Consulting, Inc.
+;    Copyright (c) 2003-2013, Fanning Software Consulting, Inc.
 ;---------------------------------------------------------------------------
 ;
 ;+
@@ -1866,7 +1869,7 @@ PRO ActiveContour::SetDisplay
       WSet, self.pixmap
       Device, Copy=[0, 0, !D.X_Size, !D.Y_Size, 0, 0, self.wid]
       WSet, self.wid
-
+      
       ; Manage it.
       XManager, 'drawing window', tlb, /No_Block, /Just_Reg
 
@@ -1904,14 +1907,29 @@ PRO ActiveContour::SetDisplay
       ; Copy the window to the pixmap.
       Device, Copy=[0, 0, !D.X_Size, !D.Y_Size, 0, 0, self.wid]
 
-      ; Draw the initial snake, if you have one.
-      IF self.npts GT 0 THEN $
-         cgPLOTS, *self.xsnake, *self.ysnake, /Device, Color=self.color, Thick=2
-
       ; Set create_draw flag.
       self.draw_create = 0 
    ENDELSE
 
+   ; If you have an initial ROI, draw it now. Assume the initial ROI values are in the coordinate system of the image (pixels).
+   ; These should be converted into the coordinate system of the current graphics window (device coordinates).
+   IF self.initialROI THEN BEGIN
+    
+        
+        ; Convert image pixel coordinates to normalized coordinates.
+        dims = Size(*self.image, /Dimensions)
+        norm_xsize = (*self.xsnake_f) / Float(dims[0])
+        norm_ysize = (*self.ysnake_f) / Float(dims[1])
+        WSet, self.wid
+        xy = Convert_Coord(norm_xsize, norm_ysize, /Normal, /To_Device)
+        *self.xsnake_f = Reform(xy[0,*])
+        *self.ysnake_f = Reform(xy[1,*])
+        
+        ; Draw the initial contour.
+        cgPLOTS, *self.xsnake_f, *self.ysnake_f, /Device, Color=self.color, Thick=2
+    
+       self.initialROI = 0
+   ENDIF
 END
 
 
@@ -2399,7 +2417,11 @@ PRO ActiveContour::UpdateImage
    ; Update the pixmap.
    WSet, self.pixmap
    Device, Copy=[0, 0, !D.X_Size, !D.Y_Size, 0, 0, self.wid]
+   WSet, self.wid
 
+   ; Draw the contour if there is one.
+   IF Ptr_Valid(self.xsnake_f) THEN cgPLOTS, *self.xsnake_f, *self.ysnake_f, /Device, Color=self.color, Thick=2
+   
    ; Calculate a new edgemap.
    self -> Edgemap
 END
@@ -2529,10 +2551,10 @@ END
 ;        image file if this argument is not provided.
 ;     x: in, optional, type=float
 ;        The initial X points of the active contour or snake. Optional.
-;        Must be used with Y.
+;        Must be used with Y. Assume values are pixel locations within image.
 ;     y: in, optional, type=float
 ;        The initial Y points of the active contour or snake. Optional.
-;        Must be used with X.
+;        Must be used with X. Assume values are pixel locations within image.
 ;       
 ; :Keywords:
 ;     alpha: in, optional, type=float, default=0.10
@@ -2654,6 +2676,10 @@ FUNCTION ActiveContour::INIT, image, x, y, $
       image = ImageSelect(Directory=thePath, /Only2D, Cancel=cancelled, Title='Select Image to Contour', /Silent)
       IF cancelled THEN RETURN, 0
    ENDIF
+   
+   ; If X is used, Y must be present, too.
+   IF (N_Elements(x) NE 0) AND (N_Elements(y) EQ 0) THEN Message, 'Both X and Y arguments must be present to be used.'
+   IF N_Elements(x) NE 0 THEN initialROI = 1 ELSE initialROI = 0
 
    ; Check positional parameters.
    ndims = Size(image, /N_Dimensions)
@@ -2720,6 +2746,7 @@ FUNCTION ActiveContour::INIT, image, x, y, $
    self.gamma = gamma
    self.gradientscale = gradientscale
    self.gvf_iterations = gvf_iterations
+   self.initialROI = initialROI
    self.iterations = iterations
    self.kappa = kappa
    IF N_Elements(max_v) EQ 0 THEN self.max_v = Max(image) ELSE self.max_v = max_v
@@ -2741,7 +2768,6 @@ FUNCTION ActiveContour::INIT, image, x, y, $
    self.yrange = [0,s[1]]
    self.ysize = ysize
    self.ysnake_f = ysnake_f
-   IF Obj_Valid(self.xsnake_f) THEN self.npts = N_Elements(*self.xsnake_f) ELSE self.npts = 0L
    
    ; Set up the image for display.
    IF N_Elements(display_image) EQ 0 THEN BEGIN
@@ -2846,6 +2872,7 @@ PRO ActiveContour__Define, class
              gamma: 0.0, $            ; Viscosity parameter.
              gradientScale: 0.0, $    ; The multiplication factor for gradient calculations.
              gvf_iterations: 0L, $    ; The number of iterations for the GVF field.
+             initialROI: 0B, $        ; A flag that indicates if an initial ROI is provided.
              image: Ptr_New(), $      ; The image for which the snake is being calculated.
              iterations: 0L, $        ; The number of iterations for the snake to converge.
              kappa: 0.0, $            ; External force weight.
@@ -2868,11 +2895,11 @@ PRO ActiveContour__Define, class
              v: Ptr_New(), $          ; The GVF solution Y gradient.
              wid: 0L, $               ; The window in which the image is displayed.
              xrange: FltArr(2), $     ; The X range of the image. [0,s[0]+1].
-             xsize: 0L, $             ; The X size of the image.
+             xsize: 0L, $             ; The X size of the image window.
              xsnake: Ptr_New(), $     ; The initial X coordinates of the snake.
              xsnake_f: Ptr_New(), $   ; The final X coordinates of the snake.
              yrange: FltArr(2), $     ; The Y range of the image, [0,s[1]+1].
-             ysize: 0L, $             ; The Y size of the image.
+             ysize: 0L, $             ; The Y size of the image window.
              ysnake: Ptr_New(), $     ; The initial Y coordinates of the snake.
              ysnake_f: Ptr_New(), $   ; The final Y coordinates of the snake.
 
