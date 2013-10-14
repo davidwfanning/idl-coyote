@@ -1576,11 +1576,15 @@ END
 ;     mu: out, optional, type=float, default=0.10
 ;        The regularization parameter. This should be set according to the amount of
 ;        noise in the image. Use a larger value for noisier images. 
-;     palette: out, optional, type=byte
-;        A 256x3 byte array containing the color table vectors for display of the image.
 ;     notify_event: out, optional, type=string
 ;        The name of an event handler that should be called when users interact with
 ;        the object. 
+;     palette: out, optional, type=byte
+;        A 256x3 byte array containing the color table vectors for display of the image.
+;     roi: out, optional, type=float
+;        A 2xN floating point array containing the X and Y points of the final ROI in
+;        pixel coordinates of the image. A short-hand way of obtaining X and Y. Only
+;        available in the source code version of the program.
 ;     scale: out, optional, type=float, default=1.0                      
 ;        Set this keyword to a scaling factor for the image. This keyword is set
 ;        automatically according to the size of the input image, unless specified
@@ -1595,11 +1599,9 @@ END
 ;        when the perimeter and area calculations for the final contour is made.
 ;        Default is [1.0D, 1.0D].
 ;     x: out, optional, type=float
-;        The initial X points of the active contour or snake. Optional.
-;        Must be used with Y.
+;        The X points of the current active contour or snake. 
 ;     y: out, optional, type=float
-;        The initial Y points of the active contour or snake. Optional.
-;        Must be used with X.
+;        The Y points of the current active contour or snake
 ;---------------------------------------------------------------------------
 PRO ActiveContour::GetProperty, $
    ALPHA=alpha, $
@@ -1621,6 +1623,7 @@ PRO ActiveContour::GetProperty, $
    MIN_VALUE=min_v, $
    MU=mu, $
    PALETTE=palette, $
+   ROI=roi, $
    SCALE=scale, $
    SIGMA=sigma, $
    SPATIAL_SCALE=spatial_scale, $
@@ -1648,6 +1651,9 @@ PRO ActiveContour::GetProperty, $
    IF Arg_Present(min_v) THEN min_v = self.min_v
    IF Arg_Present(max_v) THEN max_v = self.max_v
    IF Arg_Present(palette) THEN palette = self.palette
+   IF Arg_Present(roi) && (self.demo_version EQ 0) THEN BEGIN
+      IF Obj_Valid(self.roi) THEN self.roi -> GetProperty, Data=roi
+   ENDIF
    IF Arg_Present(sigma) THEN sigma = self.sigma
    IF Arg_Present(spatial_scale) THEN spatial_scale = self.spatial_scale
    IF Arg_Present(x) OR Arg_Present(y) THEN BEGIN
