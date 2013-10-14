@@ -1582,9 +1582,8 @@ END
 ;     palette: out, optional, type=byte
 ;        A 256x3 byte array containing the color table vectors for display of the image.
 ;     roi: out, optional, type=float
-;        A 2xN floating point array containing the X and Y points of the final ROI in
-;        pixel coordinates of the image. A short-hand way of obtaining X and Y. Only
-;        available in the source code version of the program.
+;        The final contour, stored as an IDLanROI object. Not available in the demo version
+;        of the program.
 ;     scale: out, optional, type=float, default=1.0                      
 ;        Set this keyword to a scaling factor for the image. This keyword is set
 ;        automatically according to the size of the input image, unless specified
@@ -1652,7 +1651,7 @@ PRO ActiveContour::GetProperty, $
    IF Arg_Present(max_v) THEN max_v = self.max_v
    IF Arg_Present(palette) THEN palette = self.palette
    IF Arg_Present(roi) && (self.demo_version EQ 0) THEN BEGIN
-      IF Obj_Valid(self.roi) THEN self.roi -> GetProperty, Data=roi
+      IF Obj_Valid(self.roi) THEN roi = self.roi
    ENDIF
    IF Arg_Present(sigma) THEN sigma = self.sigma
    IF Arg_Present(spatial_scale) THEN spatial_scale = self.spatial_scale
