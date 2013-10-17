@@ -1033,6 +1033,7 @@ FUNCTION SelectableObject::INIT, $
    self.visible = 0
    self -> RegisterProperty, 'DELETE', 1, USERDEF='Delete Object', NAME="Delete Object"
    self -> RegisterProperty, 'COLOR', 0, USERDEF=CapFirstLetter(self.color), NAME="Color (Foreground)"
+   self -> RegisterProperty, 'BG_COLOR', 0, USERDEF=CapFirstLetter(self.bg_color), NAME="Color (Background)"
    self.visible = currentVisible
 
    self -> Report, /Completed
