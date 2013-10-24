@@ -1784,6 +1784,7 @@ PRO CatImage::SetProperty, $
    AXES=axes, $
    AXIS_PROPERTY=axis_property, $
    COLOR_OBJECT=color_object, $
+   COORD_OBJECT=coord_object, $
    DISPLAY_MODE=display_mode, $
    DRAW=draw, $
    IMAGE=image, $
@@ -1826,6 +1827,23 @@ PRO CatImage::SetProperty, $
       self._colors -> AddParent, self
       IF OBJ_ISA_VALID(self._colors, 'COLORTOOL') OR OBJ_ISA_VALID(self._colors, 'CATCOLORS') THEN $
          self._colors -> RegisterForMessage, self, 'COLORTOOL_TABLECHANGE'
+   ENDIF
+
+   ; Coodinate object?
+   IF N_Elements(coord_object) NE 0 THEN BEGIN
+       IF Obj_Valid(self._coords) THEN $
+           BEGIN
+           self._coords -> RemoveParent, self
+           self._coords = coord_object
+           self._coords -> AddParent, self
+       ENDIF ELSE BEGIN
+           self._coords = coord_object
+           self._coords -> AddParent, self
+       ENDELSE
+       
+       ; If the zoom coordinate object is undefined, define it here.
+       IF Obj_Valid(self._zoomcoords) EQ 0 THEN self._zoomcoords = self._coords
+       
    ENDIF
 
    IF N_Elements(bring_to_front) NE 0 THEN BEGIN
