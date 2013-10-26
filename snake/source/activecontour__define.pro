@@ -18,9 +18,6 @@
 ;  parameters. Active contours are most often used with images to find and describe
 ;  regions of interest.
 ;
-;  The Coyote Library (http://www.idlcoyote.com/documents/programs.php) is required 
-;  to run this program.
-;
 ;******************************************************************************************;
 ;                                                                                          ;
 ;  Copyright (c) 2011, by Fanning Software Consulting, Inc. All rights reserved.           ;
@@ -67,8 +64,8 @@
 ;  The `Coyote Library <http://www.idlcoyote.com/documents/programs.php>` is required 
 ;  to run this program.
 ;
-;  This program set can be purchased from the 
-;  `Coyote Store <http://www.idlcoyote.com/store/index.php?act=viewCat&catId=3>`.
+;  This program set can be purchased from the
+;  `Coyote Store <http://www.idlcoyote.com/coyotestore/index.php>`.
 ;
 ; :Categories:
 ;    Graphics, Analysis

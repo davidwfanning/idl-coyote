@@ -45,9 +45,6 @@
 ;  The `Coyote Library <http://www.idlcoyote.com/documents/programs.php>` is required 
 ;  to run this program.
 ;
-;  This program set can be purchased from the 
-;  `Coyote Store <http://www.idlcoyote.com/store/index.php?act=viewCat&catId=3>`.
-;
 ; :Categories:
 ;    Testing
 ;        
