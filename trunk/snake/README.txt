@@ -1,0 +1,1 @@
+To use the programs in this distribution, extract them to a file location that is on your IDL path. Make sure the "source" folder is on the IDL path, too. The programs in this distribution require a recent version of the Coyote Library of IDL programs. These programs can be found here: http://wwww.idlcoyote.com/programs/zip_files/coyoteprograms.zip.
