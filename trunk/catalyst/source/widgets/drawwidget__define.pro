@@ -1018,9 +1018,9 @@ PRO DrawWidget::Output, $
          basename = cgRootName(filename, EXTENSION=ext)
          IF ext EQ "" THEN filename = filename + '.ps'
          IF nodialog EQ 1 THEN BEGIN
-            keywords = cgPSConfig(Filename=filename, /NoGUI, _Extra=position, LANDSCAPE=landscape)
+            keywords = cgPS_Config(Filename=filename, /NoGUI, _Extra=position, LANDSCAPE=landscape)
             cancelled = 0
-         ENDIF ELSE keywords = cgPSConfig(Filename=filename, Cancel=cancelled, $
+         ENDIF ELSE keywords = cgPS_Config(Filename=filename, Cancel=cancelled, $
             LANDSCAPE=landscape, _Extra=position)
          IF cancelled THEN RETURN
 
