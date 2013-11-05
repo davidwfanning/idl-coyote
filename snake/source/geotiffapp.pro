@@ -49,7 +49,7 @@ PRO GeoTiffApp_SaveROI, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
    
@@ -112,7 +112,7 @@ PRO GeoTiffApp_SnakeEvents, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
    
@@ -186,7 +186,7 @@ PRO GeoTiffApp_Contour, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
    
@@ -221,7 +221,7 @@ PRO GeoTiffApp_DrawEvents, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
    
@@ -272,7 +272,7 @@ PRO GeoTiffApp, dataFile, MIN_VALUE=min_value, MAX_VALUE=max_value
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
    

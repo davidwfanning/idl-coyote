@@ -127,7 +127,7 @@ PRO ActiveContour::ArcSample, x_in, y_in, x_out, y_out, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
 
@@ -208,7 +208,7 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       IF Obj_Valid(progressbar) THEN progressbar -> Destroy
       void = Check_Math()
       !Except = thisExcept
@@ -482,7 +482,7 @@ PRO ActiveContour::Controls
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
@@ -664,7 +664,7 @@ PRO ActiveContour::Draw_Widget_Events, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
    ENDIF
 
@@ -972,7 +972,7 @@ PRO ActiveContour::Edgemap
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       Ptr_Free, self.edgemap
       RETURN
    ENDIF
@@ -1014,7 +1014,7 @@ PRO ActiveContour::Event_Handler, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
@@ -1744,7 +1744,7 @@ PRO ActiveContour::ResetDisplay
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
 
@@ -1792,7 +1792,7 @@ PRO ActiveContour::SendEvent, DATA=eventData, TYPE=type
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
 
@@ -1830,7 +1830,7 @@ PRO ActiveContour::SetDisplay
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
@@ -2034,7 +2034,7 @@ PRO ActiveContour::SetProperty, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
 
@@ -2404,7 +2404,7 @@ PRO ActiveContour::UpdateImage
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
 
@@ -2440,7 +2440,7 @@ PRO ActiveContour::UpdateParameters
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN
    ENDIF
 
@@ -2661,7 +2661,7 @@ FUNCTION ActiveContour::INIT, image, x, y, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       RETURN, 0
    ENDIF
 
@@ -2820,7 +2820,7 @@ PRO ActiveContour_WidgetEvents, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message(/Traceback)
+      ok = cgErrorMsg(/Traceback)
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
