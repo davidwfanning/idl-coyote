@@ -1370,7 +1370,7 @@ PRO AnnotateInteraction::EventHandler, event
          'POSTSCRIPT': BEGIN
             self._drawID -> SetWindow
             thisDevice = !D.Name
-            keywords = PSConfig(Cancel=cancelled, FILENAME=self.output_filename + '.ps', _Extra=PSWindow())
+            keywords = cgPSConfig(Cancel=cancelled, FILENAME=self.output_filename + '.ps', _Extra=PSWindow())
             IF cancelled THEN RETURN
             Set_Plot, 'PS'
             Device, _Extra=keywords
