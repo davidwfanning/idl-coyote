@@ -143,15 +143,6 @@
 ;   Probably doesn't work correctly on VMS systems :-( If you can help, please
 ;   contact me. I don't have a VMS system to test on.
 ;
-; OTHER COYOTE LIBRARY FILES REQUIRED:
-;
-;  http://www.dfanning.com/programs/cgcentertlb.pro
-;  http://www.dfanning.com/programs/error_message.pro
-;  http://www.dfanning.com/programs/fsc_fileselect.pro
-;  http://www.dfanning.com/programs/image_dimensions.pro
-;  http://www.dfanning.com/programs/cgnumber_formatter.pro
-;  http://www.dfanning.com/programs/cgimage.pro
-;
 ;  Note: Keyword inheritance to collect undefined keywords that may be passed into the
 ;  program for use in READ_XXX routines, make it impossible to trap keyword useage errors.
 ;  Please take care when using keywords.
@@ -250,7 +241,7 @@ FUNCTION SelectImage_WindowSize, image, XSIZE=xsize, YSIZE=ysize
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      void = Error_Message()
+      void = cgErrorMsg()
       RETURN, Size(image, /Dimensions)
    ENDIF
 
@@ -297,7 +288,7 @@ PRO SelectImage_Action, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message()
+      ok = cgErrorMsg()
       IF N_Elements(info) NE 0 THEN Widget_Control, event.top, Set_UValue=info, /No_Copy
       RETURN
    ENDIF
@@ -475,7 +466,7 @@ PRO SelectImage_FilenameEvents, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message()
+      ok = cgErrorMsg()
       IF N_Elements(info) NE 0 THEN Widget_Control, event.top, Set_UValue=info, /No_Copy
       RETURN
    ENDIF
@@ -622,7 +613,7 @@ PRO SelectImage_FlipImage, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message()
+      ok = cgErrorMsg()
       IF N_Elements(info) NE 0 THEN Widget_Control, event.top, Set_UValue=info, /No_Copy
       RETURN
    ENDIF
@@ -656,7 +647,7 @@ PRO SelectImage_ListEvents, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message()
+      ok = cgErrorMsg()
       IF N_Elements(info) NE 0 THEN Widget_Control, event.top, Set_UValue=info, /No_Copy
       RETURN
    ENDIF
@@ -909,7 +900,7 @@ PRO SelectImage_ReadFiles, extension, filename, info, fileinfo, image, ok, type,
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      void = Error_Message()
+      void = cgErrorMsg()
       ok = 0
       RETURN
    ENDIF
@@ -1268,7 +1259,7 @@ PRO SelectImage_SetFilter, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = Error_Message()
+      ok = cgErrorMsg()
       IF N_Elements(info) NE 0 THEN Widget_Control, event.top, Set_UValue=info, /No_Copy
       RETURN
    ENDIF
@@ -1463,7 +1454,7 @@ Catch, theError
 IF theError NE 0 THEN BEGIN
    Catch, /Cancel
    Cancel = 1
-   ok = Error_Message()
+   ok = cgErrorMsg()
    RETURN, 0
 ENDIF
 

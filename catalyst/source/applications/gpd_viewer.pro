@@ -111,7 +111,7 @@ FUNCTION GPD_Viewer::CheckKnownFileList, filename
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         IF N_Elements(lun) NE 0 THEN Free_Lun, lun
         RETURN, 0
     ENDIF
@@ -1146,7 +1146,7 @@ PRO GPD_Viewer::Open_GPD_File, filename
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         IF N_Elements(lun) NE 0 THEN Free_Lun, lun
     ENDIF
     
@@ -2531,7 +2531,7 @@ PRO GPD_Viewer::Write_LatLon_Files, EXPORT=export
         Catch, /CANCEL
         IF N_Elements(latlun) NE 0 THEN Free_Lun, latlun
         IF N_Elements(lonlun) NE 0 THEN Free_Lun, lonlun
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
      ENDIF
      
@@ -2659,7 +2659,7 @@ PRO GPD_Viewer::Write_XYGrid_Files, EXPORT=export
         Catch, /CANCEL
         IF N_Elements(latlun) NE 0 THEN Free_Lun, latlun
         IF N_Elements(lonlun) NE 0 THEN Free_Lun, lonlun
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
      ENDIF
      

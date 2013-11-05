@@ -67,7 +67,7 @@ PRO DataViewer_Parse_Configuration, config_file, CONFIGURATION=currentStruct
    Catch, theError
    IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        ok = Error_Message()
+        ok = cgErrorMsg()
         RETURN
    ENDIF
 

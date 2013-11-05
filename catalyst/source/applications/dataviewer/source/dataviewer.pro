@@ -2396,7 +2396,7 @@ PRO DataViewer::Write_Config_File, filename, NOCURRENTWINDOW=noCurrentWindow
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
 
@@ -2635,7 +2635,7 @@ PRO DataViewer, files
    Catch, theError
    IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = ERROR_MESSAGE()
+        void = cgErrorMsg()
         RETURN
    ENDIF
 

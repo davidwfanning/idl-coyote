@@ -86,14 +86,6 @@
 ;      UVCOORDS:        Set this keyword if the LON and LAT arrays are specified in UV coordinates, rather than
 ;                       longitude and latitude coordinates.
 ;
-; DEPENDENCIES:
-;
-;       The following programs (at least) are required from the Coyote Library:
-;
-;                     http://www.idlcoyote.com/programs/error_message.pro
-;                     http://www.idlcoyote.com/programs/cgcolor.pro
-;                     http://www.idlcoyote.com/programs/cgsymcat.pro
-;
 ; MODIFICATION HISTORY:
 ;
 ;       Written by David W. Fanning, 14 June 2010.
@@ -138,7 +130,7 @@ PRO Map_Vector::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -238,7 +230,7 @@ PRO Map_Vector::GetProperty, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -283,7 +275,7 @@ PRO Map_Vector::SetProperty, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     IF N_Elements(lon) NE 0 THEN BEGIN
@@ -347,7 +339,7 @@ FUNCTION Map_Vector::INIT, lon, lat, u, v, mapCoordObj, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN, 0
     ENDIF
     

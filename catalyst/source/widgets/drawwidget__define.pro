@@ -999,7 +999,7 @@ PRO DrawWidget::Output, $
          IF theError NE 0 THEN BEGIN
              
              Catch, /CANCEL
-             void = Error_Message()
+             void = cgErrorMsg()
              IF N_Elements(thisDevice NE 0) THEN BEGIN
                 IF !D.NAME EQ 'PS' THEN Device, /CLOSE_FILE
                 Set_Plot, thisDevice
