@@ -162,7 +162,7 @@ PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
     ENDIF
     
     ; Do this in decomposed color, if possible.
-    SetDecomposedState, 1, CURRENT=currentState
+    cgSetColorState, 1, CURRENT=currentState
     
     ; Draw the appropriate map outline.
     IF self.gshhs THEN BEGIN
@@ -216,7 +216,7 @@ PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
                 ZVALUE=self.zvalue
          ENDELSE
     ENDELSE
-    SetDecomposedState, currentState
+    cgSetColorState, currentState
     
     ; Draw children?
     self -> CatAtom::Draw, _EXTRA=extrakeywords
