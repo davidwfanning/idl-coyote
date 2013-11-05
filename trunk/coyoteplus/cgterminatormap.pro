@@ -160,7 +160,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      void = Error_Message()
+      void = cgErrorMsg()
       IF N_Elements(thisDevice) NE 0 THEN Set_Plot, thisDevice
       RETURN
    ENDIF
