@@ -131,13 +131,6 @@
 ;                       passed a map coordinate object as a positional parameter. This keyword should
 ;                       be used ONLY if you are not specifying a parent parameter.
 ;      
-; DEPENDENCIES:
-;
-;       The following programs (at least) are required from the Coyote Library:
-;
-;                     http://www.dfanning.com/programs/error_message.pro
-;                     http://www.dfanning.com/programs/cgColor.pro
-;
 ; MODIFICATION HISTORY:
 ;
 ;       Written by David W. Fanning, 3 January 2009.
@@ -204,7 +197,7 @@ PRO Map_Grid::AutoDrawGrid
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -303,7 +296,7 @@ PRO Map_Grid::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -410,7 +403,7 @@ PRO Map_Grid::GetProperty, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -472,7 +465,7 @@ PRO Map_Grid::SetProperty, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -551,7 +544,7 @@ FUNCTION Map_Grid::INIT, parent, mapCoordObj, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN, 0
     ENDIF
     

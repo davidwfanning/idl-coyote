@@ -81,7 +81,7 @@ PRO DataViewer_Edit_Config_File_Restore, info, SUCCESS=success
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         success = 0
         RETURN
     ENDIF
@@ -128,7 +128,7 @@ FUNCTION DataViewer_Edit_Config_File_Struct, info, SUCCESS=success
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         success = 0
         RETURN, info.startingConfig
     ENDIF
@@ -203,7 +203,7 @@ PRO DataViewer_Edit_Config_File_Events, event
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -320,7 +320,7 @@ FUNCTION DataViewer_Edit_Config_File, configurationFile, group_leader, dataViewe
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN, 0
     ENDIF
     

@@ -622,7 +622,7 @@ FUNCTION ImgWin::INIT, image, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN, 0
     ENDIF
     

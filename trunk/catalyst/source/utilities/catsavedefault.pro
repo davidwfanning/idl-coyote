@@ -7,7 +7,7 @@ PRO CatSaveDefault, defaultName, FILENAME=fileName, SUCCESS=success
    ; Error handling.
    CATCH, theError
    IF (theError NE 0) THEN BEGIN
-      void = Error_Message()
+      void = cgErrorMsg()
       success = 0
       RETURN
    ENDIF

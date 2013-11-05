@@ -144,7 +144,7 @@ Function GeoCoord, image, geotiff, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        IF ~Keyword_Set(silent) THEN void = Error_Message()
+        IF ~Keyword_Set(silent) THEN void = cgErrorMsg()
         success = 0
         RETURN, Obj_New()
     ENDIF

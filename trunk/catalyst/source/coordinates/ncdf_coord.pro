@@ -141,7 +141,7 @@ FUNCTION NCDF_Coord_GetMapUnit, varWithMap, fileObj, SILENT=silent
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        IF ~Keyword_Set(silent) THEN void = Error_Message()
+        IF ~Keyword_Set(silent) THEN void = cgErrorMsg()
         RETURN, mapUnit
     ENDIF
     
@@ -189,7 +189,7 @@ FUNCTION NCDF_Coord_FindBoundary, varWithMap, thisMapVar, fileObj, mapCoord, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        IF ~Keyword_Set(silent) THEN void = Error_Message()
+        IF ~Keyword_Set(silent) THEN void = cgErrorMsg()
         success = 0
         RETURN, success
     ENDIF
@@ -321,7 +321,7 @@ FUNCTION NCDF_Coord_EllipseAxes, varWithMap, thisMapVar, fileObj, SILENT=silent,
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /CANCEL
-        IF ~Keyword_Set(silent) THEN void = Error_Message()
+        IF ~Keyword_Set(silent) THEN void = cgErrorMsg()
         success = 0
         RETURN, success
     ENDIF
@@ -441,7 +441,7 @@ FUNCTION NCDF_Coord, ncdf_filename, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, theError
-        IF ~Keyword_Set(silent) THEN void = Error_Message()
+        IF ~Keyword_Set(silent) THEN void = cgErrorMsg()
         success = 0
         IF Obj_Valid(fileObj) THEN Obj_Destroy, fileObj
         RETURN, Obj_New()

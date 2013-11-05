@@ -81,7 +81,7 @@ PRO CatEventDispatcher, event
       positions = StrPos(msg, '[cat_handled]')
       foundit = Where(positions NE -1, count)
       IF count EQ 0 THEN BEGIN
-         void = Error_Message()
+         void = cgErrorMsg()
       END
 
       ; Clear the error state variable.

@@ -107,7 +107,7 @@ PRO mhh_strict, txtlines
 Catch, theError
 IF theError NE 0 THEN BEGIN
    Catch, /Cancel
-   ok = Error_Message()
+   ok = cgErrorMsg()
    RETURN
 ENDIF
 
@@ -195,7 +195,7 @@ PRO  mhh_grab_hdr,name,dict,infile_indx,libfile_indx,txt_file,verbose,$
 Catch, theError
 IF theError NE 0 THEN BEGIN
    Catch, /Cancel
-   ok = Error_Message()
+   ok = cgErrorMsg()
    RETURN
 ENDIF
 
@@ -332,7 +332,7 @@ PRO mhh_gen_file,dict,txt_file,infiles,libfiles,outfile,verbose,title,strict
 Catch, theError
 IF theError NE 0 THEN BEGIN
    Catch, /Cancel
-   ok = Error_Message()
+   ok = cgErrorMsg()
    RETURN
 ENDIF
 
@@ -563,7 +563,7 @@ PRO MAKE_CATLIB_HELP, sources, outfile, VERBOSE=verbose, TITLE=title, STRICT=str
  IF theError NE 0 THEN BEGIN
    Catch, /Cancel
    PROBLEM:
-   ok = Error_Message()
+   ok = cgErrorMsg()
    IF N_Elements(txt_file) NE 0 THEN Free_Lun, txt_file
    RETURN
  ENDIF

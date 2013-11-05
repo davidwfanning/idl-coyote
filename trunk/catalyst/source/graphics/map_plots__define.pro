@@ -82,14 +82,6 @@
 ;      UVCOORDS:        Set this keyword if the LONS and LATS are specified in UV (XY) coordinates, rather than
 ;                       longitude and latitude coordinates.
 ;
-; DEPENDENCIES:
-;
-;       The following programs (at least) are required from the Coyote Library:
-;
-;                     http://www.idlcoyote.com/programs/error_message.pro
-;                     http://www.idlcoyote.com/programs/cgcolor.pro
-;                     http://www.idlcoyote.com/programs/cgsymcat.pro
-;
 ; MODIFICATION HISTORY:
 ;
 ;       Written by David W. Fanning, 9 January 2009.
@@ -141,7 +133,7 @@ PRO Map_PlotS::Draw, NOMAPDRAW=nomapdraw, _EXTRA=extrakeywords
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -223,7 +215,7 @@ PRO Map_PlotS::GetProperty, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     
@@ -266,7 +258,7 @@ PRO Map_PlotS::SetProperty, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN
     ENDIF
     IF N_Elements(lons) NE 0 THEN BEGIN
@@ -322,7 +314,7 @@ FUNCTION Map_PlotS::INIT, lons, lats, mapCoordObj, $
     Catch, theError
     IF theError NE 0 THEN BEGIN
         Catch, /Cancel
-        void = Error_Message()
+        void = cgErrorMsg()
         RETURN, 0
     ENDIF
     
