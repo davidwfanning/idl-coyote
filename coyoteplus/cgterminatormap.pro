@@ -332,7 +332,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
    ENDIF
    
    ; Set up the PostScript file.
-   IF (ps || png) THEN PS_Start, Filename=outfilename
+   IF (ps || png) THEN cgPS_Open, Filename=outfilename
 
    ; Display the image.
    cgImage, warp, Position=position
@@ -360,7 +360,7 @@ PRO cgTerminatorMap, center_lon, center_lat, $
       LatLabel=-7.5
       
    ; Close the PostScrit file and create a PNG file, if required.
-   IF (ps || png) THEN PS_End, PNG=png
+   IF (ps || png) THEN cgPS_Close, PNG=png
       
    ; Need output image?
    IF Arg_Present(image) THEN image = cgSnapshot()
