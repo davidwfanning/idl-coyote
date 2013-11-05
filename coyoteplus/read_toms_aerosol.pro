@@ -101,7 +101,7 @@ PRO Read_TOMS_Aerosol, filename, DATA=data, HEADER=header, LIMIT=limit, PS=ps
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      void = Error_Message()
+      void = cgErrorMsg()
       IF N_Elements(lun) NE 0 THEN Free_Lun, lun ; Free file logical unit number.
       IF N_Elements(theState) NE 0 THEN Device, Decomposed=theState ; Preserve color mode.
       RETURN
