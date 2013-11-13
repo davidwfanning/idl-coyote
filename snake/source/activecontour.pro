@@ -68,7 +68,7 @@
 ;  to run this program.
 ;  
 ;  This program set can be purchased from the 
-;  `Coyote Store <http://www.idlcoyote.com/coyotestore/index.php>`.
+;  `Coyote Store <http://www.idlcoyote.com/coyotestore/index.php?main_page=product_info&cPath=2&products_id=184>`.
 ;
 ; :Categories:
 ;    Graphics, Analysis
