@@ -262,7 +262,7 @@ PRO TestApplication, imageFile, MIN_VALUE=min_value, MAX_VALUE=max_value
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
    
