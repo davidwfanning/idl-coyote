@@ -127,7 +127,7 @@ PRO ActiveContour::ArcSample, x_in, y_in, x_out, y_out, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
 
@@ -208,7 +208,7 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       IF Obj_Valid(progressbar) THEN progressbar -> Destroy
       void = Check_Math()
       !Except = thisExcept
@@ -308,8 +308,8 @@ FUNCTION ActiveContour::ApplyGVFSnake, Cancel=cancel, NOBLINK=noblink
    ; The normalized coordinates describe the data range, which
    ; goes from 0 to the size of the image.
    s = Size(*self.original, /DIMENSIONS)
-   xvec = Scale_Vector(Dindgen(s[0]), 0.0d, 1.0d)
-   yvec = Scale_Vector(Dindgen(s[1]), 0.0d, 1.0d)
+   xvec = cgScaleVector(Dindgen(s[0]), 0.0d, 1.0d)
+   yvec = cgScaleVector(Dindgen(s[1]), 0.0d, 1.0d)
    xpixCoord = Value_Locate(xvec, xNorm)
    ypixCoord = Value_Locate(yvec, yNorm)
 
@@ -482,7 +482,7 @@ PRO ActiveContour::Controls
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
@@ -664,7 +664,7 @@ PRO ActiveContour::Draw_Widget_Events, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
    ENDIF
 
@@ -934,8 +934,8 @@ PRO ActiveContour::Draw_Widget_Events, event
          yNorm = Transpose(normCoord[1,*])
        
          s = Size(*self.original, /DIMENSIONS)
-         xvec = Scale_Vector(Dindgen(s[0]+1), 0, 1)
-         yvec = Scale_Vector(Dindgen(s[1]+1), 0, 1)
+         xvec = cgScaleVector(Dindgen(s[0]+1), 0, 1)
+         yvec = cgScaleVector(Dindgen(s[1]+1), 0, 1)
          xpixCoord = Round(Value_Locate(xvec, xNorm))
          ypixCoord = Round(Value_Locate(yvec, yNorm))
          value = (*self.original)[xpixCoord, ypixCoord]
@@ -972,13 +972,13 @@ PRO ActiveContour::Edgemap
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       Ptr_Free, self.edgemap
       RETURN
    ENDIF
 
    ; An edgemap is the gradient of the image, scaled into 0 to 1.
-   edgemap = 1.0 - Scale_Vector(Sobel(*self.image), 1.0, 0.0)
+   edgemap = 1.0 - cgScaleVector(Sobel(*self.image), 1.0, 0.0)
 
    IF Ptr_Valid(self.edgemap) THEN *self.edgemap = edgemap ELSE self.edgemap = Ptr_New(edgemap)
 
@@ -1014,7 +1014,7 @@ PRO ActiveContour::Event_Handler, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
@@ -1744,7 +1744,7 @@ PRO ActiveContour::ResetDisplay
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
 
@@ -1792,7 +1792,7 @@ PRO ActiveContour::SendEvent, DATA=eventData, TYPE=type
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
 
@@ -1830,7 +1830,7 @@ PRO ActiveContour::SetDisplay
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
@@ -2034,7 +2034,7 @@ PRO ActiveContour::SetProperty, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
 
@@ -2152,7 +2152,7 @@ PRO ActiveContour::SetProperty, $
    IF needscaling THEN BEGIN
    
        ; Scale the image, but make sure it stays a float.
-       *self.image = Float(Scale_Vector(*self.original, MIN=self.min_v, MAX=self.max_v, /NAN, 0, 255))
+       *self.image = Float(cgScaleVector(*self.original, MIN=self.min_v, MAX=self.max_v, /NAN, 0, 255))
        
        ; Draw the scaled image in the window.
        Device, Decomposed=1
@@ -2404,7 +2404,7 @@ PRO ActiveContour::UpdateImage
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
 
@@ -2440,7 +2440,7 @@ PRO ActiveContour::UpdateParameters
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN
    ENDIF
 
@@ -2661,7 +2661,7 @@ FUNCTION ActiveContour::INIT, image, x, y, $
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       RETURN, 0
    ENDIF
 
@@ -2774,10 +2774,10 @@ FUNCTION ActiveContour::INIT, image, x, y, $
    ; Set up the image for display.
    IF N_Elements(display_image) EQ 0 THEN BEGIN
        IF Size(image, /TNAME) NE 'BYTE' THEN BEGIN
-           self.image = Ptr_New(Float(Scale_Vector(*self.original, MIN=self.min_v, MAX=self.max_v, /NAN, 0, 255 )), /No_Copy)
+           self.image = Ptr_New(Float(cgScaleVector(*self.original, MIN=self.min_v, MAX=self.max_v, /NAN, 0, 255 )), /No_Copy)
        ENDIF ELSE BEGIN
            IF (N_Elements(max_v) NE 0) && (N_Elements(min_v) NE 0) THEN BEGIN
-              self.image = Ptr_New(Float(Scale_Vector(*self.original, MIN=min_v, MAX=max_v, /NAN, 0, 255)), /No_Copy)
+              self.image = Ptr_New(Float(cgScaleVector(*self.original, MIN=min_v, MAX=max_v, /NAN, 0, 255)), /No_Copy)
            ENDIF ELSE self.image = Ptr_New(Float(*self.original))
        ENDELSE
    ENDIF ELSE self.image = Ptr_New(Float(display_image))
@@ -2820,7 +2820,7 @@ PRO ActiveContour_WidgetEvents, event
    Catch, theError
    IF theError NE 0 THEN BEGIN
       Catch, /Cancel
-      ok = cgErrorMsg(/Traceback)
+      ok = cgErrorMsg()
       IF N_Elements(tlb) NE 0 THEN Widget_Control, tlb, /Destroy
       RETURN
    ENDIF
