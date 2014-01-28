@@ -1039,7 +1039,7 @@ PRO ActiveContour::Event_Handler, event
       'CONTOUR_LOAD': BEGIN
 
             ; Get a filename for reading.
-            thePath = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='roi', '')
+            thePath = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='roi', '')
             filename = Dialog_Pickfile(Path=thePath, Filter='*.roi', Title='Select Input Contour File...')
             IF filename EQ "" THEN RETURN
 
@@ -1073,7 +1073,7 @@ PRO ActiveContour::Event_Handler, event
       'CONTOUR_SAVE': BEGIN
 
             ; Get a filename for writing.
-            thePath = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='roi', '')
+            thePath = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='roi', '')
             filename = Dialog_Pickfile(Path=thePath, File='contour.roi', $
                Title='Specify Output Contour File Name...', /Write)
             IF filename EQ "" THEN RETURN
@@ -1165,7 +1165,7 @@ PRO ActiveContour::Event_Handler, event
             CASE event.uvalue OF
 
             'GUIDE': BEGIN
-                  file = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='docs', 'activecontour.pdf')
+                  file = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='docs', 'activecontour.pdf')
                   IF File_Test(file) THEN OnLine_Help, Book=file ELSE $
                      ok = Dialog_Message('The on-line help file "activecontour.pdf" cannot be located')
                END
@@ -1174,7 +1174,7 @@ PRO ActiveContour::Event_Handler, event
                   IF self.demo_version THEN BEGIN
                      ok = Dialog_Message('Program documentation is not available in Demo Version.')
                   ENDIF ELSE BEGIN
-                     file = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='docs', 'index.html')
+                     file = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='docs', 'index.html')
                      IF File_Test(file) THEN OnLine_Help, Book=file ELSE $
                         ok = Dialog_Message('The on-line help file "activecontour.htm" cannot be located')
                   ENDELSE
@@ -1203,7 +1203,7 @@ PRO ActiveContour::Event_Handler, event
             END
 
       'NEW_IMAGE': BEGIN
-            thePath = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='images', '')
+            thePath = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='images', '')
             image = ImageSelect(Directory=thePath, /Only2D, Cancel=cancelled, Group_Leader=event.top)
             IF cancelled THEN RETURN
 
@@ -1255,7 +1255,7 @@ PRO ActiveContour::Event_Handler, event
          END
 
       'PARAMETERS_SAVE': BEGIN
-            thePath = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='parameters', '')
+            thePath = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='parameters', '')
             file = Dialog_Pickfile(Path=thePath, File='snake_param.dat', $
                Title='Specify Parameter Ouput File Name...', /Write)
             IF file EQ "" THEN RETURN
@@ -1283,7 +1283,7 @@ PRO ActiveContour::Event_Handler, event
          END
 
       'PARAMETERS_LOAD': BEGIN
-            thePath = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='parameters', '')
+            thePath = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='parameters', '')
             file = Dialog_Pickfile(Path=thePath, File='defaults.dat', Title='Select Input Parameter File...')
             IF file EQ "" THEN RETURN
 
@@ -2674,7 +2674,7 @@ FUNCTION ActiveContour::INIT, image, x, y, $
       xx = Temporary(image)
    ENDIF
    IF (N_Elements(image) EQ 0) THEN BEGIN
-      thePath = FilePath(Root_Dir=ProgramRootDir(/ONEUP), SubDir='images', '')
+      thePath = FilePath(Root_Dir=cgSourceDir(/ONEUP), SubDir='images', '')
       image = ImageSelect(Directory=thePath, /Only2D, Cancel=cancelled, Title='Select Image to Contour', /Silent)
       IF cancelled THEN RETURN, 0
    ENDIF
