@@ -271,7 +271,7 @@ PRO DataViewer_Edit_Config_File_Events, event
            ; Is this a relative file name or a complete file name?
            IF StrUpCase(File_BaseName(info.configFile)) EQ StrUpCase(info.configFile) THEN BEGIN
                IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-               configfile = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+               configfile = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
                   SUBDIR='config', info.configFile)
            ENDIF ELSE configFile = info.configFile
            root_file = cgRootName(configFile, DIRECTORY=configDir, EXTENSION=ext)

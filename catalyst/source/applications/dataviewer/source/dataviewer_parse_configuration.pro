@@ -74,7 +74,7 @@ PRO DataViewer_Parse_Configuration, config_file, CONFIGURATION=currentStruct
    ; Look for the default dataviewer configuration file.
    IF N_Elements(config_file) EQ 0 THEN BEGIN
       IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-      config_file = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), SUBDIRECTORY='config', 'dataviewer_default.txt')
+      config_file = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), SUBDIRECTORY='config', 'dataviewer_default.txt')
    ENDIF
       
    ; Read the entire file into a text array.

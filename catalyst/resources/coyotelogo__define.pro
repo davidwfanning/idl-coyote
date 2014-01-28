@@ -72,7 +72,7 @@ FUNCTION CoyoteLogo::INIT, _EXTRA=extraKeywords
    ; Set up error handler and call superclass init method
    @cat_func_error_handler
 
-   filename = Filepath(Root_Dir=ProgramRootDir(), 'coyote.jpg')
+   filename = Filepath(Root_Dir=cgSourceDir(), 'coyote.jpg')
    Read_JPEG, filename, image
 
    ok = self -> CATIMAGE::INIT (image, _EXTRA=extraKeywords)

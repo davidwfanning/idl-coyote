@@ -732,7 +732,7 @@ PRO DataViewer::EventHandler, event
 
       'HELP': BEGIN
          IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-         dataViewerDir = ProgramRootDir(ONEUP=oneup)
+         dataViewerDir = cgSourceDir(ONEUP=oneup)
          readmeFile = Filepath(ROOT_DIR=dataViewerDir, 'README.txt')
          self -> GetProperty, XOFFSET=xoffset, XSIZE=xsize, YOFFSET=yoffset, YSIZE=ysize
          xoffset = xoffset + (xsize/2)
@@ -882,7 +882,7 @@ PRO DataViewer::EventHandler, event
                        ; Is this a relative file name or a complete file name?
                        IF StrUpCase(File_BaseName(config_file)) EQ StrUpCase(config_file) THEN BEGIN
                            IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-                           config_file = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+                           config_file = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
                               SUBDIR='config', config_file)
                        ENDIF
                        IF File_Test(config_file, /READ) EQ 0 THEN $
@@ -896,12 +896,12 @@ PRO DataViewer::EventHandler, event
                dataDir = CatGetDefault('DATAVIEWER_DATA_DIRECTORY', SUCCESS=success)
                IF StrLowCase(dataDir) EQ 'default' THEN BEGIN
                    IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-                   dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+                   dataDir = FilePath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
                        SUBDIR='data', "")
                ENDIF
                IF StrLowCase(dataDir) EQ 'data' THEN BEGIN
                    IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-                   dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+                   dataDir = FilePath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
                        SUBDIR=dataDir, "")
                ENDIF
                IF success THEN BEGIN
@@ -1282,7 +1282,7 @@ PRO DataViewer::EventHandler, event
             ; Are you inside the information button?
             IF (xnorm GE 0.88) AND (xnorm LE 0.98) AND (ynorm GE 0.89) AND (ynorm LE 0.99) THEN BEGIN
                  IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-                 dataViewerDir = ProgramRootDir(ONEUP=oneup)
+                 dataViewerDir = cgSourceDir(ONEUP=oneup)
                  readmeFile = Filepath(ROOT_DIR=dataViewerDir, 'README.txt')
                  self -> GetProperty, XOFFSET=xoffset, XSIZE=xsize, YOFFSET=yoffset, YSIZE=ysize
                  xoffset = xoffset + (xsize/2)
@@ -1521,7 +1521,7 @@ PRO DataViewer::GUI, menubarID
 
    ; Add a splash screen.
    IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-   iceimagefile = Filepath(Root_Dir=ProgramRootDir(ONEUP=oneup), $
+   iceimagefile = Filepath(Root_Dir=cgSourceDir(ONEUP=oneup), $
       Subdirectory='resources', 'dataviewer_splash.jpg')
    IF File_Test(iceimagefile) EQ 0 THEN BEGIN
       iceimagefile = Find_Resource_File('dataviewer_splash.jpg')
@@ -1529,7 +1529,7 @@ PRO DataViewer::GUI, menubarID
    Read_JPEG, iceimagefile, image
    iceimage = Obj_New('CatImage', image, Position=[0.0, 0.0, 1.0, 1.0], /KEEP_ASPECT, NAME='SPLASH_IMAGE')
    self.splashWindow -> Add, iceimage
-   infoimagefile = Filepath(Root_Dir=ProgramRootDir(ONEUP=oneup), $
+   infoimagefile = Filepath(Root_Dir=cgSourceDir(ONEUP=oneup), $
       Subdirectory='resources', 'information.jpg')
    Read_JPEG, infoimagefile, infoimage
    infoimage = Obj_New('CatImage', infoimage, Position=[0.88, 0.89, 0.98, 0.99], /KEEP_ASPECT, NAME='INFO_IMAGE')
@@ -2415,7 +2415,7 @@ PRO DataViewer::Write_Config_File, filename, NOCURRENTWINDOW=noCurrentWindow
     ; Is the filename such that it will write into the config directory?
     basename = cgRootName(filename, DIRECTORY=theDir, EXTENSION=extension)
     IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-    IF theDir EQ "" THEN filename = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+    IF theDir EQ "" THEN filename = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
       SUBDIR='config', filename)
     IF extension EQ "" THEN filename = filename + '.txt'
 
@@ -2575,7 +2575,7 @@ FUNCTION DataViewer::INIT, _Ref_Extra=extra
    grid = CatGetDefault('DATAVIEWER_GRIDWINDOW_GRID')
    self.numImages = grid[0] * grid[1]
    IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-   self.configFile = Filepath(Root_Dir=ProgramRootDir(ONEUP=oneup), $
+   self.configFile = Filepath(Root_Dir=cgSourceDir(ONEUP=oneup), $
       SUBDIRECTORY='config', 'dataviewer_default.txt')
 
    self.version = 1.0
@@ -2641,7 +2641,7 @@ PRO DataViewer, files
 
    ; Set the main IDL directory to this directory.
    IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-   CD, ProgramRootDir(ONEUP=oneup)
+   CD, cgSourceDir(ONEUP=oneup)
 
    ; Parse the configuration file.
    DataViewer_Parse_Configuration
@@ -2657,7 +2657,7 @@ PRO DataViewer, files
            ; Is this a relative file name or a complete file name?
            IF StrUpCase(File_BaseName(config_file)) EQ StrUpCase(config_file) THEN BEGIN
                IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-               config_file = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+               config_file = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
                   SUBDIR='config', config_file)
            ENDIF
            IF File_Test(config_file, /READ) EQ 0 THEN $
@@ -2671,7 +2671,7 @@ PRO DataViewer, files
            ; Is this a relative file name or a complete file name?
            IF StrUpCase(File_BaseName(config_file)) EQ StrUpCase(config_file) THEN BEGIN
                IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-               config_file = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+               config_file = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
                   SUBDIR='config', config_file)
            ENDIF
         ENDELSE
@@ -2680,7 +2680,7 @@ PRO DataViewer, files
         ; Look in the config directory for files. If the user can't find any, we
         ; are done.
         IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-        configPath = Filepath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), SUBDIR='config', "")
+        configPath = Filepath(ROOT_DIR=cgSourceDir(ONEUP=oneup), SUBDIR='config', "")
         config_file = Dialog_Pickfile(PATH=configPath, TITLE='Select Configuration File...', $
             FILTER='*.txt')
         IF config_file EQ "" THEN Message, 'Cannot continue with DataViewer Configuration File.'
@@ -2691,11 +2691,11 @@ PRO DataViewer, files
    dataDir = CatGetDefault('DATAVIEWER_DATA_DIRECTORY', SUCCESS=success)
    IF StrLowCase(dataDir) EQ 'default' THEN BEGIN
        IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-       dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), SUBDIR='data', "")
+       dataDir = FilePath(ROOT_DIR=cgSourceDir(ONEUP=oneup), SUBDIR='data', "")
    ENDIF
    IF StrLowCase(dataDir) EQ 'data' THEN BEGIN
        IF LMGR(/RUNTIME) OR LMGR(/VM) THEN oneup = 0 ELSE oneup=1
-       dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup), $
+       dataDir = FilePath(ROOT_DIR=cgSourceDir(ONEUP=oneup), $
            SUBDIR=dataDir, "")
    ENDIF
    IF success THEN BEGIN
@@ -2749,7 +2749,7 @@ PRO DataViewer, files
    test = File_Test(dataDir, /DIRECTORY)
    IF test EQ 0 THEN BEGIN
 
-      IF (StrUpCase(dataDir) EQ 'DEFAULT' + Path_Sep()) THEN dataDir = ProgramRootDir(ONEUP=oneup)
+      IF (StrUpCase(dataDir) EQ 'DEFAULT' + Path_Sep()) THEN dataDir = cgSourceDir(ONEUP=oneup)
       answer = Dialog_Message(['The DataViewer needs to know where your images are located. ', $
                                'The current Data Directory is set to a currently non-existent directory: ', $
                                ' ', $
@@ -2769,7 +2769,7 @@ PRO DataViewer, files
 
          ; Answer is no, but the current directory doesn't exist. Get a directory that
          ; does  exist, i.e., the DataViewer directory.
-         dataDir = FilePath(ROOT_DIR=ProgramRootDir(ONEUP=oneup),  "")
+         dataDir = FilePath(ROOT_DIR=cgSourceDir(ONEUP=oneup),  "")
          CatSetDefault, 'DATAVIEWER_DATA_DIRECTORY', dataDir
          ok = Dialog_Message(['The current Data Directory has been set temporarily to', dataDir], CENTER=1)
       ENDELSE
