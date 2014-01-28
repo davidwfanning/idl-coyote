@@ -168,7 +168,7 @@ PRO MAP_OUTLINE::Draw, _EXTRA=extrakeywords
     IF self.gshhs THEN BEGIN
         rootName = File_Basename(self.filename)
         IF StrLowCase(rootName) EQ StrLowCase(self.filename) THEN BEGIN
-            gshhsFileName = Find_Resource_File(rootName, SUCCESS=success)
+            gshhsFileName = cgFindPathTo(rootName, SUCCESS=success)
         ENDIF ELSE BEGIN
             gshhsFileName = self.filename
             IF self.filename EQ "" THEN success = 0 ELSE success = 1
