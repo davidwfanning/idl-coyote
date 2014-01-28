@@ -1524,7 +1524,7 @@ PRO DataViewer::GUI, menubarID
    iceimagefile = Filepath(Root_Dir=cgSourceDir(ONEUP=oneup), $
       Subdirectory='resources', 'dataviewer_splash.jpg')
    IF File_Test(iceimagefile) EQ 0 THEN BEGIN
-      iceimagefile = Find_Resource_File('dataviewer_splash.jpg')
+      iceimagefile = cgFindPathTo('dataviewer_splash.jpg')
    ENDIF
    Read_JPEG, iceimagefile, image
    iceimage = Obj_New('CatImage', image, Position=[0.0, 0.0, 1.0, 1.0], /KEEP_ASPECT, NAME='SPLASH_IMAGE')

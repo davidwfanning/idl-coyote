@@ -99,7 +99,7 @@
 ;
 ;       Written by: David W. Fanning, 17 October 2008, based on COLORTOOL.
 ;       In looking for a Brewer color table file, I replaced all FILE_WHICH commands with
-;           FIND_RESOURCE_FILE commands. 28 April 2009. DWF.
+;           cgFindPathTo commands. 28 April 2009. DWF.
 ;       I added a check for a display connection before adding system colors to the colors
 ;           the program knows about. This *should* make it possible to use the object in
 ;           cron jobs. 6 October 2010. DWF.
@@ -406,7 +406,7 @@ PRO CatColors::EventHandler, event
                    END
 
                 'BREWER': BEGIN
-                   self._colorfile = Find_Resource_File('fsc_brewer.tbl')
+                   self._colorfile = cgFindPathTo('fsc_brewer.tbl')
                    self._brewer = 1
                    info._brewer = 1
                    info._colorfile = self._colorfile
@@ -725,7 +725,7 @@ PRO CatColors::LoadCT, colorIndex, BREWER=brewer, DRAW=draw
    ; Try to locate the brewer file. Check resource/colors directory, then any
    ; directory on the IDL path.
     brewerfile = Filepath(SubDir=['resource','colors'], 'fsc_brewer.tbl')
-    IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = Find_Resource_File('fsc_brewer.tbl')
+    IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = cgFindPathTo('fsc_brewer.tbl')
     IF brewerfile EQ "" THEN BEGIN
         locatedBrewerFile = 0
     ENDIF ELSE BEGIN
@@ -987,7 +987,7 @@ PRO CatColors::SetProperty, $
    IF N_Elements(brewer) NE 0 THEN BEGIN
         file = self._colorFile
         brewerfile = Filepath(SubDir=['resource','colors'], 'fsc_brewer.tbl')
-        IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = Find_Resource_File('fsc_brewer.tbl')
+        IF File_Test(brewerfile, /READ) EQ 0 THEN brewerfile = cgFindPathTo('fsc_brewer.tbl')
         IF brewerfile EQ "" THEN BEGIN
             locatedBrewerFile = 0
         ENDIF ELSE BEGIN
