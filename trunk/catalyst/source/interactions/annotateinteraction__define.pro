@@ -477,7 +477,7 @@ PRO AnnotateInteraction::ControlPanel, baseObject, _EXTRA=extraKeywords
 
    ; Look for resources in Catalyst resource directory. If not there,
    ; look in RSI resource directory. If not there, make do with an ugly resource.
-   resourcefile = Filepath('cat_arrow.bmp', Root_Dir=ProgramRootDir(/TWOUP), Subdir=['resources'])
+   resourcefile = Filepath('cat_arrow.bmp', Root_Dir=cgSourceDir(/TWOUP), Subdir=['resources'])
    file = File_Search(resourcefile, Count=count)
    IF count EQ 0 THEN BEGIN
       resourcefile = Filepath('cat_arrow.bmp', Subdir=['resource'])
@@ -498,7 +498,7 @@ PRO AnnotateInteraction::ControlPanel, baseObject, _EXTRA=extraKeywords
                      NAME='INSERT_ELLIPSE', Tracking_Events=1, No_Release=1)
 
 
-   resourcefile = Filepath('cat_polygon.bmp', Root_Dir=ProgramRootDir(/TwoUp), Subdir=['resources'])
+   resourcefile = Filepath('cat_polygon.bmp', Root_Dir=cgSourceDir(/TwoUp), Subdir=['resources'])
    file = File_Search(resourcefile, Count=count)
    IF count EQ 0 THEN BEGIN
       resourcefile = Filepath('cat_arrow.bmp', Subdir=['resource'])
@@ -512,7 +512,7 @@ PRO AnnotateInteraction::ControlPanel, baseObject, _EXTRA=extraKeywords
                      NAME='INSERT_POLYGON', Tracking_Events=1, No_Release=1)
 
 
-   resourcefile = Filepath('cat_linemeasure.bmp', Root_Dir=ProgramRootDir(/TwoUp), Subdir=['resources'])
+   resourcefile = Filepath('cat_linemeasure.bmp', Root_Dir=cgSourceDir(/TwoUp), Subdir=['resources'])
    file = File_Search(resourcefile, Count=count)
    IF count EQ 0 THEN BEGIN
       resourcefile = Filepath('cat_linemeasure.bmp', Subdir=['resource'])
@@ -545,7 +545,7 @@ PRO AnnotateInteraction::ControlPanel, baseObject, _EXTRA=extraKeywords
                      NAME='INSERT_MEASURE', Tracking_Events=1, No_Release=1)
 
 
-   resourcefile = Filepath('cat_angle.bmp', Root_Dir=ProgramRootDir(/TwoUp), Subdir=['resources'])
+   resourcefile = Filepath('cat_angle.bmp', Root_Dir=cgSourceDir(/TwoUp), Subdir=['resources'])
    file = File_Search(resourcefile, Count=count)
    IF count EQ 0 THEN BEGIN
       resourcefile = Filepath('cat_angle.bmp', Subdir=['resource'])
@@ -589,7 +589,7 @@ PRO AnnotateInteraction::ControlPanel, baseObject, _EXTRA=extraKeywords
    ; If we have an annotation layer object, then include annotation ON/OFF buttons.
    IF Obj_Valid(self.layerObject) THEN BEGIN
 
-      resourcefile = Filepath('cat_layer_on.bmp', Root_Dir=ProgramRootDir(/TwoUp), Subdir=['resources'])
+      resourcefile = Filepath('cat_layer_on.bmp', Root_Dir=cgSourceDir(/TwoUp), Subdir=['resources'])
       file = File_Search(resourcefile, Count=count)
       IF count EQ 0 THEN BEGIN
          resourcefile = Filepath('cat_layer_on.bmp', Subdir=['resource'])
@@ -602,7 +602,7 @@ PRO AnnotateInteraction::ControlPanel, baseObject, _EXTRA=extraKeywords
                         Helpline ='This button turns the annotation layer ON.', $
                         NAME='ANNOTATE_LAYER_ON', Tracking_Events=1, No_Release=1)
 
-      resourcefile = Filepath('cat_layer_off.bmp', Root_Dir=ProgramRootDir(/TwoUp), Subdir=['resources'])
+      resourcefile = Filepath('cat_layer_off.bmp', Root_Dir=cgSourceDir(/TwoUp), Subdir=['resources'])
       file = File_Search(resourcefile, Count=count)
       IF count EQ 0 THEN BEGIN
          resourcefile = Filepath('cat_layer_off.bmp', Subdir=['resource'])

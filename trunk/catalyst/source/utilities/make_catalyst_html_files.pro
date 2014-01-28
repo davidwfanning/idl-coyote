@@ -67,7 +67,7 @@
 PRO Make_Catalyst_HTML_Files
     
     ; Locate the main Catalyst Directory.
-    catalystDir = ProgramRootDir(/TWOUP)
+    catalystDir = cgSourceDir(/TWOUP)
     
     ; Can you find an HTML docs directory here?
     htmlDir = Filepath(ROOT_DIR=catalystDir, 'docs')

@@ -191,7 +191,7 @@ PRO App_Template::GUI, menubarID
 
    ; Open an image and display it in the draw widget. Use the coyote.jpg image
    ; if you can find it.
-   filename = Filepath(Root_Dir=ProgramRootDir(/OneUp), SubDir='cat_resources', 'coyote.jpg')
+   filename = Filepath(Root_Dir=cgSourceDir(/OneUp), SubDir='cat_resources', 'coyote.jpg')
    file = File_Search(filename, Count=count)
    IF count EQ 0 THEN BEGIN
       filename = Filepath(Subdir=['examples','data'], 'elev_t.jpg')

@@ -850,7 +850,7 @@ PRO Catalyst::GUI, menuBar
                      Helpline ='Draw Polygon ROI on image. Click inside to drag.', $
                      NAME='POLYGON', /No_Release)
 
-   resourcefile = Filepath('cat_linemeasure.bmp', Root_Dir=ProgramRootDir(), Subdir=['resources'])
+   resourcefile = Filepath('cat_linemeasure.bmp', Root_Dir=cgSourceDir(), Subdir=['resources'])
    file = File_Search(resourcefile, Count=count)
    IF count EQ 0 THEN BEGIN
       resourcefile = Filepath('cat_linemeasure.bmp', Subdir=['resource'])
@@ -883,7 +883,7 @@ PRO Catalyst::GUI, menuBar
                      NAME='MEASURETOOL', No_Release=1)
 
 
-   resourcefile = Filepath('cat_angle.bmp', Root_Dir=ProgramRootDir(), Subdir=['resources'])
+   resourcefile = Filepath('cat_angle.bmp', Root_Dir=cgSourceDir(), Subdir=['resources'])
    file = File_Search(resourcefile, Count=count)
    IF count EQ 0 THEN BEGIN
       resourcefile = Filepath('cat_angle.bmp', Subdir=['resource'])
