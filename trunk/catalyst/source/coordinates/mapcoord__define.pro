@@ -887,17 +887,23 @@ FUNCTION MapCoord::SetMapProjection, map_projection, $
    ; Center latitudes are not allowed in some projections. Here are the ones where
    ; they are prohibited.
    centerlatOK = 1
-   badprojstr = ['GOODES HOMOLOSINE', 'STATE PLANE', 'MERCATOR', 'SINUSOIDAL', 'EQUIRECTANGULAR', $
+   badprojstr = ['GEOGRAPHIC', 'GOODES HOMOLOSINE', 'STATE PLANE', 'MERCATOR', 'SINUSOIDAL', 'EQUIRECTANGULAR', $
       'MILLER CYLINDRICAL', 'ROBINSON', 'SPACE OBLIQUE MERCATOR A', 'SPACE OBLIQUE MERCATOR B', $
       'ALASKA CONFORMAL', 'INTERRUPTED GOODE', 'MOLLWEIDE', 'INTERRUPED MOLLWEIDE', 'HAMMER', $
       'WAGNER IV', 'WAGNER VII', 'INTEGERIZED SINUSOIDAL']
    void = Where(badprojstr EQ StrUpCase(thisProjection), count)
    IF count GT 0 THEN centerlatOK = 0
     
-    ; UTM and State Plane projections have to be handled differently.
-    IF (StrUpCase(thisProjection) EQ 'UTM') OR (StrUpCase(thisProjection) EQ 'STATE PLANE') THEN BEGIN
+    ; Geographics, UTM,  and State Plane projections have to be handled differently.
+    IF (StrUpCase(thisProjection) EQ 'GEOGRAPHIC') OR $
+       (StrUpCase(thisProjection) EQ 'UTM') OR $
+       (StrUpCase(thisProjection) EQ 'STATE PLANE') THEN BEGIN
     
         CASE StrUpCase(thisProjection) OF
+            
+            'GEOGRAPHIC': BEGIN
+                mapStruct = Map_Proj_Init(thisProjection, /GCTP, CENTER_LONGITUDE=center_lon)
+                END
             'UTM': BEGIN
                 mapStruct = Map_Proj_Init(thisProjection, DATUM=self.thisDatum.(0), /GCTP, $
                     CENTER_LATITUDE=center_lat, CENTER_LONGITUDE=center_lon, ZONE=zone)
@@ -1228,7 +1234,8 @@ FUNCTION MapCoord::INIT, map_projection, $
         map_projection = 111
    ENDIF
    
-    projections=[ {MAPCOORD_PROJECTION, 'UTM', 101, 0 }, $  ; GCTP 101
+    projections=[ {MAPCOORD_PROJECTION, 'GEOGRAPHIC', 100, 1 }, $  ; GCTP 100
+                  {MAPCOORD_PROJECTION, 'UTM', 101, 0 }, $  ; GCTP 101
                   {MAPCOORD_PROJECTION, 'State Plane', 102, 0 }, $  ; GCTP 102
                   {MAPCOORD_PROJECTION, 'Albers Equal Area', 103, 0 }, $  ; GCTP 103
                   {MAPCOORD_PROJECTION, 'Lambert Conformal Conic', 104, 0 }, $  ; GCTP 104
