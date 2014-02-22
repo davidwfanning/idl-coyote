@@ -171,6 +171,7 @@
 ;       Switch UTM datum from WGS84 to WALBECK to avoid UTM projection bug in all versions
 ;            of IDL prior to IDL 8.2, when it is suppose to be fixed. For more information,
 ;            see this article: http://www.idlcoyote.com/map_tips/utmwrong.php. 31 Oct 2011. DWF.
+;        Added the GEOGRAPHIC map projection (UCTP=100). 21 Feb 2014. DWF.
 ;-
 ;*******************************************************************************************
 ;* Copyright (c) 2008-2010, jointly by Fanning Software Consulting, Inc.                   *
