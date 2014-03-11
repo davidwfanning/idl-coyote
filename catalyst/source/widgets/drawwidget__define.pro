@@ -928,7 +928,7 @@ PRO DrawWidget::Output, $
    aspectRatio = Float(!D.Y_Size) / !D.X_Size
    IF aspectRatio LT 1 THEN landscape = 1 ELSE landscape = 0
    snapshot = cgSnapshot()
-   position = PSWindow(LANDSCAPE=landscape)
+   position = cgPSWindow(LANDSCAPE=landscape)
    
 
    ; What kind of file is wanted?
@@ -1013,7 +1013,7 @@ PRO DrawWidget::Output, $
              
              RETURN
          ENDIF
-         position = PSWindow(LANDSCAPE=landscape)
+         position = cgPSWindow(LANDSCAPE=landscape)
          IF N_Elements(filename) EQ 0 THEN filename='output.ps'
          basename = cgRootName(filename, EXTENSION=ext)
          IF ext EQ "" THEN filename = filename + '.ps'
