@@ -548,15 +548,15 @@ IF N_Elements(ztitle) EQ 0 THEN ztitle='Z Axis'
     ; Need some data.
 
 Catch, error
-IF error NE 0 THEN BEGIN  ; Can't find LoadData.
+IF error NE 0 THEN BEGIN  ; Can't find cgDemoData.
    data = DIST(41)
    x = Findgen(41)
    y = Findgen(41)
-   IF !Error NE -154 THEN Print, !Err_String ELSE Print, 'Skipping LOADDATA call.'
+   IF !Error NE -154 THEN Print, !Err_String ELSE Print, 'Skipping cgDemoData call.'
 ENDIF
 
 IF N_Elements(data) EQ 0 THEN BEGIN
-   data = LoadData(2)
+   data = cgDemoData(2)
 ENDIF
 
 s = Size(data)
