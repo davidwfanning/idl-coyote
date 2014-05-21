@@ -433,23 +433,6 @@ FUNCTION Parse_NSIDC_Filename, filename, INFO=info, SUCCESS=success, RETURN_IMAG
             NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord, COLOR_OBJECT=colors)
    ENDIF
 
-   ; Ice motion data.
-   iceMotion = StrMid(root_name, 0, 9)
-   IF StrUpCase(iceMotion) EQ 'ICEMOTION' THEN BEGIN
-        theImage = Parse_NSIDC_Filename_0116(filename, INFO=info, SUCCESS=success)
-        IF ~success THEN RETURN, -1
-        mapCoord = info.mapCoord
-        
-        ; Turn color bars off and grid on.
-        CatSetDefault, 'DATAVIEWER_COLORBARS_OFF', 1
-        CatSetDefault, 'DATAVIEWER_MAP_GRID_ON', 1
-        colors = Obj_New('CatColors')
-        colors -> LoadCT, 0
-        colors -> LoadColor, 'light gray', 0
-        theImageObject = Obj_New('NSIDC_Image', theImage, FILENAME=info.filename, NCOLORS=250, $
-            COLORCHANGEALLOWED=0, COLORCHANGENCOLORS=info.colorChangeNColors, CB_TYPE=2, $
-            NSIDC_TAG=info.nsidc_tag, COORD_OBJECT=mapCoord, COLOR_OBJECT=colors)
-   ENDIF
 
    ; Are we successful so far?
    IF success EQ 0 THEN BEGIN
