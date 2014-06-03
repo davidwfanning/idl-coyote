@@ -546,7 +546,7 @@ PRO ODrawWidget::Print, $
    self._thePrinter -> GetProperty, Dimensions=pdims
    plotAspect = Float(wdims[1]) / wdims[0]
    printerAspect = Float(pdims[1]) / pdims[0]
-   position = Aspect(plotAspect, WindowAspect=printerAspect, Margin=0)
+   position = cgAspect(plotAspect, WindowAspect=printerAspect, Margin=0)
 
       ; Change the dimensions and postion of the viewport on the output page.
       ; Be sure to use normalized coordinates (units=3).
