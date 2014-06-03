@@ -389,7 +389,7 @@ FUNCTION CatSurface::Create_View, data, x, y, $
 
       surfaceAspect = Float(s[2]) / s[1]
       windowAspect = 1.0
-      position = Aspect(surfaceAspect, WindowAspect=windowAspect, Margin=0)
+      position = cgAspect(surfaceAspect, WindowAspect=windowAspect, Margin=0)
       position = [position[0], position[2], position[1], position[3], 0.0, 1.0] - 0.5
 
    ENDIF ELSE BEGIN
