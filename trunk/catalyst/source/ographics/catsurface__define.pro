@@ -66,6 +66,7 @@
 ; MODIFICATION_HISTORY:
 ;
 ;       Written by: David W. Fanning, 1 July, 2003.
+;       Had to modify cgAspect to conform to new interface. 30 Oct 2014. DWF.
 ;-
 ;******************************************************************************************;
 ;  Copyright (c) 2008, jointly by Fanning Software Consulting, Inc.                        ;
@@ -389,7 +390,7 @@ FUNCTION CatSurface::Create_View, data, x, y, $
 
       surfaceAspect = Float(s[2]) / s[1]
       windowAspect = 1.0
-      position = cgAspect(surfaceAspect, WindowAspect=windowAspect, Margin=0)
+      position = cgAspect(surfaceAspect, WAspect=windowAspect)
       position = [position[0], position[2], position[1], position[3], 0.0, 1.0] - 0.5
 
    ENDIF ELSE BEGIN
