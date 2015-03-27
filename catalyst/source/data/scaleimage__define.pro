@@ -14,7 +14,7 @@
 ;           scaledImage = BytScl(image, MIN=SCLMIN, MAX=SCLMAX, TOP=NCOLORS-1, /NAN) + BOTTOM
 ;           IF count GT 0 THEN scaledImage[i] = MISSING_INDEX
 ;           
-;       Scaling or stretching types include: linear, 2% linear, gamma, log, hyperbolic sine,
+;       Scaling or stretching types include: linear, 2% linear, gamma, compression, hyperbolic sine,
 ;       square-root, equilization, and gaussian. See this article for additional information:
 ;       
 ;           http://www.idlcoyote.com/ip_tips/xstretch.html
@@ -86,9 +86,10 @@
 ;          been using PTR_VALID(missing_value). 25 October 2010. DWF.
 ;       Modified the  ScaleTheImage method to byte scale 24-bit images if they
 ;          are not already byte type data. 8 August 2013. DWF.
+;       Updated old "log" scaling to what it is: "compression" scaling. 27 March 2015. DWF.
 ;-
 ;*******************************************************************************************
-;* Copyright (c) 2008-2009, jointly by Fanning Software Consulting, Inc.                   *
+;* Copyright (c) 2008-2015, jointly by Fanning Software Consulting, Inc.                   *
 ;* and Burridge Computing. All rights reserved.                                            *
 ;*                                                                                         *
 ;* Redistribution and use in source and binary forms, with or without                      *
@@ -555,9 +556,9 @@ END
 ;     SCALETYPE:     The type of scaling performed prior to display. Default is 0, linear scaling.
 ;           Number   Type of Stretch
 ;             0         Linear         scaled = BytScl(image, MIN=minThresh, MAX=maxThresh)
-;             1         Gamma          scaled = GmaScl(image, MIN=minThresh, MAX=maxThresh, Gamma=gamma)
-;             2         Log            scaled = LogScl(image, MIN=minThresh, MAX=maxThresh, Mean=mean, Exponent=exponent)
-;             3         Asinh          scaled = AsinhScl(image, MIN=minThresh, MAX=maxThresh, Beta=beta)
+;             1         Gamma          scaled = cgGmaScl(image, MIN=minThresh, MAX=maxThresh, Gamma=gamma)
+;             2         Compression    scaled = cgCompressScl(image, MIN=minThresh, MAX=maxThresh, Mean=mean, Exponent=exponent)
+;             3         Asinh          scaled = cgAsinhScl(image, MIN=minThresh, MAX=maxThresh, Beta=beta)
 ;             4         Linear 2%      A linear stretch, with 2 percent of pixels clipped at both the top and bottom
 ;             5         Square Root    A linear stretch of the square root histogram of the image values.
 ;             6         Equalization   A linear stretch of the histogram equalized image histogram.
@@ -663,7 +664,7 @@ FUNCTION SCALEIMAGE::ScaleTheImage, image
       ENDIF
    ENDIF
    
-   stretchTypes = ['Linear', 'Gamma', 'Log', 'Asinh', 'Linear 2%', 'Square Root', $
+   stretchTypes = ['Linear', 'Gamma', 'Compression', 'Asinh', 'Linear 2%', 'Square Root', $
                    'Equalization', 'Gaussian', 'None']
    
    CASE self.scaleType OF
@@ -674,19 +675,19 @@ FUNCTION SCALEIMAGE::ScaleTheImage, image
          END
 
       1: BEGIN
-         scaledImage = GmaScl(image, Max=self.sclmax, Min=self.sclmin, $
+         scaledImage = cgGmaScl(image, Max=self.sclmax, Min=self.sclmin, $
                    Gamma=self.gamma, Negative=self.negative, OMAX=self.ncolors-1)
          RETURN, scaledImage
          END
 
       2: BEGIN
-         scaledImage =  LogScl(image, Max=self.sclmax, Min=self.sclmin, $
+         scaledImage =  cgCompressScl(image, Max=self.sclmax, Min=self.sclmin, $
                    Mean=self.mean, Exponent=self.exponent, Negative=self.negative, OMAX=self.ncolors-1)
          RETURN, scaledImage
          END
 
       3: BEGIN
-         scaledImage = ASinhScl(image, Max=self.sclmax, Min=self.sclmin, $
+         scaledImage = cgASinhScl(image, Max=self.sclmax, Min=self.sclmin, $
                   BETA=self.beta, Negative=self.negative, OMAX=self.ncolors-1)
          RETURN, scaledImage
          END
@@ -708,7 +709,7 @@ FUNCTION SCALEIMAGE::ScaleTheImage, image
          END
 
       7: BEGIN
-         scaledImage = GaussScl(image, Max=self.sclmax, Min=self.sclmin, $
+         scaledImage = cgGaussScl(image, Max=self.sclmax, Min=self.sclmin, $
                    Sigma=self.sigma, Negative=self.negative, OMAX=self.ncolors-1)
          RETURN, scaledImage
          END
@@ -780,9 +781,9 @@ END
 ;
 ;           Number   Type of Stretch
 ;             0         Linear         scaled = BytScl(image, MIN=minThresh, MAX=maxThresh)
-;             1         Gamma          scaled = GmaScl(image, MIN=minThresh, MAX=maxThresh, Gamma=gamma)
-;             2         Log            scaled = LogScl(image, MIN=minThresh, MAX=maxThresh, Mean=mean, Exponent=exponent)
-;             3         Asinh          scaled = AsinhScl(image, MIN=minThresh, MAX=maxThresh, Beta=beta)
+;             1         Gamma          scaled = cgGmaScl(image, MIN=minThresh, MAX=maxThresh, Gamma=gamma)
+;             2         Compression    scaled = cgCompressScl(image, MIN=minThresh, MAX=maxThresh, Mean=mean, Exponent=exponent)
+;             3         Asinh          scaled = cgAsinhScl(image, MIN=minThresh, MAX=maxThresh, Beta=beta)
 ;             4         Linear 2%      A linear stretch, with 2 percent of pixels clipped at both the top and bottom
 ;             5         Square Root    A linear stretch of the square root histogram of the image values.
 ;             6         Equalization   A linear stretch of the histogram equalized image histogram.
@@ -837,7 +838,7 @@ PRO SCALEIMAGE::SetProperty, $
    
    IF N_Elements(scaletype) NE 0 THEN BEGIN
         IF Size(scaletype, /TNAME) EQ 'STRING' THEN BEGIN
-              possibleTypes = ['LINEAR', 'GAMMA', 'LOG', 'ASINH', $
+              possibleTypes = ['LINEAR', 'GAMMA', 'COMPRESSION', 'ASINH', $
                                'LINEAR 2%', 'SQUARE ROOT', 'EQUALIZATION', 'GAUSSIAN']
               index = Where(possibleTypes EQ StrUpCase(scaletype), count)
               IF count EQ 0 THEN Message, 'Unknown scaling type encountered.'
@@ -959,9 +960,9 @@ END
 ;
 ;           Number   Type of Stretch
 ;             0         Linear         scaled = BytScl(image, MIN=minThresh, MAX=maxThresh)
-;             1         Gamma          scaled = GmaScl(image, MIN=minThresh, MAX=maxThresh, Gamma=gamma)
-;             2         Log            scaled = LogScl(image, MIN=minThresh, MAX=maxThresh, Mean=mean, Exponent=exponent)
-;             3         Asinh          scaled = AsinhScl(image, MIN=minThresh, MAX=maxThresh, Beta=beta)
+;             1         Gamma          scaled = cgGmaScl(image, MIN=minThresh, MAX=maxThresh, Gamma=gamma)
+;             2         Compression    scaled = cgCompressScl(image, MIN=minThresh, MAX=maxThresh, Mean=mean, Exponent=exponent)
+;             3         Asinh          scaled = cgAsinhScl(image, MIN=minThresh, MAX=maxThresh, Beta=beta)
 ;             4         Linear 2%      A linear stretch, with 2 percent of pixels clipped at both the top and bottom
 ;             5         Square Root    A linear stretch of the square root histogram of the image values.
 ;             6         Equalization   A linear stretch of the histogram equalized image histogram.
@@ -1037,7 +1038,7 @@ FUNCTION SCALEIMAGE::INIT, image, $
    IF N_Elements(ncolors) EQ 0 THEN BEGIN
        IF N_Elements(missing_value) EQ 0 THEN ncolors = 256 ELSE ncolors = 255
    ENDIF
-   possibleTypes = ['LINEAR', 'GAMMA', 'LOG', 'ASINH', $
+   possibleTypes = ['LINEAR', 'GAMMA', 'COMPRESSION', 'ASINH', $
                     'LINEAR 2%', 'SQUARE ROOT', 'EQUALIZATION', 'GAUSSIAN', 'NONE', 'MODIS']
    IF N_Elements(scaletype) EQ 0 THEN scaletype = 0 ELSE BEGIN
          IF Size(scaletype, /TNAME) EQ 'STRING' THEN BEGIN
