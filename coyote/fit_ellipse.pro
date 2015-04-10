@@ -123,7 +123,7 @@ FUNCTION Fit_Ellipse, indices, $
     ; an ellipse to it. This is used to calculate the major and minor axes of
     ; the ellipse, as well as its orientation. The orientation is calculated in
     ; degrees counter-clockwise from the X axis.
-    
+
     IF N_Elements(xsize) EQ 0 THEN xsize = !D.X_Size
     IF N_Elements(ysize) EQ 0 THEN ysize = !D.Y_Size
     IF N_Elements(npoints) EQ 0 THEN npoints = 120
