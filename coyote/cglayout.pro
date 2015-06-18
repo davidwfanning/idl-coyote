@@ -332,10 +332,12 @@ FUNCTION cgLayout, layout, $
           ENDIF
           
           ; Recalculate the position of the plot in the window.
-          p[0] = (((xpixSize - trialX) / 2.0) / xsize) + p[0]
-          p[2] = p[0] + (trialX/Float(xsize))
-          p[1] = (((ypixSize - trialY) / 2.0) / ysize)  + p[1]
-          p[3] = p[1] + (trialY/Float(ysize))
+          IF xsize GE ysize THEN BEGIN
+              p[0] = (((xpixSize - trialX) / 2.0) / xsize) + p[0]
+              p[2] = p[0] + (trialX/Float(xsize))
+              p[1] = (((ypixSize - trialY) / 2.0) / ysize)  + p[1]
+              p[3] = p[1] + (trialY/Float(ysize))
+          ENDIF 
           
           positions[*,j] = p
         ENDFOR

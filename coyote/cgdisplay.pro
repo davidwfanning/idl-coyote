@@ -154,6 +154,7 @@
 ;        If only one input parameter is passed, treat that as window index number to create. 15 Feb 2014. DWF.
 ;        More work to fix a problem with an interaction between cgPS_Open and cgDisplay, when the
 ;           PostScript file is set up in ENCAPSULATED mode and the ASPECT keyword is used. 8 May 2014. DWF.
+;        Extraneous line in code introduced on 8 May 2014 causing a problem. Removed. 16 April 2014. DWF.
 ;
 ; :Copyright:
 ;     Copyright (c) 2010-2014, Fanning Software Consulting, Inc.
@@ -284,7 +285,6 @@ PRO cgDisplay, pxsize, pysize, $
                     keywords = cgPSWindow(AspectRatio=Float(pysize)/pxsize, Landscape=ps_struct.landscape)
                 ENDIF ELSE BEGIN
                     keywords = cgPSWindow(AspectRatio=Float(pysize)/pxsize)
-                    ps_struct.landscape = keywords.landscape
                 ENDELSE
                 Device, _Extra=keywords
                 END

@@ -71,7 +71,7 @@
 ;       IDL> index = Where(StrUpCase(titles) EQ 'PLOT WINDOW', tcnt)
 ;       IDL> IF tcnt GT 0 THEN cgSet, wids[index]
 ;       IDL> cgWindow, 'Oplot', thisData, /AddCmd
-;       IDL> cgSet ; Bring current window forwad on display
+;       IDL> cgSet ; Bring current window forward on display
 ;       
 ; :Author:
 ;       FANNING SOFTWARE CONSULTING::

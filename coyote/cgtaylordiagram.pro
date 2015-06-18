@@ -160,9 +160,11 @@
 ;        Added check to not create initial plot if PostScript is the current device. 18 Feb 2015. DWF.
 ;        Small modification to prevent extraneous drawing on right edge of plot in PostScript files,
 ;           and updated figures and documentation. 10 April 2015. DWF.
+;        Another small modification to accommodate extraneous line removal when doing multiple plots on
+;           a page. Appears to work in both PostScript and on the display for multiple plots. 19 May 2015. DWF.
 ;
 ; :Copyright:
-;     Copyright (c) 2013, Fanning Software Consulting, Inc.
+;     Copyright (c) 2013-2015, Fanning Software Consulting, Inc.
 ;-
 PRO cgTaylorDiagram, stddev, correlation, $
     ADDCMD=addcmd, $
@@ -438,18 +440,18 @@ PRO cgTaylorDiagram, stddev, correlation, $
       ENDFOR
   ENDIF
   
-  ; Mask: Masking part of the RMS circles out:
+  ; Masking part of the RMS circles out.
   cgColorFill, [x, stddev_max, x[0]],[y, stddev_max, y[0]], /data, COLOR='white'
   cgPolygon,   [x, stddev_max, x[0]],[y, stddev_max, y[0]], /data, COLOR='white'
-  cgColorFill, [!X.Window[0],!X.Window[0], !X.Window[1], !X.Window[1], !X.Window[0]], $
-               [!Y.Window[1], 1.0, 1.0, !Y.Window[1]], $
-               /Normal, COLOR='white'
+  cgColorFill, [         0,               0, stddev_max*1.05, stddev_max*1.05,          0], $
+               [stddev_max, stddev_max*1.05, stddev_max*1.05,      stddev_max, stddev_max], $
+               COLOR='white' ; To remove traces of line above plot in PostScript files.
   
   cgPlotS, x, y
   
  ; Short Ticks
  ; new circle where its points will be used as the end point of the short ticks
-  short_cir = 1000
+   short_cir = 1000
   short_max = stddev_max*.98
   short_min = 0.0
   short_cir_x = Findgen(short_cir)/(short_cir-1)*(short_max-short_min)+short_min

@@ -145,6 +145,7 @@
 ;             that are not the same length. Added code to make sure all positional parameters are the same
 ;             length. 16 Oct 2014. DWF.
 ;        Running into more problems from 10 Oct 2014 changes. Have to unpack 2D and 3D data passed in as single parameter.
+;        Changed the default value for the symbol size to !P.Symsize rather than 1.0. 17 April 2015. DWF.
 ;        
 ; :Copyright:
 ;     Copyright (c) 2010-2014, Fanning Software Consulting, Inc.
@@ -259,7 +260,7 @@ PRO cgPlotS, x_, y_, z_, $
     
     ; Check parameters and keywords.
     IF N_Elements(psym) EQ 0 THEN psym = 0
-    IF N_Elements(symsize) EQ 0 THEN symsize = 1.0
+    IF N_Elements(symsize) EQ 0 THEN symsize = !P.SymSize
    
     ; Be sure the vectors are the right length and are defined.
     CASE n_params OF
