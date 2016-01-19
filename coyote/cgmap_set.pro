@@ -31,8 +31,8 @@
 ;  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS           ;
 ;  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            ;
 ;******************************************************************************************;
-;
-;+--------------------------------------------------------------------------
+;---------------------------------------------------------------------------
+;+
 ;   Provides a modified MAP_SET command that can work together with other Coyote Graphics
 ;   commands and be used in resizeable graphics windows. Any keyword appropriate for MAP_SET,
 ;   MAP_CONTINENTS, or MAP_GRID can be used with this routine. Additional or modified 
@@ -112,6 +112,7 @@
 ;        
 ; :Copyright:
 ;     Copyright (c) 2011-2012, Fanning Software Consulting, Inc.
+;-
 ;---------------------------------------------------------------------------
 PRO cgMap_Set, p0lat, p0lon, rot, $
       ADDCMD=addcmd, $
