@@ -105,6 +105,9 @@ FUNCTION cgPercentiles, data, Percentiles=percentiles
    ; Input data is required.
    IF N_Elements(data) EQ 0 THEN Message, 'Input data is required.'
    
+   ; Remove non finite data
+   data=data[WHERE(FINITE(data))]
+   
    ; Need default values for percentiles?
    IF N_Elements(percentiles) EQ 0 THEN percentiles = [0.25, 0.50, 0.75]
    
