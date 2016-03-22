@@ -96,7 +96,7 @@ FUNCTION cgWhoCalledMe
    
    ; Find where I am in the call stack. The calling program is up
    ; two levels from there. Unless, of course, I am close to $MAIN$.
-   index = Where(StrMid(callstack, 0, 11) EQ 'WHOCALLEDME', count)
+   index = Where(StrMid(callstack, 0, 13) EQ 'CGWHOCALLEDME', count)
    IF count GE 1 THEN index = (Reverse(index))[0] 
    callingRoutine = (StrSplit(StrCompress(callStack[(index-2) > 0])," ", /Extract))[0]
    
